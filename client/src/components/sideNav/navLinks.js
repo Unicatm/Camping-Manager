@@ -12,14 +12,14 @@ const navLinks = [
     icon: HomeIcon,
   },
   {
-    route: "/clienti",
-    title: "Clienți",
-    icon: UserGroupIcon,
-  },
-  {
     route: "/rezervari",
     title: "Rezervări",
     icon: CreditCardIcon,
+  },
+  {
+    route: "/clienti",
+    title: "Clienți",
+    icon: UserGroupIcon,
   },
   {
     route: "/stats",
