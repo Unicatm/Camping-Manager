@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
-import Table from "../components/clienti/tabels/Table";
+import { useEffect, useState, useCallback } from "react";
+import ClientsTable from "../components/tables/ClientsTable";
 import HeaderPage from "../components/HeaderPage";
-import SearchAddSection from "../components/clienti/SearchAddSection";
-import ModalClienti from "../components/clienti/modals/ModalClienti";
+import SearchAddSection from "../components/tables/SearchAddSection";
+import ClientsForm from "../components/forms/ClientsForm";
 import { useParams } from "react-router-dom";
+import { deleteClient, getClienti } from "../api/clientApi";
+import { useLocalStorage } from "../components/hooks/useLocalStorage";
 
 function Clients() {
   const { id } = useParams();
@@ -11,22 +13,51 @@ function Clients() {
   const [isEditing, setIsEditing] = useState(false);
   const [clienti, setClienti] = useState([]);
   const [selectedClientId, setSelectedClientId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const { getItem, setItem } = useLocalStorage("CLIENTS_DATA_TABLE");
+
   async function fetchClienti() {
-    const res = await fetch("http://127.0.0.1:3000/api/v1/clients");
-    const resData = await res.json();
-    setClienti(resData.data.clients);
-    setIsFetching(false);
+    setIsFetching(true);
+    try {
+      const data = await getClienti();
+      setClienti(data);
+    } catch (error) {
+      console.error("Failed to fetch clients:", error);
+    } finally {
+      setIsFetching(false);
+    }
   }
+
+  useEffect(() => {
+    const cachedData = getItem("CLIENTS_DATA_TABLE");
+    if (cachedData) {
+      const parsedData = JSON.parse(cachedData);
+      if (Array.isArray(parsedData)) {
+        setClienti(parsedData);
+      }
+    }
+    fetchClienti();
+  }, []);
+
+  const saveClientiToStorage = useCallback(() => {
+    if (clienti.length > 0) {
+      setItem(JSON.stringify(clienti));
+    }
+  }, [clienti, setItem]);
+
+  useEffect(() => {
+    saveClientiToStorage();
+  }, [saveClientiToStorage]);
 
   useEffect(() => {
     if (isEditing) {
       setIsModalOpen(true);
       setSelectedClientId(id);
     }
-  }, [id]);
+  }, [isEditing, id]);
 
   const handleEdit = (clientId) => {
     setIsEditing(true);
@@ -36,42 +67,35 @@ function Clients() {
 
   const handleDelete = async (clientId) => {
     try {
-      const res = await fetch(
-        `http://127.0.0.1:3000/api/v1/clients/${clientId}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      if (res.ok) {
-        fetchClienti();
-      } else {
-        console.error("Eroare la ștergerea clientului");
-      }
+      const res = await deleteClient(clientId);
+      res.ok ? fetchClienti() : console.error("Eroare la ștergerea clientului");
     } catch (error) {
       console.error(error);
     }
   };
 
-  useEffect(() => {
-    setIsFetching(true);
-    fetchClienti();
-  }, []);
+  const filteredClienti = clienti.filter((client) =>
+    client.nume.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="h-screen grow bg-blue-100/50">
       <div className="relative w-11/12 place-self-center">
-        <HeaderPage path="Clienți" />
-        <SearchAddSection openModal={() => setIsModalOpen(true)} />
-        <Table
-          clienti={clienti}
+        <HeaderPage path="Clienți" title="Clienți" />
+        <SearchAddSection
+          openModal={() => setIsModalOpen(true)}
+          buttonText="Adaugă un client"
+          onSearch={(term) => setSearchTerm(term)}
+        />
+        <ClientsTable
+          clienti={filteredClienti}
           isLoading={isFetching}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />
 
         {isModalOpen && (
-          <ModalClienti
+          <ClientsForm
             onClientAdded={fetchClienti}
             onClose={() => {
               setIsModalOpen(false);

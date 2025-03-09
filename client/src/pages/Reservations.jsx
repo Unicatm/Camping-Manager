@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Table from "../components/tables/Table";
+import ReservationsTable from "../components/tables/ReservationsTable";
 import HeaderPage from "../components/HeaderPage";
-import ModalRezervari from "../components/modals/ModalRezervari";
-import SearchAddSection from "../components/rezervations/SearchAddSection";
+import ReservationsForm from "../components/forms/ReservationsForm";
+import SearchAddSection from "../components/tables/SearchAddSection";
 
 function Reservations() {
   const [isFetching, setIsFetching] = useState(false);
@@ -22,16 +22,17 @@ function Reservations() {
     fetchRezervari();
   }, []);
 
-  console.log(rezervari);
-
   return (
     <div className="h-screen grow bg-blue-100/50">
       <div className="relative w-11/12 place-self-center">
         <HeaderPage path="Rezervări" />
-        <SearchAddSection openModal={() => setIsModalOpen(true)} />
-        <Table rezervari={rezervari} isLoading={isFetching} />
+        <SearchAddSection
+          openModal={() => setIsModalOpen(true)}
+          buttonText="Adaugă o rezervare"
+        />
+        <ReservationsTable rezervari={rezervari} isLoading={isFetching} />
         {isModalOpen && (
-          <ModalRezervari onClose={() => setIsModalOpen(false)} />
+          <ReservationsForm onClose={() => setIsModalOpen(false)} />
         )}
       </div>
     </div>

@@ -1,14 +1,14 @@
-import clientiTableHeads from "./clientiTabelHeads";
-import dateFormatter from "../../../utils/dateFormat";
-import TableHead from "../../tables/TableHead";
-
 import { TrashIcon, PencilIcon } from "@heroicons/react/16/solid";
+import clientiTableHeads from "./clientiTabelHeads";
+import dateFormatter from "../../utils/dateFormat";
+import TableHead from "./TableHead";
+import { Link } from "react-router-dom";
 
-function Table({ clienti, isLoading, onEdit, onDelete }) {
+function ClientsTable({ clienti, isLoading, onEdit, onDelete }) {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <TableHead heads={clientiTableHeads} />
+        <TableHead heads={clientiTableHeads} forPreview={false} />
         <tbody>
           {isLoading && clienti.length === 0 ? (
             <tr>
@@ -29,7 +29,12 @@ function Table({ clienti, isLoading, onEdit, onDelete }) {
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
                 >
-                  {client.nume}
+                  <Link
+                    to={`/clienti/${client._id}`}
+                    className="underline underline-offset-2"
+                  >
+                    {client.nume}
+                  </Link>
                 </th>
                 <td className="px-6 py-4">{client._id}</td>
                 <td className="px-6 py-4">{client.nationalitate}</td>
@@ -65,4 +70,4 @@ function Table({ clienti, isLoading, onEdit, onDelete }) {
   );
 }
 
-export default Table;
+export default ClientsTable;

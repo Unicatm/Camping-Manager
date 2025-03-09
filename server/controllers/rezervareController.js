@@ -19,6 +19,24 @@ exports.getRezervare = async (req, res) => {
   }
 };
 
+exports.getRezervariByClientId = async (req, res) => {
+  try {
+    const rezervari = await Rezervare.find({ idClient: req.params.id });
+    res.status(200).json({
+      status: "success",
+      data: {
+        rezervari,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
 exports.getAllRezervari = async (req, res) => {
   try {
     const features = new APIFeatures(Rezervare.find(), req.query)

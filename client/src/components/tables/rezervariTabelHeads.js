@@ -7,7 +7,6 @@ const rezervariTableHeads = [
   { title: "No. Copii" },
   { title: "Electricitate" },
   { title: "Tip Auto" },
-  { title: "" },
 ];
 
 export default rezervariTableHeads;

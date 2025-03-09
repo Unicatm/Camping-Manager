@@ -1,6 +1,6 @@
 import Input from "./Input";
 
-function ModalRezervari({ onClose }) {
+function ReservationsForm({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
       <div className="fixed inset-0 flex flex-col gap-6 items-center m-auto w-[45%] min-w-xl p-8 h-max bg-white shadow-md sm:rounded-lg">
@@ -78,4 +78,4 @@ function ModalRezervari({ onClose }) {
   );
 }
 
-export default ModalRezervari;
+export default ReservationsForm;

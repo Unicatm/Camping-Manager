@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Input from "../../modals/Input";
+import Input from "../forms/Input";
 
-function ModalClienti({ onClose, onClientAdded, isEditing, clientId }) {
+function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
   const navigate = useNavigate();
   // const [enteredValues, setEnteredValues] = useState({});
   const [client, setClient] = useState({});
@@ -145,4 +145,4 @@ function ModalClienti({ onClose, onClientAdded, isEditing, clientId }) {
   );
 }
 
-export default ModalClienti;
+export default ClientsForm;

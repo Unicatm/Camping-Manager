@@ -2,19 +2,28 @@ import TableHead from "./TableHead";
 import rezervariTableHeads from "./rezervariTabelHeads";
 import dateFormatter from "../../utils/dateFormat";
 
-function Table({ rezervari, isLoading }) {
+function ReservationsTable({ rezervari, isLoading, forPreview }) {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <TableHead heads={rezervariTableHeads} />
+        <TableHead heads={rezervariTableHeads} forPreview={forPreview} />
         <tbody>
-          {isLoading && rezervari.length === 0 ? (
+          {isLoading ? (
             <tr>
               <td
                 colSpan={rezervariTableHeads.length}
                 className="px-6 py-4 text-center"
               >
-                {"Datele se încarcă..."}
+                Datele se încarcă...
+              </td>
+            </tr>
+          ) : rezervari.length === 0 ? (
+            <tr>
+              <td
+                colSpan={rezervariTableHeads.length}
+                className="px-6 py-4 text-center"
+              >
+                Nu sunt date de afișat
               </td>
             </tr>
           ) : (
@@ -50,15 +59,16 @@ function Table({ rezervari, isLoading }) {
                     <div key={idx}>{tip}</div>
                   ))}
                 </td>
-
-                <td className="px-6 py-4 text-right">
-                  <a
-                    href="#"
-                    className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                  >
-                    Edit
-                  </a>
-                </td>
+                {!forPreview && (
+                  <td className="px-6 py-4 text-right">
+                    <a
+                      href="#"
+                      className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                    >
+                      Edit
+                    </a>
+                  </td>
+                )}
               </tr>
             ))
           )}
@@ -68,4 +78,4 @@ function Table({ rezervari, isLoading }) {
   );
 }
 
-export default Table;
+export default ReservationsTable;
