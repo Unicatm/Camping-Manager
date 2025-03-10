@@ -1,11 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
-import ClientsTable from "../components/tables/ClientsTable";
-import HeaderPage from "../components/HeaderPage";
-import SearchAddSection from "../components/tables/SearchAddSection";
-import ClientsForm from "../components/forms/ClientsForm";
 import { useParams } from "react-router-dom";
 import { deleteClient, getClienti } from "../api/clientApi";
 import { useLocalStorage } from "../components/hooks/useLocalStorage";
+import HeaderPage from "../components/HeaderPage";
+import SearchAddSection from "../components/tables/SearchAddSection";
+import ClientsForm from "../components/forms/ClientsForm";
+import Table from "../components/tables/Table";
+import clientiTableHeads from "../components/tables/tableHeads/clientiTabelHeads";
+import ClientsTableData from "../components/tables/tableDatas/ClientsTableData";
 
 function Clients() {
   const { id } = useParams();
@@ -87,12 +89,20 @@ function Clients() {
           buttonText="Adaugă un client"
           onSearch={(term) => setSearchTerm(term)}
         />
-        <ClientsTable
-          clienti={filteredClienti}
+
+        <Table
+          data={filteredClienti}
+          columns={clientiTableHeads}
           isLoading={isFetching}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+          forPreview={false}
+        >
+          <ClientsTableData
+            clienti={filteredClienti}
+            forPreview={false}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        </Table>
 
         {isModalOpen && (
           <ClientsForm
