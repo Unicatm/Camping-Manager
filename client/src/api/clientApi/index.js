@@ -12,6 +12,12 @@ export const getClient = async (id) => {
   return resData.data.client;
 };
 
+export const getClientName = async (id) => {
+  const res = await fetch(`${BASE_URL}/${id}`);
+  const resData = await res.json();
+  return resData.data.client.nume;
+};
+
 export const createClient = async (client) => {
   const res = await fetch(BASE_URL, {
     method: "POST",
@@ -32,13 +38,13 @@ export const deleteClient = async (id) => {
   return res;
 };
 
-export const editClient = async (client) => {
+export const editClient = async (client, newData) => {
   const res = await fetch(`${BASE_URL}/${client._id}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(client),
+    body: JSON.stringify(newData),
   });
   return res.json();
 };

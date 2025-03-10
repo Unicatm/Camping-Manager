@@ -7,7 +7,7 @@ function MiddleNav() {
   return (
     <div className="flex pl-4 pt-8 flex-col gap-2">
       {navLinks.map((link) => {
-        const isActive = location.pathname === link.route;
+        const isActive = location.pathname.startsWith(link.route);
 
         return (
           <Link to={link.route} key={link.route}>

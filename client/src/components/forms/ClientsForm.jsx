@@ -1,27 +1,28 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../forms/Input";
+import { editClient, getClient } from "../../api/clientApi";
 
 function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
   const navigate = useNavigate();
-  // const [enteredValues, setEnteredValues] = useState({});
   const [client, setClient] = useState({});
 
-  // const isClientEmpty = JSON.stringify(client) === "{}";
+  async function fetchClient() {
+    try {
+      const data = await getClient(clientId);
+      setClient(data);
+    } catch (error) {
+      console.error("Failed to fetch client:", error);
+    }
+  }
 
-  console.log(isEditing);
   useEffect(() => {
     if (isEditing && clientId) {
-      async function getClient() {
-        const res = await fetch(
-          `http://127.0.0.1:3000/api/v1/clients/${clientId}`
-        );
-        const resData = await res.json();
-        setClient(resData.data.client);
-      }
-      getClient();
+      console.log("Client ID s-a actualizat:", clientId);
+      fetchClient();
+      console.log(clientId);
     }
-  }, [isEditing, clientId]);
+  }, [clientId]);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -29,7 +30,6 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
     const fd = new FormData(event.target);
     const data = Object.fromEntries(fd.entries());
     // setEnteredValues(data);
-    console.log(data);
 
     if (Object.keys(client).length === 0) {
       fetch("http://127.0.0.1:3000/api/v1/clients", {
@@ -43,17 +43,13 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
           onClose();
         });
     } else {
-      fetch(`http://127.0.0.1:3000/api/v1/clients/${clientId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then(() => {
-          onClientAdded();
-          onClose();
-          navigate("/clienti");
-        });
+      console.log("clientId în handleSubmit:", client._id);
+      console.log(data);
+      editClient(client,data).then(() => {
+        onClientAdded();
+        onClose();
+        navigate("/clienti");
+      });
     }
     event.target.reset();
   }
@@ -72,9 +68,9 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
           width="w-full"
           id="cnp"
           placeholder="CNP..."
-          name="_id"
+          name="cnp"
           label="CNP"
-          defaultValue={isEditing ? client._id : ""}
+          defaultValue={isEditing ? client.cnp : ""}
         />
         <Input
           width="w-full"

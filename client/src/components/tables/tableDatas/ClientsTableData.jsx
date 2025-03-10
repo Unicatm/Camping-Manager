@@ -15,7 +15,7 @@ function ClientsTableData({ clienti, forPreview, onEdit, onDelete }) {
           {client.nume}
         </Link>
       </TableHead>
-      <TableData>{client._id}</TableData>
+      <TableData>{client.cnp}</TableData>
       <TableData>{client.nationalitate}</TableData>
       <TableData>{dateFormatter(client.dataNasterii)}</TableData>
       <TableData>

@@ -1,33 +1,62 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useLocalStorage } from "../components/hooks/useLocalStorage";
 import HeaderPage from "../components/HeaderPage";
 import ReservationsForm from "../components/forms/ReservationsForm";
 import SearchAddSection from "../components/tables/SearchAddSection";
 import Table from "../components/tables/Table";
-import rezervariTableHeads from "../components/tables/tableHeads/rezervariTabelHeads";
 import ReservationsTableData from "../components/tables/tableDatas/ReservationsTableData";
+import rezervariTableHeads from "../components/tables/rezervariTabelHeads";
+import { getAllRezervari } from "../api/reservationsApi";
 
 function Reservations() {
+  const { getItem, setItem } = useLocalStorage("RESERVATIONS_DATA_TABLE");
   const [isFetching, setIsFetching] = useState(false);
   const [rezervari, setRezervari] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  useEffect(() => {
+  async function fetchRezervari() {
     setIsFetching(true);
-    async function fetchRezervari() {
-      const res = await fetch("http://127.0.0.1:3000/api/v1/rezervari");
-      const resData = await res.json();
-      setRezervari(resData.data.rezervari);
+    try {
+      const data = await getAllRezervari();
+      setRezervari(data);
+    } catch (error) {
+      console.error("Failed to fetch rezervari:", error);
+    } finally {
       setIsFetching(false);
     }
+  }
 
+  // useEffect(() => {
+  //   setIsFetching(true);
+  //   fetchRezervari();
+  // }, []);
+
+  useEffect(() => {
+    const cachedData = getItem("RESERVATIONS_DATA_TABLE");
+    if (cachedData) {
+      const parsedData = JSON.parse(cachedData);
+      if (Array.isArray(parsedData)) {
+        setRezervari(parsedData);
+      }
+    }
     fetchRezervari();
   }, []);
+
+  const saveRezervariToStorage = useCallback(() => {
+    if (rezervari.length > 0) {
+      setItem(JSON.stringify(rezervari));
+    }
+  }, [rezervari, setItem]);
+
+  useEffect(() => {
+    saveRezervariToStorage();
+  }, [saveRezervariToStorage]);
 
   return (
     <div className="h-screen grow bg-blue-100/50">
       <div className="relative w-11/12 place-self-center">
-        <HeaderPage path="Rezervări" />
+        <HeaderPage path="Rezervări" title="Rezervări" />
         <SearchAddSection
           openModal={() => setIsModalOpen(true)}
           buttonText="Adaugă o rezervare"

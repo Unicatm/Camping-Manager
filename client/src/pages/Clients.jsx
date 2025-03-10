@@ -6,10 +6,11 @@ import HeaderPage from "../components/HeaderPage";
 import SearchAddSection from "../components/tables/SearchAddSection";
 import ClientsForm from "../components/forms/ClientsForm";
 import Table from "../components/tables/Table";
-import clientiTableHeads from "../components/tables/tableHeads/clientiTabelHeads";
+import clientiTableHeads from "../components/tables/clientiTabelHeads";
 import ClientsTableData from "../components/tables/tableDatas/ClientsTableData";
 
 function Clients() {
+  const { getItem, setItem } = useLocalStorage("CLIENTS_DATA_TABLE");
   const { id } = useParams();
   const [isFetching, setIsFetching] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -18,8 +19,6 @@ function Clients() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const { getItem, setItem } = useLocalStorage("CLIENTS_DATA_TABLE");
 
   async function fetchClienti() {
     setIsFetching(true);
@@ -62,10 +61,18 @@ function Clients() {
   }, [isEditing, id]);
 
   const handleEdit = (clientId) => {
+    console.log("Client ID la edit:", clientId);
     setIsEditing(true);
     setSelectedClientId(clientId);
+    console.log("Handle edit" + selectedClientId);
     setIsModalOpen(true);
   };
+
+  useEffect(() => {
+    if (selectedClientId) {
+      setIsModalOpen(true);
+    }
+  }, [selectedClientId]);
 
   const handleDelete = async (clientId) => {
     try {

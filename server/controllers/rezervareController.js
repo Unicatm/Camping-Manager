@@ -21,7 +21,7 @@ exports.getRezervare = async (req, res) => {
 
 exports.getRezervariByClientId = async (req, res) => {
   try {
-    const rezervari = await Rezervare.find({ idClient: req.params.id });
+    const rezervari = await Rezervare.find({ idClient: req.params.cnp });
     res.status(200).json({
       status: "success",
       data: {

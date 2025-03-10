@@ -5,7 +5,7 @@ import { getClient } from "../api/clientApi";
 import { getRezervariByClientId } from "../api/reservationsApi";
 import Table from "../components/tables/Table";
 import ReservationsTableData from "../components/tables/tableDatas/ReservationsTableData";
-import rezervariTableHeads from "../components/tables/tableHeads/rezervariTabelHeads";
+import rezervariTableHeads from "../components/tables/rezervariTabelHeads";
 
 function ClientsReservations() {
   const { id } = useParams();

@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
 
 const clientSchema = new mongoose.Schema({
-  _id: {
+  cnp: {
     type: String,
+    unique: true,
   },
   nume: {
     type: String,
