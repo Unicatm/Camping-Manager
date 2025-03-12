@@ -9,6 +9,7 @@ import Table from "../components/tables/Table";
 import clientiTableHeads from "../components/tables/clientiTabelHeads";
 import ClientsTableData from "../components/tables/tableDatas/ClientsTableData";
 import Calendar from "../components/ui/Calendar";
+import Calendar2 from "../components/ui/Calendar";
 
 function Clients() {
   const { getItem, setItem } = useLocalStorage("CLIENTS_DATA_TABLE");
@@ -111,8 +112,6 @@ function Clients() {
             onDelete={handleDelete}
           />
         </Table>
-
-        <Calendar />
 
         {isModalOpen && (
           <ClientsForm

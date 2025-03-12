@@ -75,37 +75,73 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* .react-datepicker__year-dropdown {
-  max-height: 200px;
-  overflow-y: auto;
-  width: 100%;
-  padding: 5px 0;
-}
-
-.react-datepicker__year-dropdown-container {
-  margin: 0 5px;
+.react-datepicker__year-dropdown {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 coloane */
+  gap: 8px;
+  padding: 8px;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: max-content;
+  min-width: 120px;
 }
 
 .react-datepicker__year-option {
-  padding: 8px 10px;
-  line-height: 16px;
   border: 2px solid red;
+  padding: 4px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
 }
 
 .react-datepicker__year-option:hover {
-  background-color: #f0f5ff;
+  background-color: #f3f4f6;
 }
 
-/* Elimină butoanele de scroll din dropdown */
-/* .react-datepicker__year-option--selected_year {
+.react-datepicker__year-option--selected {
   background-color: #4299e1;
   color: white;
+  font-weight: bold;
 }
 
-.react-datepicker__navigation--years {
-  display: none;
+/* Stiluri pentru dropdown-ul de ani */
+.year-dropdown-container {
+  /* position: absolute; */
+  /* top: 100%;  */
+  /* left: 0; */
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  width: max-content;
+  max-height: 160px;
+  overflow-y: hidden;
 }
 
-.react-datepicker__month {
-  margin: 0;
-}  */
+.year-dropdown-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 8px;
+}
+
+.year-item {
+  padding: 8px;
+  text-align: center;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.year-item:hover {
+  background-color: #f3f4f6;
+}
+
+.year-item.selected {
+  background-color: #3b82f6;
+  color: white;
+}

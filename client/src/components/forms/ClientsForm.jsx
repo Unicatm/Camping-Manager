@@ -13,6 +13,11 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
     try {
       const data = await getClient(clientId);
       setClient(data);
+
+      if (data.dataNasterii) {
+        const dateFromDb = new Date(data.dataNasterii);
+        setSelectedDate(dateFromDb);
+      }
     } catch (error) {
       console.error("Failed to fetch client:", error);
     }
@@ -22,9 +27,8 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
     if (isEditing && clientId) {
       console.log("Client ID s-a actualizat:", clientId);
       fetchClient();
-      // console.log(clientId);
     }
-  }, [clientId]);
+  }, [clientId, isEditing]);
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -34,7 +38,8 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
     data.dataNasterii = selectedDate
       ? selectedDate.toISOString().split("T")[0]
       : "";
-    // setEnteredValues(data);
+
+    console.log(data);
 
     if (Object.keys(client).length === 0) {
       fetch("http://127.0.0.1:3000/api/v1/clients", {
@@ -48,8 +53,6 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
           onClose();
         });
     } else {
-      // console.log("clientId în handleSubmit:", client._id);
-      // console.log(data);
       editClient(client, data).then(() => {
         onClientAdded();
         onClose();
@@ -66,8 +69,7 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
     >
       <div className="fixed inset-0 flex flex-col gap-6 items-center m-auto w-[40%] min-w-xl p-8 h-max bg-white shadow-md sm:rounded-lg">
         <h2 className="font-bold text-2xl">
-          {" "}
-          {isEditing ? <p>Adaugă o rezervare</p> : <p>Editează rezervarea</p>}
+          {isEditing ? <p>Editează rezervarea</p> : <p>Adaugă o rezervare</p>}
         </h2>
         <Input
           width="w-full"
@@ -106,6 +108,7 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
               onDateChange={setSelectedDate}
               id="dataNasterii"
               name="dataNasterii"
+              selected={selectedDate}
             />
           </div>
         </div>

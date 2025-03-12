@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   CalendarIcon,
   ArrowRightIcon,
@@ -8,15 +8,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./custom-datepicker.css";
 
-const CustomInput = ({
-  value,
-  onClick,
-  id,
-  name,
-  isOpen,
-  setIsOpen,
-  setViewMode,
-}) => (
+const CustomInput = ({ value, id, name, setIsOpen }) => (
   <div className="relative w-full">
     <input
       id={id}
@@ -27,7 +19,6 @@ const CustomInput = ({
       onClick={(e) => {
         e.stopPropagation();
         setIsOpen((prev) => !prev);
-        setViewMode("date");
       }}
       readOnly
     />
@@ -35,198 +26,149 @@ const CustomInput = ({
       className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer"
       onClick={(e) => {
         e.stopPropagation();
-        setIsOpen(() => (isOpen ? false : true));
-        onClick();
+        setIsOpen((prev) => !prev);
       }}
     >
       <CalendarIcon className="h-5 w-5 text-slate-400" />
     </div>
   </div>
 );
+
 const CustomHeader = ({
   date,
   decreaseMonth,
   increaseMonth,
-  setViewMode,
-  viewMode,
-  setIsOpen,
-}) => (
-  <div className="flex justify-between items-center py-2 px-2 bg-white">
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        decreaseMonth();
-      }}
-      className="p-2 rounded-sm text-gray-900 hover:bg-gray-100"
-    >
-      <ArrowLeftIcon className="w-5 h-5" />
-    </button>
-    <span
-      className="text-sm font-semibold text-gray-900 p-2 rounded-sm cursor-pointer hover:bg-gray-100"
-      onClick={() => {
-        setViewMode(viewMode === "date" ? "year" : "date");
-        setIsOpen(false);
-      }}
-    >
-      {date.toLocaleString("default", { month: "long", year: "numeric" })}
-    </span>
-    <button
-      onClick={(e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        increaseMonth();
-      }}
-      className="p-2 rounded-sm text-gray-900 hover:bg-gray-100"
-    >
-      <ArrowRightIcon className="w-5 h-5" />
-    </button>
-  </div>
-);
-
-const CustomYearPicker = ({
-  date,
-  onChange,
-  onClose,
-  setViewMode,
-  setIsOpen,
+  setStartDate,
+  startDate,
+  handleDateChange,
+  changeYear,
 }) => {
-  const startYear = date.getFullYear() - ((date.getFullYear() - 1) % 12);
-  const [currentStartYear, setCurrentStartYear] = useState(startYear);
+  const [showYearDropdown, setShowYearDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
-  const years = Array.from({ length: 12 }, (_, i) => currentStartYear + i);
+  const years = Array.from(
+    { length: 2030 - 1960 + 1 },
+    (_, i) => 1960 + i
+  ).reverse();
 
-  const handleYearClick = (year) => {
-    onChange(year);
-    setViewMode("date");
-    setIsOpen(true);
-    onClose();
-  };
+  useEffect(() => {
+    if (showYearDropdown && dropdownRef.current) {
+      const selectedYearElement = dropdownRef.current.querySelector(
+        `.year-item[data-year="${date.getFullYear()}"]`
+      );
+      if (selectedYearElement) {
+        selectedYearElement.scrollIntoView({ block: "center" });
+      }
+    }
+  }, [showYearDropdown, date]);
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow-lg w-full mt-2 border-[1px] border-gray-200">
-      <div className="flex justify-between items-center mb-4">
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            setCurrentStartYear(currentStartYear - 12);
-          }}
-          className="p-2 rounded-sm text-gray-900 hover:bg-gray-100"
-        >
-          <ArrowLeftIcon className="w-5 h-5" />
-        </button>
+    <div className="relative flex justify-between items-center py-2 px-2 bg-white">
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          decreaseMonth();
+        }}
+        className="p-2 rounded-sm text-gray-900 hover:bg-gray-100"
+      >
+        <ArrowLeftIcon className="w-5 h-5" />
+      </button>
+      <div className="">
         <span
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            setViewMode("date");
-            setIsOpen(true);
-          }}
-          className="text-sm font-semibold p-2 rounded-sm text-gray-900 cursor-pointer hover:bg-gray-100"
+          className="text-sm font-semibold text-gray-900 p-2 rounded-sm cursor-pointer hover:bg-gray-100"
+          onClick={() => setShowYearDropdown((prev) => !prev)}
         >
-          {currentStartYear} - {currentStartYear + 11}
+          {date.toLocaleString("default", { month: "long", year: "numeric" })}
         </span>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            e.preventDefault();
-            setCurrentStartYear(currentStartYear + 12);
-          }}
-          className="p-2 rounded-sm text-gray-900 hover:bg-gray-100"
-        >
-          <ArrowRightIcon className="w-5 h-5" />
-        </button>
-      </div>
-      <div className="grid grid-cols-3 gap-2">
-        {years.map((year) => (
-          <button
-            key={year}
-            type="button"
-            onClick={() => handleYearClick(year)}
-            className={`p-2 text-sm rounded-md cursor-pointer ${
-              date.getFullYear() === year
-                ? "bg-blue-500 text-white"
-                : "text-gray-900 hover:bg-gray-100"
-            }`}
+        {showYearDropdown && (
+          <div
+            ref={dropdownRef}
+            className="absolute top-14 left-[10%] bg-white border border-gray-200 rounded-md shadow-lg z-10 year-dropdown-container"
           >
-            {year}
-          </button>
-        ))}
+            <div className="p-2 grid grid-cols-4 gap-2 max-h-40 overflow-y-auto year-dropdown-grid">
+              {years.map((year) => (
+                <div
+                  key={year}
+                  data-year={year}
+                  className={`p-2 text-center rounded-md cursor-pointer year-item ${
+                    year === date.getFullYear()
+                      ? "bg-blue-500 text-white"
+                      : "hover:bg-gray-100"
+                  }`}
+                  onClick={() => {
+                    const newDate = new Date(startDate);
+                    newDate.setFullYear(year);
+                    changeYear(year);
+                    setStartDate(newDate);
+                    handleDateChange(newDate);
+                    setShowYearDropdown(false);
+                  }}
+                >
+                  {year}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          increaseMonth();
+        }}
+        className="p-2 rounded-sm text-gray-900 hover:bg-gray-100"
+      >
+        <ArrowRightIcon className="w-5 h-5" />
+      </button>
     </div>
   );
 };
 
-export default function Calendar({ onDateChange, id, name }) {
-  const [startDate, setStartDate] = useState(new Date());
-  const [viewMode, setViewMode] = useState("date");
+export default function Calendar({ onDateChange, id, name, selected }) {
+  const [startDate, setStartDate] = useState(selected || new Date());
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (selected) {
+      setStartDate(new Date(selected));
+    }
+  }, [selected]);
 
   const handleDateChange = (date) => {
     setStartDate(date);
-    setIsOpen(false);
+    setIsOpen(true);
     if (onDateChange) {
       onDateChange(date);
     }
   };
 
-  const handleYearChange = (year) => {
-    setStartDate(new Date(year, startDate.getMonth(), startDate.getDate()));
-    setViewMode("date");
-    setIsOpen(true);
-  };
-
   return (
     <div className="relative w-full">
       <DatePicker
+        dateFormat={"dd-MM-YYYY"}
         calendarClassName="custom-calendar"
         showPopperArrow={false}
         selected={startDate}
         onChange={handleDateChange}
-        customInput={
-          <CustomInput
-            id={id}
-            name={name}
-            onClick={() => {
-              setIsOpen((prev) => !prev);
-              setViewMode("date"); // Setează modul de vizualizare la "date" când se face click pe input
-            }}
-            setIsOpen={setIsOpen}
-            isOpen={isOpen}
-            setViewMode={setViewMode}
-            viewMode={viewMode}
-          />
-        }
+        showYearDropdown
+        customInput={<CustomInput id={id} name={name} setIsOpen={setIsOpen} />}
         renderCustomHeader={(props) => (
           <CustomHeader
             {...props}
-            setViewMode={setViewMode}
-            viewMode={viewMode}
-            setIsOpen={setIsOpen}
+            setStartDate={setStartDate}
+            startDate={startDate}
+            handleDateChange={handleDateChange}
           />
         )}
-        open={isOpen && viewMode === "date"}
+        open={isOpen}
         onClickOutside={(e) => {
           if (!e.target.closest("input")) {
             setIsOpen(false);
           }
         }}
       />
-      {viewMode === "year" && (
-        <div className="absolute top-full left-0 w-full z-10">
-          <CustomYearPicker
-            date={startDate}
-            onChange={handleYearChange}
-            onClose={() => {
-              setViewMode("date");
-            }}
-            setViewMode={setViewMode}
-            viewMode={viewMode}
-            setIsOpen={setIsOpen}
-          />
-        </div>
-      )}
     </div>
   );
 }
