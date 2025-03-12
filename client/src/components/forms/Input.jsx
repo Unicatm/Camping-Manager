@@ -1,6 +1,6 @@
-function Input({ width, label, id, error, ...props }) {
+function Input({ width,flex, label, id, error, ...props }) {
   return (
-    <div class={`${width}`}>
+    <div className={`${width} ${flex}`}>
       <label
         htmlFor={id}
         className="block mb-2 text-sm text-blue-950 font-medium"

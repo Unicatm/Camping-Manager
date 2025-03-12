@@ -1,0 +1,111 @@
+:root {
+  --clr-gray-100: #f3f4f6;
+}
+
+.custom-popper {
+  z-index: 1000;
+}
+
+.custom-calendar {
+  font-family: "Inter", sans-serif;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 8px;
+  height: 300px;
+}
+
+.custom-calendar .react-datepicker__day-names {
+  text-align: center;
+  background: var(--clr-gray-100);
+  border-radius: 4px;
+  font-weight: 600;
+  color: #0b60d7;
+}
+
+.react-datepicker__header {
+  padding: 0;
+  border-bottom: 0;
+  background-color: transparent;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.custom-calendar .react-datepicker__current-month {
+  border-bottom: 2px solid blueviolet;
+}
+
+.react-datepicker__day {
+  color: #2d3748;
+  border-radius: 4px;
+}
+
+.react-datepicker__day--outside-month {
+  color: #b3b3b3;
+}
+
+.react-datepicker__day--selected {
+  background-color: #4299e1;
+  color: white;
+}
+
+.react-datepicker__day--keyboard-selected {
+  background-color: #4299e1;
+  color: white;
+}
+
+.react-datepicker__day:hover,
+.react-datepicker__navigation--next:hover,
+.react-datepicker__navigation--previous:hover {
+  background-color: #cbd5e0;
+}
+
+.react-datepicker__day--today {
+  font-weight: bold;
+  color: #043f6f;
+}
+
+.react-datepicker__month-dropdown,
+.react-datepicker__year-dropdown {
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* .react-datepicker__year-dropdown {
+  max-height: 200px;
+  overflow-y: auto;
+  width: 100%;
+  padding: 5px 0;
+}
+
+.react-datepicker__year-dropdown-container {
+  margin: 0 5px;
+}
+
+.react-datepicker__year-option {
+  padding: 8px 10px;
+  line-height: 16px;
+  border: 2px solid red;
+}
+
+.react-datepicker__year-option:hover {
+  background-color: #f0f5ff;
+}
+
+/* Elimină butoanele de scroll din dropdown */
+/* .react-datepicker__year-option--selected_year {
+  background-color: #4299e1;
+  color: white;
+}
+
+.react-datepicker__navigation--years {
+  display: none;
+}
+
+.react-datepicker__month {
+  margin: 0;
+}  */

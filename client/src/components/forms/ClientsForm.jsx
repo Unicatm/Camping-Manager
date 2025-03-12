@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../forms/Input";
 import { editClient, getClient } from "../../api/clientApi";
+import Calendar from "../ui/Calendar";
 
 function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
   const navigate = useNavigate();
   const [client, setClient] = useState({});
+  const [selectedDate, setSelectedDate] = useState(null);
 
   async function fetchClient() {
     try {
@@ -20,7 +22,7 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
     if (isEditing && clientId) {
       console.log("Client ID s-a actualizat:", clientId);
       fetchClient();
-      console.log(clientId);
+      // console.log(clientId);
     }
   }, [clientId]);
 
@@ -29,6 +31,9 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
 
     const fd = new FormData(event.target);
     const data = Object.fromEntries(fd.entries());
+    data.dataNasterii = selectedDate
+      ? selectedDate.toISOString().split("T")[0]
+      : "";
     // setEnteredValues(data);
 
     if (Object.keys(client).length === 0) {
@@ -43,9 +48,9 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
           onClose();
         });
     } else {
-      console.log("clientId în handleSubmit:", client._id);
-      console.log(data);
-      editClient(client,data).then(() => {
+      // console.log("clientId în handleSubmit:", client._id);
+      // console.log(data);
+      editClient(client, data).then(() => {
         onClientAdded();
         onClose();
         navigate("/clienti");
@@ -90,13 +95,16 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
             defaultValue={isEditing ? client.nationalitate : ""}
           />
 
-          <div className="w-full min-w-[200px]">
-            <label className="block mb-2 text-sm text-blue-950 font-medium">
+          <div className="w-full">
+            <label
+              htmlFor="dataNasterii"
+              className="block mb-2 text-sm text-blue-950 font-medium"
+            >
               Data Nașterii
             </label>
-            <input
-              className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
-              placeholder="Type here..."
+            <Calendar
+              onDateChange={setSelectedDate}
+              id="dataNasterii"
               name="dataNasterii"
             />
           </div>
