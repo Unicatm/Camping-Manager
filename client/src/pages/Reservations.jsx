@@ -27,8 +27,6 @@ function Reservations() {
 
   const queryClient = useQueryClient();
 
-  console.log(rezervari);
-
   const deleteMutationRezervare = useMutation({
     mutationFn: deleteRezervare,
     onSuccess: () => {

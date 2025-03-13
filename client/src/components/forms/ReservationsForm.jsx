@@ -30,7 +30,7 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
   // console.log("ReservationsForm - rezervare:", rezervare);
   // console.log("ReservationsForm - dataci:", selectedDataIn);
 
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
 
   const updateRezervareMutation = useMutation({
     mutationFn: editRezervare,

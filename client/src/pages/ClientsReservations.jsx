@@ -50,6 +50,7 @@ function ClientsReservations() {
     }
   }, [client]);
 
+
   return (
     <div className="h-screen grow bg-blue-100/50">
       <div className="relative w-11/12 place-self-center">

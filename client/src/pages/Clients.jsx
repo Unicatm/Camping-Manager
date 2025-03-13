@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteClient, getClienti } from "../api/clientApi";
 import HeaderPage from "../components/HeaderPage";
 import SearchAddSection from "../components/tables/SearchAddSection";
@@ -10,60 +11,55 @@ import ClientsTableData from "../components/tables/tableDatas/ClientsTableData";
 
 function Clients() {
   const { id } = useParams();
-  const [isFetching, setIsFetching] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [clienti, setClienti] = useState([]);
   const [selectedClientId, setSelectedClientId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  async function fetchClienti() {
-    setIsFetching(true);
-    try {
-      const data = await getClienti();
-      setClienti(data);
-    } catch (error) {
-      console.error("Failed to fetch clients:", error);
-    } finally {
-      setIsFetching(false);
-    }
-  }
+  const {
+    data: clienti,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["clienti", "list"],
+    queryFn: getClienti,
+  });
 
-  const handleDelete = async (clientId) => {
-    try {
-      const res = await deleteClient(clientId);
-      res.ok ? fetchClienti() : console.error("Eroare la ștergerea clientului");
-    } catch (error) {
-      console.error(error);
-    }
+  const queryClient = useQueryClient();
+
+  const deleteMutationClient = useMutation({
+    mutationFn: deleteClient,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clienti", "list"] });
+    },
+  });
+
+  const handleDeleteClient = (id) => {
+    deleteMutationClient.mutate(id);
   };
 
-  const filteredClienti = clienti.filter((client) =>
-    client.nume.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  useEffect(() => {
-    fetchClienti();
-  }, []);
+  const handleEdit = (clientId) => {
+    setIsEditing(true);
+    setSelectedClientId(clientId);
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
     if (isEditing) {
       setIsModalOpen(true);
       setSelectedClientId(id);
     }
-  }, [isEditing, id]);
+  }, [id]);
 
-  useEffect(() => {
-    if (selectedClientId) {
-      setIsModalOpen(true);
+  const filteredClienti = () => {
+    if (clienti == undefined) {
+      return clienti;
+    } else {
+      return clienti.filter((client) =>
+        client.nume.toLowerCase().includes(searchTerm.toLowerCase())
+      );
     }
-  }, [selectedClientId]);
-
-  const handleEdit = (clientId) => {
-    setIsEditing(true);
-    setSelectedClientId(clientId);
-    setIsModalOpen(true);
   };
 
   return (
@@ -77,22 +73,22 @@ function Clients() {
         />
 
         <Table
-          data={filteredClienti}
+          data={filteredClienti()}
           columns={clientiTableHeads}
-          isLoading={isFetching}
+          isLoading={isLoading}
           forPreview={false}
+          isError={isError}
         >
           <ClientsTableData
-            clienti={filteredClienti}
+            clienti={filteredClienti()}
             forPreview={false}
             onEdit={handleEdit}
-            onDelete={handleDelete}
+            onDelete={handleDeleteClient}
           />
         </Table>
 
         {isModalOpen && (
           <ClientsForm
-            onClientAdded={fetchClienti}
             onClose={() => {
               setIsModalOpen(false);
               setSelectedClientId(null);

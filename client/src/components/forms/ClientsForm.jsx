@@ -1,36 +1,40 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../forms/Input";
-import { editClient, getClient } from "../../api/clientApi";
+import { createClient, editClient, getClient } from "../../api/clientApi";
 import Calendar from "../ui/Calendar";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
+function ClientsForm({ onClose, isEditing, clientId }) {
   const navigate = useNavigate();
-  const [client, setClient] = useState({});
   const [selectedDate, setSelectedDate] = useState(null);
 
-  async function fetchClient() {
-    try {
-      const data = await getClient(clientId);
-      setClient(data);
+  const { data: client } = useQuery({
+    queryKey: ["clienti", clientId],
+    queryFn: () => getClient(clientId),
+    enabled: !!clientId,
+  });
 
-      if (data.dataNasterii) {
-        const dateFromDb = new Date(data.dataNasterii);
-        setSelectedDate(dateFromDb);
-      }
-    } catch (error) {
-      console.error("Failed to fetch client:", error);
-    }
-  }
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    if (isEditing && clientId) {
-      console.log("Client ID s-a actualizat:", clientId);
-      fetchClient();
-    }
-  }, [clientId, isEditing]);
+  const createClientMutation = useMutation({
+    mutationFn: createClient,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clienti", "list"] });
+      onClose();
+    },
+  });
 
-  function handleSubmit(event) {
+  const updateClientMutation = useMutation({
+    mutationFn: (data) => editClient(clientId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["clienti", "list"] });
+      onClose();
+      navigate("/clienti");
+    },
+  });
+
+  const handleSubmit = (event) => {
     event.preventDefault();
 
     const fd = new FormData(event.target);
@@ -39,28 +43,13 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
       ? selectedDate.toISOString().split("T")[0]
       : "";
 
-    console.log(data);
-
-    if (Object.keys(client).length === 0) {
-      fetch("http://127.0.0.1:3000/api/v1/clients", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then(() => {
-          onClientAdded();
-          onClose();
-        });
+    if (!isEditing) {
+      createClientMutation.mutate(data);
     } else {
-      editClient(client, data).then(() => {
-        onClientAdded();
-        onClose();
-        navigate("/clienti");
-      });
+      updateClientMutation.mutate(data);
     }
     event.target.reset();
-  }
+  };
 
   return (
     <form
@@ -77,7 +66,7 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
           placeholder="CNP..."
           name="cnp"
           label="CNP"
-          defaultValue={isEditing ? client.cnp : ""}
+          defaultValue={isEditing && client ? client.cnp : ""}
         />
         <Input
           width="w-full"
@@ -85,7 +74,7 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
           name="nume"
           label="Nume"
           placeholder="Nume..."
-          defaultValue={isEditing ? client.nume : ""}
+          defaultValue={isEditing && client ? client.nume : ""}
         />
         <div className="flex gap-8 w-full pb-4">
           <Input
@@ -94,7 +83,7 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
             name="nationalitate"
             label="Nationalitate"
             placeholder="Romania..."
-            defaultValue={isEditing ? client.nationalitate : ""}
+            defaultValue={isEditing && client ? client.nationalitate : ""}
           />
 
           <div className="w-full">
@@ -120,7 +109,7 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
             label="Email *"
             placeholder="ceva@gmail.com..."
             type="email"
-            defaultValue={isEditing ? client.email : ""}
+            defaultValue={isEditing && client ? client.email : ""}
           />
 
           <Input
@@ -129,7 +118,7 @@ function ClientsForm({ onClose, onClientAdded, isEditing, clientId }) {
             name="nrTelefon"
             label="Număr telefon *"
             placeholder="07xxxxx..."
-            defaultValue={isEditing ? client.nrTelefon : ""}
+            defaultValue={isEditing && client ? client.nrTelefon : ""}
           />
         </div>
 

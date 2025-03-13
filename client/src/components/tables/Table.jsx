@@ -34,7 +34,10 @@ const TableBody = ({ data, columns, isLoading, children, forPreview }) => (
       </tr>
     ) : data.length === 0 ? (
       <tr>
-        <td colSpan={columns.length} className="bg-white px-6 py-4 text-center">
+        <td
+          colSpan={columns.length + (forPreview ? 0 : 1)}
+          className="bg-white px-6 py-4 text-center"
+        >
           Nu sunt date de afișat...
         </td>
       </tr>
@@ -70,7 +73,14 @@ export {
   TableRow,
 };
 
-export const Table = ({ data, columns, forPreview, isLoading, children }) => {
+export const Table = ({
+  data,
+  columns,
+  forPreview,
+  isError,
+  isLoading,
+  children,
+}) => {
   return (
     <>
       <TableElement>
@@ -79,6 +89,7 @@ export const Table = ({ data, columns, forPreview, isLoading, children }) => {
           data={data}
           columns={columns}
           isLoading={isLoading}
+          isError={isError}
           forPreview={forPreview}
         >
           {children}

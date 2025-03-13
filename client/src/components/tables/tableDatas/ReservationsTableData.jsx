@@ -32,16 +32,6 @@ function ReservationsTableData({ rezervari, forPreview, onEdit, onDelete }) {
     });
   }, [rezervari, numeClienti]);
 
-  if (rezervari == undefined) {
-    return (
-      <TableRow>
-        <TableData className="text-center col-span-full">
-          Nu sunt date de afișat...
-        </TableData>
-      </TableRow>
-    );
-  }
-
   return rezervari.map((rezervare, index) => (
     <TableRow key={index}>
       <TableHead>

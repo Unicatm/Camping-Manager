@@ -4,7 +4,7 @@ import { TableData, TableRow, TableHead } from "../Table";
 import { TrashIcon, PencilIcon } from "@heroicons/react/16/solid";
 import dateFormatter from "../../../utils/dateFormat";
 
-function ClientsTableData({ clienti, forPreview, onEdit, onDelete }) {
+function ClientsTableData({ clienti, forPreview,onEdit, onDelete }) {
   return clienti.map((client, index) => (
     <TableRow key={index}>
       <TableHead>
