@@ -1,12 +1,11 @@
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useLocalStorage } from "../../hooks/useLocalStorage";
-import React, { useCallback, useEffect, useState } from "react";
+import { TrashIcon, PencilIcon } from "@heroicons/react/16/solid";
 import { TableData, TableRow, TableHead } from "../Table";
 import dateFormatter from "../../../utils/dateFormat";
 import { getClientName } from "../../../api/clientApi";
 
-function ReservationsTableData({ rezervari, forPreview }) {
-  const { getItem, setItem } = useLocalStorage("RESERVATIONSNAME_DATA_TABLE");
+function ReservationsTableData({ rezervari, forPreview, onEdit, onDelete }) {
   const [numeClienti, setNumeClienti] = useState({});
 
   async function fetchClientName(id) {
@@ -26,31 +25,14 @@ function ReservationsTableData({ rezervari, forPreview }) {
   }, [rezervari, numeClienti]);
 
   useEffect(() => {
-    const cachedData = getItem("RESERVATIONSNAME_DATA_TABLE");
-    if (cachedData) {
-      const parsedData = JSON.parse(cachedData);
-      if (parsedData && typeof parsedData === "object") {
-        setNumeClienti(parsedData);
-      }
-    }
     rezervari.forEach((rezervare) => {
       if (!numeClienti[rezervare.idClient]) {
         fetchClientName(rezervare.idClient);
       }
     });
-  }, [rezervari]);
+  }, [rezervari, numeClienti]);
 
-  const saveNumeRezToStorage = useCallback(() => {
-    if (Object.keys(numeClienti).length > 0) {
-      setItem(JSON.stringify(numeClienti));
-    }
-  }, [numeClienti, setItem]);
-
-  useEffect(() => {
-    saveNumeRezToStorage();
-  }, [saveNumeRezToStorage]);
-
-  if (rezervari.length === 0) {
+  if (rezervari == undefined) {
     return (
       <TableRow>
         <TableData className="text-center col-span-full">
@@ -82,14 +64,25 @@ function ReservationsTableData({ rezervari, forPreview }) {
         ))}
       </TableData>
       {!forPreview ? (
-        <TableData>
-          <a
-            href="#"
-            className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+        <td className="flex justify-center items-center space-x-4 px-2 py-3">
+          <button
+            className="font-medium text-blue-500 hover:underline p-2 cursor-pointer"
+            onClick={() => {
+              console.log("Edit clicked, rezervare._id:", rezervare._id);
+              onEdit(rezervare._id);
+            }}
           >
-            Edit
-          </a>
-        </TableData>
+            <PencilIcon className="w-4 h-4" />
+          </button>
+          <button
+            className="font-medium text-rose-600 hover:underline p-2 cursor-pointer"
+            onClick={() => {
+              onDelete(rezervare._id);
+            }}
+          >
+            <TrashIcon className="w-4 h-4" />
+          </button>
+        </td>
       ) : null}
     </TableRow>
   ));

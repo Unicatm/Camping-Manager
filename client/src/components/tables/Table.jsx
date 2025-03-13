@@ -21,11 +21,14 @@ const TableColumns = ({ columns, forPreview }) => (
   </thead>
 );
 
-const TableBody = ({ data, columns, isLoading, children }) => (
+const TableBody = ({ data, columns, isLoading, children, forPreview }) => (
   <tbody>
-    {isLoading && data.length === 0 ? (
+    {isLoading && data == undefined ? (
       <tr>
-        <td colSpan={columns.length} className="bg-white px-6 py-4 text-center">
+        <td
+          colSpan={columns.length + (forPreview ? 0 : 1)}
+          className="bg-white px-6 py-4 text-center"
+        >
           {"Datele se încarcă..."}
         </td>
       </tr>
@@ -72,7 +75,12 @@ export const Table = ({ data, columns, forPreview, isLoading, children }) => {
     <>
       <TableElement>
         <TableColumns columns={columns} forPreview={forPreview} />
-        <TableBody data={data} columns={columns} isLoading={isLoading}>
+        <TableBody
+          data={data}
+          columns={columns}
+          isLoading={isLoading}
+          forPreview={forPreview}
+        >
           {children}
         </TableBody>
       </TableElement>

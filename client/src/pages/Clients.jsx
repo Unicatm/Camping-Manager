@@ -1,18 +1,14 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { deleteClient, getClienti } from "../api/clientApi";
-import { useLocalStorage } from "../components/hooks/useLocalStorage";
 import HeaderPage from "../components/HeaderPage";
 import SearchAddSection from "../components/tables/SearchAddSection";
 import ClientsForm from "../components/forms/ClientsForm";
 import Table from "../components/tables/Table";
 import clientiTableHeads from "../components/tables/clientiTabelHeads";
 import ClientsTableData from "../components/tables/tableDatas/ClientsTableData";
-import Calendar from "../components/ui/Calendar";
-import Calendar2 from "../components/ui/Calendar";
 
 function Clients() {
-  const { getItem, setItem } = useLocalStorage("CLIENTS_DATA_TABLE");
   const { id } = useParams();
   const [isFetching, setIsFetching] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -34,48 +30,6 @@ function Clients() {
     }
   }
 
-  useEffect(() => {
-    const cachedData = getItem("CLIENTS_DATA_TABLE");
-    if (cachedData) {
-      const parsedData = JSON.parse(cachedData);
-      if (Array.isArray(parsedData)) {
-        setClienti(parsedData);
-      }
-    }
-    fetchClienti();
-  }, []);
-
-  const saveClientiToStorage = useCallback(() => {
-    if (clienti.length > 0) {
-      setItem(JSON.stringify(clienti));
-    }
-  }, [clienti, setItem]);
-
-  useEffect(() => {
-    saveClientiToStorage();
-  }, [saveClientiToStorage]);
-
-  useEffect(() => {
-    if (isEditing) {
-      setIsModalOpen(true);
-      setSelectedClientId(id);
-    }
-  }, [isEditing, id]);
-
-  const handleEdit = (clientId) => {
-    console.log("Client ID la edit:", clientId);
-    setIsEditing(true);
-    setSelectedClientId(clientId);
-    console.log("Handle edit" + selectedClientId);
-    setIsModalOpen(true);
-  };
-
-  useEffect(() => {
-    if (selectedClientId) {
-      setIsModalOpen(true);
-    }
-  }, [selectedClientId]);
-
   const handleDelete = async (clientId) => {
     try {
       const res = await deleteClient(clientId);
@@ -88,6 +42,29 @@ function Clients() {
   const filteredClienti = clienti.filter((client) =>
     client.nume.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  useEffect(() => {
+    fetchClienti();
+  }, []);
+
+  useEffect(() => {
+    if (isEditing) {
+      setIsModalOpen(true);
+      setSelectedClientId(id);
+    }
+  }, [isEditing, id]);
+
+  useEffect(() => {
+    if (selectedClientId) {
+      setIsModalOpen(true);
+    }
+  }, [selectedClientId]);
+
+  const handleEdit = (clientId) => {
+    setIsEditing(true);
+    setSelectedClientId(clientId);
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="h-screen grow bg-blue-100/50">

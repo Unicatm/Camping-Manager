@@ -14,6 +14,6 @@ router
   .patch(rezervareController.updateRezervare)
   .delete(rezervareController.deleteRezervare);
 
-router.route("/clienti/:cnp").get(rezervareController.getRezervariByClientId)
+router.route("/clienti/:idClient").get(rezervareController.getRezervariByClientId);
 
 module.exports = router;

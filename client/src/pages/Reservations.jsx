@@ -1,76 +1,100 @@
-import { useEffect, useState, useCallback } from "react";
-import { useLocalStorage } from "../components/hooks/useLocalStorage";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import HeaderPage from "../components/HeaderPage";
 import ReservationsForm from "../components/forms/ReservationsForm";
 import SearchAddSection from "../components/tables/SearchAddSection";
 import Table from "../components/tables/Table";
 import ReservationsTableData from "../components/tables/tableDatas/ReservationsTableData";
 import rezervariTableHeads from "../components/tables/rezervariTabelHeads";
-import { getAllRezervari } from "../api/reservationsApi";
+import { deleteRezervare, getAllRezervari } from "../api/reservationsApi";
 
 function Reservations() {
-  const { getItem, setItem } = useLocalStorage("RESERVATIONS_DATA_TABLE");
-  const [isFetching, setIsFetching] = useState(false);
-  const [rezervari, setRezervari] = useState([]);
-
+  const { id } = useParams();
+  const [isEditing, setIsEditing] = useState(false);
+  const [selectedRezervareId, setSelectedRezervareId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  async function fetchRezervari() {
-    setIsFetching(true);
-    try {
-      const data = await getAllRezervari();
-      setRezervari(data);
-    } catch (error) {
-      console.error("Failed to fetch rezervari:", error);
-    } finally {
-      setIsFetching(false);
-    }
-  }
+  const {
+    data: rezervari,
+    isLoading,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ["rezervari"],
+    queryFn: getAllRezervari,
+  });
 
-  // useEffect(() => {
-  //   setIsFetching(true);
-  //   fetchRezervari();
-  // }, []);
+  const queryClient = useQueryClient();
+
+  console.log(rezervari);
+
+  const deleteMutationRezervare = useMutation({
+    mutationFn: deleteRezervare,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["rezervari"] });
+      refetch();
+    },
+  });
+
+  const handleDeleteRezervare = (id) => {
+    deleteMutationRezervare.mutate(id);
+  };
+
+  const handleEdit = (rezervareId) => {
+    console.log("handleEdit called with rezervareId:", rezervareId);
+    setIsEditing(true);
+    setSelectedRezervareId(rezervareId);
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
-    const cachedData = getItem("RESERVATIONS_DATA_TABLE");
-    if (cachedData) {
-      const parsedData = JSON.parse(cachedData);
-      if (Array.isArray(parsedData)) {
-        setRezervari(parsedData);
-      }
+    if (isEditing) {
+      setIsModalOpen(true);
+      setSelectedRezervareId(id);
+      console.log("Rez uf");
+      console.log(id);
     }
-    fetchRezervari();
-  }, []);
+  }, [id]);
 
-  const saveRezervariToStorage = useCallback(() => {
-    if (rezervari.length > 0) {
-      setItem(JSON.stringify(rezervari));
-    }
-  }, [rezervari, setItem]);
-
-  useEffect(() => {
-    saveRezervariToStorage();
-  }, [saveRezervariToStorage]);
+  // if (isLoading) return "Loading data....";
+  // if (isError) return `Error: ${error.message || "A apărut o eroare"}`;
 
   return (
     <div className="h-screen grow bg-blue-100/50">
       <div className="relative w-11/12 place-self-center">
         <HeaderPage path="Rezervări" title="Rezervări" />
         <SearchAddSection
-          openModal={() => setIsModalOpen(true)}
+          openModal={() => {
+            setIsEditing(false);
+            setSelectedRezervareId(null);
+            setIsModalOpen(true);
+          }}
           buttonText="Adaugă o rezervare"
         />
         {isModalOpen && (
-          <ReservationsForm onClose={() => setIsModalOpen(false)} />
+          <ReservationsForm
+            onClose={() => {
+              setIsModalOpen(false);
+              setIsEditing(false);
+              setSelectedRezervareId(null);
+            }}
+            rezervareId={selectedRezervareId}
+            isEditing={isEditing}
+          />
         )}
         <Table
           data={rezervari}
           columns={rezervariTableHeads}
-          isLoading={isFetching}
+          isLoading={isLoading}
           forPreview={false}
         >
-          <ReservationsTableData rezervari={rezervari} forPreview={false} />
+          <ReservationsTableData
+            rezervari={rezervari}
+            forPreview={false}
+            onEdit={handleEdit}
+            onDelete={handleDeleteRezervare}
+          />
         </Table>
       </div>
     </div>

@@ -9,21 +9,25 @@ import rezervariTableHeads from "../components/tables/rezervariTabelHeads";
 
 function ClientsReservations() {
   const { id } = useParams();
+  console.log(id);
   const [client, setClient] = useState({});
   const [rezervari, setRezervari] = useState([]);
   const navigate = useNavigate();
 
   async function fetchClient() {
     try {
-      const data = await getClient(id);
-      if (data == null) {
+      const clientData = await getClient(id);
+      if (!clientData) {
         navigate("/clienti");
-      } else {
-        setClient(data);
-        fetchRezervari();
+        return;
       }
+
+      const rezervariData = await getRezervariByClientId(id);
+
+      setClient(clientData);
+      setRezervari(rezervariData);
     } catch (error) {
-      console.error("Failed to fetch client:", error);
+      console.error("Failed to fetch data:", error);
     }
   }
 
@@ -39,6 +43,12 @@ function ClientsReservations() {
   useEffect(() => {
     fetchClient();
   }, [id]);
+
+  useEffect(() => {
+    if (client?._id) {
+      fetchRezervari();
+    }
+  }, [client]);
 
   return (
     <div className="h-screen grow bg-blue-100/50">

@@ -2,12 +2,67 @@ const BASE_URL = "http://127.0.0.1:3000/api/v1/rezervari";
 
 export const getAllRezervari = async () => {
   const res = await fetch(BASE_URL);
+
+  if (!res.ok) {
+    throw new Error(`HTTP error! Status: ${res.status}`);
+  }
+
   const resData = await res.json();
-  return resData.data.rezervari;
+  return resData?.data?.rezervari || [];
 };
 
-export const getRezervariByClientId = async (id) => {
-  const res = await fetch(`${BASE_URL}/clienti/${id}`);
+export const getRezervareById = async (id) => {
+  const res = await fetch(`${BASE_URL}/${id}`);
+
+  if (!res.ok) {
+    throw new Error(`HTTP error! Status: ${res.status}`);
+  }
+
   const resData = await res.json();
-  return resData.data.rezervari;
+  const data = resData.data.rezervare;
+  console.log(data);
+  return data;
+};
+
+export const getRezervariByClientId = async (idClient) => {
+  const res = await fetch(`${BASE_URL}/clienti/${idClient}`);
+  const resData = await res.json();
+  const data = resData.data.rezervari;
+  // console.log(data);
+  return data;
+};
+
+export const createRezervare = async (rezervare) => {
+  const res = await fetch(BASE_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(rezervare),
+  });
+  return res.json();
+};
+
+export const deleteRezervare = async (id) => {
+  const res = await fetch(`${BASE_URL}/${id}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (!res.ok) {
+    throw new Error(`Failed to delete reservation with ID: ${id}`);
+  }
+
+  return res;
+};
+
+export const editRezervare = async (rezervare, newData) => {
+  const res = await fetch(`${BASE_URL}/${rezervare._id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(newData),
+  });
+  return res.json();
 };
