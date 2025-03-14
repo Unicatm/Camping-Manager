@@ -4,8 +4,8 @@ import { TableData, TableRow, TableHead } from "../Table";
 import { TrashIcon, PencilIcon } from "@heroicons/react/16/solid";
 import dateFormatter from "../../../utils/dateFormat";
 
-function ClientsTableData({ clienti, forPreview,onEdit, onDelete }) {
-  return clienti.map((client, index) => (
+function ClientsTableData({ clienti, forPreview, onEdit, onDelete }) {
+  return clienti.toReversed().map((client, index) => (
     <TableRow key={index}>
       <TableHead>
         <Link
@@ -16,12 +16,17 @@ function ClientsTableData({ clienti, forPreview,onEdit, onDelete }) {
         </Link>
       </TableHead>
       <TableData>{client.cnp}</TableData>
-      <TableData>{client.nationalitate}</TableData>
+      <TableData>{client.nationalitate || "━"}</TableData>
       <TableData>{dateFormatter(client.dataNasterii)}</TableData>
       <TableData>
-        {" "}
-        <div>{client.nrTelefon || ""}</div>
-        <div>{client.email || ""}</div>
+        {!client.nrTelefon && !client.email ? (
+          <div>━</div>
+        ) : (
+          <>
+            <div>{client.nrTelefon || ""}</div>
+            <div>{client.email || ""}</div>
+          </>
+        )}
       </TableData>
       {!forPreview ? (
         <td className="flex justify-center items-center space-x-4 px-2 py-3">

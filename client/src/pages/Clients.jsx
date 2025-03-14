@@ -64,7 +64,7 @@ function Clients() {
 
   return (
     <div className="h-screen grow bg-blue-100/50">
-      <div className="relative w-11/12 place-self-center">
+      <div className="relative w-11/12 h-full mx-auto py-8 flex flex-col">
         <HeaderPage path="Clienți" title="Clienți" />
         <SearchAddSection
           openModal={() => setIsModalOpen(true)}

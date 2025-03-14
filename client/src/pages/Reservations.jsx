@@ -60,7 +60,7 @@ function Reservations() {
 
   return (
     <div className="h-screen grow bg-blue-100/50">
-      <div className="relative w-11/12 place-self-center">
+      <div className="relative w-11/12 py-8 place-self-center">
         <HeaderPage path="Rezervări" title="Rezervări" />
         <SearchAddSection
           openModal={() => {

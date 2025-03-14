@@ -1,19 +1,85 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Input from "../forms/Input";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { createClient, editClient, getClient } from "../../api/clientApi";
-import Calendar from "../ui/Calendar";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import Calendar from "../ui/Calendar";
+import Input from "../forms/Input";
+import {
+  phoneRegex,
+  numbersLettersRegex,
+  lettersRegex,
+} from "../../utils/regex";
+
+const validationSchema = yup
+  .object({
+    cnp: yup
+      .string()
+      .required("CNP lipsă!")
+      .matches(numbersLettersRegex, "Trebuie să conțină numere și litere!"),
+    nume: yup
+      .string(lettersRegex, "Trebuie sa contina numai litere")
+      .required("Nume lipsă!"),
+    nationalitate: yup.string().optional(),
+    email: yup.string().email("Trebuie să fie un email valid!").optional(),
+    nrTelefon: yup
+      .string()
+      .nullable()
+      .notRequired()
+      .matches(phoneRegex, "Invalid")
+      .transform((value) => (value === "" ? null : value)),
+  })
+  .required();
 
 function ClientsForm({ onClose, isEditing, clientId }) {
   const navigate = useNavigate();
   const [selectedDate, setSelectedDate] = useState(null);
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(validationSchema),
+    defaultValues: {
+      cnp: "",
+      nume: "",
+      nationalitate: "",
+      email: "",
+      nrTelefon: "",
+    },
+  });
+
+  console.log(errors);
 
   const { data: client } = useQuery({
     queryKey: ["clienti", clientId],
     queryFn: () => getClient(clientId),
     enabled: !!clientId,
   });
+
+  useEffect(() => {
+    if (client && isEditing) {
+      setValue("cnp", client.cnp || "");
+      setValue("nume", client.nume || "");
+      setValue("nationalitate", client.nationalitate || "");
+      setValue(
+        "dataNasterii",
+        client.dataNasterii ? new Date(client.dataNasterii) : ""
+      );
+      setValue("email", client.email || "");
+      setValue("nrTelefon", client.nrTelefon || "");
+    }
+  }, [client, setValue, isEditing]);
+
+  useEffect(() => {
+    if (client && client.dataNasterii) {
+      const dataNasteriiDb = new Date(client.dataNasterii);
+      setSelectedDate(dataNasteriiDb);
+    }
+  }, [client]);
 
   const queryClient = useQueryClient();
 
@@ -34,11 +100,7 @@ function ClientsForm({ onClose, isEditing, clientId }) {
     },
   });
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    const fd = new FormData(event.target);
-    const data = Object.fromEntries(fd.entries());
+  const onSubmit = (data) => {
     data.dataNasterii = selectedDate
       ? selectedDate.toISOString().split("T")[0]
       : "";
@@ -47,13 +109,14 @@ function ClientsForm({ onClose, isEditing, clientId }) {
       createClientMutation.mutate(data);
     } else {
       updateClientMutation.mutate(data);
+      setSelectedDate(data.dataNasterii);
     }
-    event.target.reset();
+    console.log(data);
   };
 
   return (
     <form
-      onSubmit={handleSubmit}
+      onSubmit={handleSubmit(onSubmit)}
       className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
     >
       <div className="fixed inset-0 flex flex-col gap-6 items-center m-auto w-[40%] min-w-xl p-8 h-max bg-white shadow-md sm:rounded-lg">
@@ -66,7 +129,8 @@ function ClientsForm({ onClose, isEditing, clientId }) {
           placeholder="CNP..."
           name="cnp"
           label="CNP"
-          defaultValue={isEditing && client ? client.cnp : ""}
+          register={register}
+          error={errors.cnp}
         />
         <Input
           width="w-full"
@@ -74,7 +138,8 @@ function ClientsForm({ onClose, isEditing, clientId }) {
           name="nume"
           label="Nume"
           placeholder="Nume..."
-          defaultValue={isEditing && client ? client.nume : ""}
+          register={register}
+          error={errors.nume}
         />
         <div className="flex gap-8 w-full pb-4">
           <Input
@@ -83,7 +148,8 @@ function ClientsForm({ onClose, isEditing, clientId }) {
             name="nationalitate"
             label="Nationalitate"
             placeholder="Romania..."
-            defaultValue={isEditing && client ? client.nationalitate : ""}
+            register={register}
+            error={errors.nationalitate}
           />
 
           <div className="w-full">
@@ -109,7 +175,8 @@ function ClientsForm({ onClose, isEditing, clientId }) {
             label="Email *"
             placeholder="ceva@gmail.com..."
             type="email"
-            defaultValue={isEditing && client ? client.email : ""}
+            register={register}
+            error={errors.email}
           />
 
           <Input
@@ -118,7 +185,8 @@ function ClientsForm({ onClose, isEditing, clientId }) {
             name="nrTelefon"
             label="Număr telefon *"
             placeholder="07xxxxx..."
-            defaultValue={isEditing && client ? client.nrTelefon : ""}
+            register={register}
+            error={errors.nrTelefon}
           />
         </div>
 
