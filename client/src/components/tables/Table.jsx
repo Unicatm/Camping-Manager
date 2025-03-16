@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ArrowDownIcon } from "@heroicons/react/16/solid";
 
 const TableElement = ({ children }) => (
@@ -23,7 +23,7 @@ const TableColumns = ({
             key={index}
             scope="col"
             className={`${
-              th.alphabetical ? "cursor-pointer" : ""
+              th.sorting ? "cursor-pointer" : ""
             } px-6 py-3 not-first:text-right select-none`}
           >
             <div
@@ -33,11 +33,17 @@ const TableColumns = ({
               className="flex gap-2"
             >
               {th.title}
-              {th.alphabetical ? (
+              {th.sorting ? (
                 <ArrowDownIcon
-                  className={`${
-                    sortedColumns[th.id] ? "rotate-180" : ""
-                  } w-4 h-4`}
+                  className={`
+                  ${
+                    sortedColumns[th.id] === "none"
+                      ? "text-blue-400"
+                      : "text-white"
+                  }
+                  ${sortedColumns[th.id] === "asc" ? "rotate-180" : ""}
+                  w-4 h-4
+                `}
                 />
               ) : (
                 ""
@@ -112,11 +118,12 @@ export const Table = ({
   isError,
   isLoading,
   children,
+  onSortChange,
 }) => {
   const initialSortedState = useMemo(() => {
     return columns.reduce((acc, col) => {
       if (col.id !== undefined) {
-        acc[col.id] = false;
+        acc[col.id] = "none";
       }
       return acc;
     }, {});
@@ -125,12 +132,34 @@ export const Table = ({
   const [sortedColumns, setSortedColumns] = useState(initialSortedState);
 
   const handleSortClick = (index) => {
-    if (!columns[index].alphabetical) return;
-    setSortedColumns((prev) => ({
-      ...prev,
-      [columns[index].id]: !prev[columns[index].id],
-    }));
+    if (!columns[index].sorting) return;
+
+    setSortedColumns((prev) => {
+      const currentState = prev[columns[index].id];
+
+      const nextState =
+        currentState === "none"
+          ? "asc"
+          : currentState === "asc"
+          ? "desc"
+          : "none";
+
+      const newState = Object.keys(prev).reduce((acc, key) => {
+        acc[key] = "none";
+        return acc;
+      }, {});
+
+      newState[columns[index].id] = nextState;
+
+      return newState;
+    });
   };
+
+  useEffect(() => {
+    if (onSortChange) {
+      onSortChange(sortedColumns);
+    }
+  }, [sortedColumns]);
 
   return (
     <>

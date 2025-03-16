@@ -14,6 +14,7 @@ function Clients() {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedClientId, setSelectedClientId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [sortedColumns, setSortedColumns] = useState({});
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -52,15 +53,39 @@ function Clients() {
     }
   }, [id]);
 
+  useEffect(() => {
+    console.log(sortedColumns);
+  }, [sortedColumns]);
+
   const filteredClienti = () => {
-    if (clienti == undefined) {
-      return clienti;
-    } else {
-      return clienti.filter((client) =>
-        client.nume.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+    if (!clienti) return [];
+
+    let sortedData = [...clienti];
+
+    const activeSort = Object.entries(sortedColumns).find(
+      ([, direction]) => direction !== "none"
+    );
+
+    if (activeSort) {
+      const [columnId, direction] = activeSort;
+
+      sortedData.sort((a, b) => {
+        if (a[columnId] < b[columnId]) return direction === "asc" ? -1 : 1;
+        if (a[columnId] > b[columnId]) return direction === "asc" ? 1 : -1;
+        return 0;
+      });
     }
+
+    return sortedData.filter((client) =>
+      client.nume.toLowerCase().includes(searchTerm.toLowerCase())
+    );
   };
+
+  const handleSortChange = (newSortedColumns) => {
+    setSortedColumns(() => ({ ...newSortedColumns }));
+  };
+
+  filteredClienti();
 
   return (
     <div className="h-screen grow bg-blue-100/50">
@@ -78,6 +103,7 @@ function Clients() {
           isLoading={isLoading}
           forPreview={false}
           isError={isError}
+          onSortChange={handleSortChange}
         >
           <ClientsTableData
             clienti={filteredClienti()}
