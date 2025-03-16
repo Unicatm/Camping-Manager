@@ -10,7 +10,7 @@ function SearchAddSection({ openModal, buttonText, onSearch }) {
   return (
     <div className="w-full flex justify-between items-end pb-6">
       <Input
-        width="w-2/8"
+        width="w-3/14"
         label="Caută dupa nume"
         placeholder="Caută..."
         onChange={handleSearchChange}

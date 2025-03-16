@@ -29,7 +29,7 @@ function ClientsTableData({ clienti, forPreview, onEdit, onDelete }) {
         )}
       </TableData>
       {!forPreview ? (
-        <td className="flex justify-center items-center space-x-4 px-2 py-3">
+        <td className="flex justify-center items-center space-x-2 px-2 py-3">
           <button
             className="font-medium text-blue-500 hover:underline p-2 cursor-pointer"
             onClick={() => onEdit(client._id)}

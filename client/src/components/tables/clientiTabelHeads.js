@@ -1,7 +1,7 @@
 const clientiTableHeads = [
-  { title: "Nume Client" },
+  { title: "Nume Client", alphabetical : true, id: "nume" },
   { title: "CNP" },
-  { title: "Naționalitate" },
+  { title: "Naționalitate", alphabetical : true, id: "nationalitate" },
   { title: "Dată naștere" },
   { title: "Date contact" },
 ];

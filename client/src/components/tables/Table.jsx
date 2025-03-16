@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
+import { ArrowDownIcon } from "@heroicons/react/16/solid";
 
 const TableElement = ({ children }) => (
   <div className="relative h-full overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg">
@@ -8,18 +9,47 @@ const TableElement = ({ children }) => (
   </div>
 );
 
-const TableColumns = ({ columns, forPreview }) => (
-  <thead className="sticky top-0 text-xs text-white uppercase bg-blue-600">
-    <tr>
-      {columns.map((th, index) => (
-        <th key={index} scope="col" className="px-6 py-3 not-first:text-right">
-          {th.title}
-        </th>
-      ))}
-      {forPreview ? null : <th scope="col" className="px-6 py-3"></th>}
-    </tr>
-  </thead>
-);
+const TableColumns = ({
+  columns,
+  forPreview,
+  handleSortClick,
+  sortedColumns,
+}) => {
+  return (
+    <thead className="sticky top-0 text-xs text-white uppercase bg-blue-600">
+      <tr>
+        {columns.map((th, index) => (
+          <th
+            key={index}
+            scope="col"
+            className={`${
+              th.alphabetical ? "cursor-pointer" : ""
+            } px-6 py-3 not-first:text-right select-none`}
+          >
+            <div
+              onClick={() => {
+                handleSortClick(index);
+              }}
+              className="flex gap-2"
+            >
+              {th.title}
+              {th.alphabetical ? (
+                <ArrowDownIcon
+                  className={`${
+                    sortedColumns[th.id] ? "rotate-180" : ""
+                  } w-4 h-4`}
+                />
+              ) : (
+                ""
+              )}
+            </div>
+          </th>
+        ))}
+        {forPreview ? null : <th scope="col" className="px-6 py-3"></th>}
+      </tr>
+    </thead>
+  );
+};
 
 const TableBody = ({ data, columns, isLoading, children, forPreview }) => (
   <tbody>
@@ -83,10 +113,34 @@ export const Table = ({
   isLoading,
   children,
 }) => {
+  const initialSortedState = useMemo(() => {
+    return columns.reduce((acc, col) => {
+      if (col.id !== undefined) {
+        acc[col.id] = false;
+      }
+      return acc;
+    }, {});
+  }, [columns]);
+
+  const [sortedColumns, setSortedColumns] = useState(initialSortedState);
+
+  const handleSortClick = (index) => {
+    if (!columns[index].alphabetical) return;
+    setSortedColumns((prev) => ({
+      ...prev,
+      [columns[index].id]: !prev[columns[index].id],
+    }));
+  };
+
   return (
     <>
       <TableElement>
-        <TableColumns columns={columns} forPreview={forPreview} />
+        <TableColumns
+          columns={columns}
+          forPreview={forPreview}
+          handleSortClick={handleSortClick}
+          sortedColumns={sortedColumns}
+        />
         <TableBody
           data={data}
           columns={columns}
