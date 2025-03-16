@@ -145,6 +145,7 @@ function ClientsForm({ onClose, isEditing, clientId }) {
               id="dataNasterii"
               name="dataNasterii"
               selected={selectedDate}
+              birthDate={true}
             />
           </div>
         </div>

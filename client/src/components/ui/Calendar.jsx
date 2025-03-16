@@ -42,19 +42,23 @@ const CustomHeader = ({
   startDate,
   handleDateChange,
   changeYear,
+  birthDate,
 }) => {
   const [showYearDropdown, setShowYearDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
+  const currentYear = new Date().getFullYear();
+  const lastMajorYear = currentYear - 18;
+
   const years = Array.from(
-    { length: 2030 - 1960 + 1 },
+    { length: birthDate ? lastMajorYear - 1960 + 1 : 2030 - 1960 + 1 },
     (_, i) => 1960 + i
   ).reverse();
 
   useEffect(() => {
     if (showYearDropdown && dropdownRef.current) {
       const selectedYearElement = dropdownRef.current.querySelector(
-        `.year-item[data-year="${date.getFullYear()}"]`
+        `.year-item[data-year="${birthDate ? lastMajorYear : currentYear}"]`
       );
       if (selectedYearElement) {
         selectedYearElement.scrollIntoView({ block: "center" });
@@ -79,7 +83,12 @@ const CustomHeader = ({
           className="text-sm font-semibold text-gray-900 p-2 rounded-sm cursor-pointer hover:bg-gray-100"
           onClick={() => setShowYearDropdown((prev) => !prev)}
         >
-          {date.toLocaleString("default", { month: "long", year: "numeric" })}
+          {new Date(
+            date.setYear(birthDate ? lastMajorYear : new Date().getFullYear())
+          ).toLocaleString("default", {
+            month: "long",
+            year: "numeric",
+          })}
         </span>
         {showYearDropdown && (
           <div
@@ -126,7 +135,13 @@ const CustomHeader = ({
   );
 };
 
-export default function Calendar({ onDateChange, id, name, selected }) {
+export default function Calendar({
+  onDateChange,
+  id,
+  name,
+  selected,
+  birthDate,
+}) {
   const [startDate, setStartDate] = useState(selected || new Date());
   const [isOpen, setIsOpen] = useState(false);
 
@@ -147,7 +162,7 @@ export default function Calendar({ onDateChange, id, name, selected }) {
   return (
     <div className="relative w-full">
       <DatePicker
-        dateFormat={"dd-MM-YYYY"}
+        dateFormat={"dd-MM-yyyy"}
         calendarClassName="custom-calendar"
         showPopperArrow={false}
         selected={startDate}
@@ -160,6 +175,7 @@ export default function Calendar({ onDateChange, id, name, selected }) {
             setStartDate={setStartDate}
             startDate={startDate}
             handleDateChange={handleDateChange}
+            birthDate={birthDate}
           />
         )}
         open={isOpen}

@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { ArrowDownIcon } from "@heroicons/react/16/solid";
 
 const TableElement = ({ children }) => (
-  <div className="relative h-full overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg">
+  <div className="relative h-full overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg bg-white">
     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
       {children}
     </table>
