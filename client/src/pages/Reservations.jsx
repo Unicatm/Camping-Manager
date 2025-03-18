@@ -17,8 +17,7 @@ function Reservations() {
 
   const {
     data: rezervari,
-    isLoading,
-    isError,
+    isFetching,
     refetch,
   } = useQuery({
     queryKey: ["rezervari"],
@@ -55,9 +54,6 @@ function Reservations() {
     }
   }, [id]);
 
-  // if (isLoading) return "Loading data....";
-  // if (isError) return `Error: ${error.message || "A apărut o eroare"}`;
-
   return (
     <div className="h-screen grow bg-blue-100/50">
       <div className="relative w-11/12 py-8 place-self-center">
@@ -84,8 +80,8 @@ function Reservations() {
         <Table
           data={rezervari}
           columns={rezervariTableHeads}
-          isLoading={isLoading}
           forPreview={false}
+          isFetching={isFetching}
         >
           <ReservationsTableData
             rezervari={rezervari}

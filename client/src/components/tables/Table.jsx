@@ -57,31 +57,34 @@ const TableColumns = ({
   );
 };
 
-const TableBody = ({ data, columns, isLoading, children, forPreview }) => (
-  <tbody>
-    {isLoading && data == undefined ? (
-      <tr>
-        <td
-          colSpan={columns.length + (forPreview ? 0 : 1)}
-          className="bg-white px-6 py-4 text-center"
-        >
-          {"Datele se încarcă..."}
-        </td>
-      </tr>
-    ) : data.length === 0 ? (
-      <tr>
-        <td
-          colSpan={columns.length + (forPreview ? 0 : 1)}
-          className="bg-white px-6 py-4 text-center"
-        >
-          Nu sunt date de afișat...
-        </td>
-      </tr>
-    ) : (
-      children
-    )}
-  </tbody>
-);
+const TableBody = ({ data, columns, children, forPreview, isFetching }) => {
+  console.log("Fetching: " + isFetching);
+  return (
+    <tbody>
+      {isFetching ? (
+        <tr>
+          <td
+            colSpan={columns.length + (forPreview ? 0 : 1)}
+            className="bg-white px-6 py-4 text-center"
+          >
+            {"Datele se încarcă..."}
+          </td>
+        </tr>
+      ) : data.length === 0 ? (
+        <tr>
+          <td
+            colSpan={columns.length + (forPreview ? 0 : 1)}
+            className="bg-white px-6 py-4 text-center"
+          >
+            Nu sunt date de afișat...
+          </td>
+        </tr>
+      ) : (
+        children
+      )}
+    </tbody>
+  );
+};
 
 const TableRow = ({ children }) => (
   <tr className="bg-white border-b border-gray-200 hover:bg-gray-50">
@@ -116,7 +119,7 @@ export const Table = ({
   columns,
   forPreview,
   isError,
-  isLoading,
+  isFetching,
   children,
   onSortChange,
 }) => {
@@ -173,9 +176,9 @@ export const Table = ({
         <TableBody
           data={data}
           columns={columns}
-          isLoading={isLoading}
           isError={isError}
           forPreview={forPreview}
+          isFetching={isFetching}
         >
           {children}
         </TableBody>

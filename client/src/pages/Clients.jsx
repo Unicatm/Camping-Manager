@@ -20,7 +20,7 @@ function Clients() {
 
   const {
     data: clienti,
-    isLoading,
+    isFetching,
     isError,
   } = useQuery({
     queryKey: ["clienti", "list"],
@@ -100,9 +100,9 @@ function Clients() {
         <Table
           data={filteredClienti()}
           columns={clientiTableHeads}
-          isLoading={isLoading}
           forPreview={false}
           isError={isError}
+          isFetching={isFetching}
           onSortChange={handleSortChange}
         >
           <ClientsTableData
