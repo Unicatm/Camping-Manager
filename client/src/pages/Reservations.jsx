@@ -20,7 +20,7 @@ function Reservations() {
     isFetching,
     refetch,
   } = useQuery({
-    queryKey: ["rezervari"],
+    queryKey: ["rezervari", "list"],
     queryFn: getAllRezervari,
   });
 
@@ -29,7 +29,7 @@ function Reservations() {
   const deleteMutationRezervare = useMutation({
     mutationFn: deleteRezervare,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["rezervari"] });
+      queryClient.invalidateQueries({ queryKey: ["rezervari", "list"] });
       refetch();
     },
   });

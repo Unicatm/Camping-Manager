@@ -56,8 +56,8 @@ export const deleteRezervare = async (id) => {
   return res;
 };
 
-export const editRezervare = async (rezervare, newData) => {
-  const res = await fetch(`${BASE_URL}/${rezervare._id}`, {
+export const editRezervare = async (rezervareId, newData) => {
+  const res = await fetch(`${BASE_URL}/${rezervareId}`, {
     method: "PATCH",
     headers: {
       "Content-Type": "application/json",

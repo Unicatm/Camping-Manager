@@ -141,6 +141,7 @@ export default function Calendar({
   name,
   selected,
   birthDate,
+  label,
 }) {
   const [startDate, setStartDate] = useState(selected || new Date());
   const [isOpen, setIsOpen] = useState(false);
@@ -161,6 +162,16 @@ export default function Calendar({
 
   return (
     <div className="relative w-full">
+      {label !== null ? (
+        <label
+          htmlFor={id}
+          className="block mb-2 text-sm text-blue-950 font-medium"
+        >
+          {label}
+        </label>
+      ) : (
+        ""
+      )}
       <DatePicker
         dateFormat={"dd-MM-yyyy"}
         calendarClassName="custom-calendar"

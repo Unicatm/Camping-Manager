@@ -1,37 +1,9 @@
-import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { TrashIcon, PencilIcon } from "@heroicons/react/16/solid";
 import { TableData, TableRow, TableHead } from "../Table";
 import dateFormatter from "../../../utils/dateFormat";
-import { getClientName } from "../../../api/clientApi";
 
 function ReservationsTableData({ rezervari, forPreview, onEdit, onDelete }) {
-  const [numeClienti, setNumeClienti] = useState({});
-
-  async function fetchClientName(id) {
-    const nume = await getClientName(id);
-    setNumeClienti((prevNumeClienti) => ({
-      ...prevNumeClienti,
-      [id]: nume,
-    }));
-  }
-
-  useEffect(() => {
-    rezervari.forEach((rezervare) => {
-      if (!numeClienti[rezervare.idClient]) {
-        fetchClientName(rezervare.idClient);
-      }
-    });
-  }, [rezervari, numeClienti]);
-
-  useEffect(() => {
-    rezervari.forEach((rezervare) => {
-      if (!numeClienti[rezervare.idClient]) {
-        fetchClientName(rezervare.idClient);
-      }
-    });
-  }, [rezervari, numeClienti]);
-
   return rezervari.map((rezervare, index) => (
     <TableRow key={index}>
       <TableHead>
@@ -39,13 +11,13 @@ function ReservationsTableData({ rezervari, forPreview, onEdit, onDelete }) {
           to={`/clienti/${rezervare?.idClient}`}
           className="underline underline-offset-2"
         >
-          {numeClienti[rezervare?.idClient]}
+          {rezervare?.idClient}
         </Link>
       </TableHead>
       <TableData>{rezervare?.idLoc}</TableData>
       <TableData>{dateFormatter(rezervare?.dataCheckIn)}</TableData>
       <TableData>{dateFormatter(rezervare?.dataCheckOut)}</TableData>
-      <TableData>{rezervare?.facilitati["Adulti"] || "0"}</TableData>
+      <TableData>{rezervare?.facilitati["Adult"] || "0"}</TableData>
       <TableData>{rezervare?.facilitati["Copii"] || "0"}</TableData>
       <TableData>{rezervare?.hasElectricity ? "Da" : "Nu"}</TableData>
       <TableData>
@@ -53,6 +25,9 @@ function ReservationsTableData({ rezervari, forPreview, onEdit, onDelete }) {
           <div key={idx}>{tip}</div>
         ))}
       </TableData>
+      <TableData>{rezervare?.suma + " lei"}</TableData>
+      <TableData>{rezervare?.sumaPerDay + " lei"}</TableData>
+
       {!forPreview ? (
         <td className="flex justify-center items-center space-x-4 px-2 py-3">
           <button

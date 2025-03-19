@@ -14,4 +14,8 @@ router
   .patch(clientController.updateClient)
   .delete(clientController.deleteClient);
 
+router
+  .route("/rezervari/:clientId")
+  .get(clientController.getClientWithReservations);
+
 module.exports = router;

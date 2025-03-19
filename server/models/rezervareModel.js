@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
+const { numbersRegex } = require("../../client/src/utils/regex");
 
 const rezervareSchema = new mongoose.Schema({
   idClient: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "Client",
   },
   idLoc: {
@@ -41,6 +42,9 @@ const rezervareSchema = new mongoose.Schema({
   sumaPerDay: {
     type: Number,
   },
+  numeClient: {
+    type: String,
+  },
 });
 
 async function calculeazaSume(querry) {
@@ -52,7 +56,7 @@ async function calculeazaSume(querry) {
       const facilitate = await mongoose
         .model("Facilitate")
         .findOne({ denumire: key });
-      if (facilitate) {
+      if (facilitate && typeof facilitate.pret === "number") {
         costFacilitati += value * facilitate.pret;
       }
     }
@@ -63,7 +67,7 @@ async function calculeazaSume(querry) {
       const facilitate = await mongoose
         .model("Facilitate")
         .findOne({ denumire: vehicul });
-      if (facilitate) {
+      if (facilitate && typeof facilitate.pret === "number") {
         costFacilitati += facilitate.pret;
       }
     }
@@ -75,13 +79,18 @@ async function calculeazaSume(querry) {
     (querry.dataCheckOut - querry.dataCheckIn) / (1000 * 60 * 60 * 24)
   );
 
-  const suma = querry.sumaPerDay * numarZile;
+  const suma = sumaPerDay * numarZile;
 
-  return { sumaPerDay, suma };
+  return {
+    sumaPerDay: isNaN(sumaPerDay) ? 0 : sumaPerDay,
+    suma: isNaN(suma) ? 0 : suma,
+  };
 }
 
 rezervareSchema.pre("save", async function (next) {
-  await calculeazaSume(this);
+  const { sumaPerDay, suma } = await calculeazaSume(this);
+  this.sumaPerDay = sumaPerDay;
+  this.suma = suma;
   next();
 });
 
@@ -98,7 +107,12 @@ rezervareSchema.pre("findOneAndUpdate", async function (next) {
   querryToUpdate.set(update.$set);
 
   const { sumaPerDay, suma } = await calculeazaSume(querryToUpdate);
-  this.set({ sumaPerDay, suma });
+  console.log("SUME");
+  console.log("Suma " + suma);
+  console.log("Suma per day " + sumaPerDay);
+
+  update.$set.suma = suma;
+  update.$set.sumaPerDay = sumaPerDay;
   next();
 });
 

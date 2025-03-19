@@ -6,10 +6,9 @@ import { createClient, editClient, getClient } from "../../api/clientApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Calendar from "../ui/Calendar";
 import Input from "../forms/Input";
-import Autocomplete from "./Autocomplete";
 import Select from "./Select";
 import countryData from "../forms/countryData";
-import validationSchemaClient from "./validationSchemes/validationSchemes";
+import { validationSchemaClient } from "./validationSchemes/validationSchemes";
 
 function ClientsForm({ onClose, isEditing, clientId }) {
   const navigate = useNavigate();

@@ -1,4 +1,6 @@
+const mongoose = require("mongoose");
 const Client = require("../models/clientModel");
+const Rezervare = require("../models/rezervareModel");
 const APIFeatures = require("./../utils/apiFeatures");
 
 exports.getClient = async (req, res) => {
@@ -12,6 +14,47 @@ exports.getClient = async (req, res) => {
       },
     });
   } catch (err) {
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
+exports.getClientWithReservations = async (req, res) => {
+  try {
+    const clientId = new mongoose.Types.ObjectId(req.params.clientId);
+
+    const clientsWithReservations = await Client.aggregate([
+      {
+        $match: {
+          _id: clientId,
+        },
+      },
+      {
+        $lookup: {
+          from: "rezervares",
+          localField: "_id",
+          foreignField: "idClient",
+          as: "rezervari",
+        },
+      },
+    ]);
+
+    if (clientsWithReservations.length === 0) {
+      return res.status(404).json({
+        status: "failed",
+        message: "Client not found.",
+      });
+    }
+
+    console.log(await clientsWithReservations);
+    res.status(200).json({
+      status: "success",
+      data: clientsWithReservations,
+    });
+  } catch (err) {
+    console.log(err);
     res.status(404).json({
       status: "failed",
       message: err,
