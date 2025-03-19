@@ -23,6 +23,18 @@ export const getClient = async (id) => {
   return data;
 };
 
+export const getClientReservations = async (idClient) => {
+  const res = await fetch(`${BASE_URL}/rezervari/${idClient}`);
+
+  if (!res.ok) {
+    throw new Error(`HTTP error! Status: ${res.status}`);
+  }
+
+  const resData = await res.json();
+  const data = resData.data[0];
+  return data;
+};
+
 export const getClientName = async (id) => {
   const res = await fetch(`${BASE_URL}/${id}`);
 

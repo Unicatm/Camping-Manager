@@ -48,7 +48,6 @@ exports.getClientWithReservations = async (req, res) => {
       });
     }
 
-    console.log(await clientsWithReservations);
     res.status(200).json({
       status: "success",
       data: clientsWithReservations,
