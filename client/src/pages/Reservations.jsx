@@ -24,6 +24,8 @@ function Reservations() {
     queryFn: getAllRezervari,
   });
 
+  console.log(rezervari);
+
   const queryClient = useQueryClient();
 
   const deleteMutationRezervare = useMutation({

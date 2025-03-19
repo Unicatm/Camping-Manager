@@ -39,13 +39,27 @@ exports.getRezervariByClientId = async (req, res) => {
 
 exports.getAllRezervari = async (req, res) => {
   try {
-    const features = new APIFeatures(Rezervare.find(), req.query)
+    const features = new APIFeatures(
+      Rezervare.find().populate({
+        path: "idClient",
+        select: "nume",
+      }),
+      req.query
+    )
       .filter()
       .sort()
       .limitFields()
       .paginate();
 
-    const rezervari = await features.query;
+    let rezervari = await features.query;
+
+    rezervari = rezervari.map((rezervare) => {
+      return {
+        ...rezervare.toObject(),
+        idClient: rezervare.idClient._id,
+        numeClient: rezervare.idClient.nume,
+      };
+    });
 
     res.status(200).json({
       status: "success",

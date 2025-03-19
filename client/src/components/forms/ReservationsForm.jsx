@@ -129,7 +129,10 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
       className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
     >
       <div className="fixed inset-0 flex flex-col gap-6 items-center m-auto w-[40%] min-w-xl p-8 h-max bg-white shadow-md sm:rounded-lg">
-        <h2 className="font-bold text-2xl">Adaugă o rezervare</h2>
+        <h2 className="font-bold text-2xl">
+          {" "}
+          {isEditing ? <p>Editează rezervarea</p> : <p>Adaugă o rezervare</p>}
+        </h2>
         <Input
           width="w-full"
           label="Client"

@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const Client = require("../models/clientModel");
-const Rezervare = require("../models/rezervareModel");
 const APIFeatures = require("./../utils/apiFeatures");
 
 exports.getClient = async (req, res) => {
@@ -37,6 +36,13 @@ exports.getClientWithReservations = async (req, res) => {
           localField: "_id",
           foreignField: "idClient",
           as: "rezervari",
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          nume: 1,
+          rezervari: 1,
         },
       },
     ]);

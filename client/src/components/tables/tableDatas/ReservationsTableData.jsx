@@ -3,16 +3,26 @@ import { TrashIcon, PencilIcon } from "@heroicons/react/16/solid";
 import { TableData, TableRow, TableHead } from "../Table";
 import dateFormatter from "../../../utils/dateFormat";
 
-function ReservationsTableData({ rezervari, forPreview, onEdit, onDelete }) {
+function ReservationsTableData({
+  rezervari,
+  forPreview,
+  onEdit,
+  onDelete,
+  ...props
+}) {
   return rezervari.map((rezervare, index) => (
     <TableRow key={index}>
       <TableHead>
-        <Link
-          to={`/clienti/${rezervare?.idClient}`}
-          className="underline underline-offset-2"
-        >
-          {rezervare?.idClient}
-        </Link>
+        {forPreview ? (
+          rezervare?.numeClient || props.numeClient
+        ) : (
+          <Link
+            to={`/clienti/${rezervare?.idClient}`}
+            className="underline underline-offset-2"
+          >
+            {rezervare?.numeClient || props.numeClient}
+          </Link>
+        )}
       </TableHead>
       <TableData>{rezervare?.idLoc}</TableData>
       <TableData>{dateFormatter(rezervare?.dataCheckIn)}</TableData>

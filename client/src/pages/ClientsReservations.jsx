@@ -21,12 +21,16 @@ function ClientsReservations() {
       <div className="relative w-11/12 place-self-center">
         <HeaderPage path={`Clienti/ ${data?.nume}`} title={`${data?.nume}`} />
         <Table
-          data={data.rezervari}
+          data={data?.rezervari}
           columns={rezervariTableHeads}
           forPreview={true}
           isFetching={isFetching}
         >
-          <ReservationsTableData rezervari={data.rezervari} forPreview={true} />
+          <ReservationsTableData
+            rezervari={data?.rezervari}
+            numeClient={data?.nume}
+            forPreview={true}
+          />
         </Table>
       </div>
     </div>
