@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
+import ChartSelectButton from "./ChartSelectButton";
 
 // Saptamanal - L-D
 // Lunar - Ian - Dec
@@ -102,7 +103,7 @@ export default function IncomingRevenueChart() {
 
         <div className="flex gap-2 text-sm">
           <button className="h-fit flex items-center gap-1 bg-blue-600 text-white px-2 py-1 rounded-md cursor-pointer hover:bg-blue-700">
-            Saptămânal
+            Lună
             <ChevronDownIcon className="w-4 h-4" />
           </button>
           <button className="h-fit flex items-center gap-1 bg-gray-100 text-blue-950 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-200">

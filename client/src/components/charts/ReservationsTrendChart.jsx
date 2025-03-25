@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import {
   ResponsiveContainer,
@@ -9,6 +9,7 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import ChartMultiSelectButton from "./ChartMultiSelectButton";
 
 const data = [
   {
@@ -85,7 +86,15 @@ const data = [
   },
 ];
 
+const years = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
+
 export default function ReservationsTrendChart() {
+  const [checkedYears, setCheckedYears] = useState({ [years[0]]: true });
+
+  useEffect(() => {
+    console.log(checkedYears);
+  }, [checkedYears]);
+
   return (
     <div className="bg-white w-fit h-fit p-4 shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20">
       <div className="flex flex-row items-start justify-between">
@@ -93,10 +102,12 @@ export default function ReservationsTrendChart() {
           <h2 className="font-bold text-blue-950 text-lg">
             Trendul rezervărilor
           </h2>
-          <button className="h-fit w-fit flex items-center gap-1 bg-gray-100 text-blue-950 text-sm px-2 py-1 rounded-md cursor-pointer hover:bg-gray-200">
-            Ani
-            <ChevronDownIcon className="w-4 h-4" />
-          </button>
+          <ChartMultiSelectButton
+            data={years}
+            btnTitle={"Ani"}
+            checkedData={checkedYears}
+            setCheckedData={setCheckedYears}
+          />
         </div>
       </div>
       <ResponsiveContainer className="bg-white" width={500} height={220}>
