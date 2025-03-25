@@ -1,5 +1,4 @@
-import React from "react";
-import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import React, { useState } from "react";
 import {
   PieChart,
   Pie,
@@ -10,6 +9,7 @@ import {
   ResponsiveContainer,
   LabelList,
 } from "recharts";
+import ChartSelectButton from "./ChartSelectButton";
 
 const data01 = [
   { value: 5, nationalitate: "România", procent: "30%" },
@@ -17,6 +17,8 @@ const data01 = [
   { value: 1, nationalitate: "Olanda", procent: "10%" },
   { value: 1, nationalitate: "Austria", procent: "5%" },
 ];
+
+const years = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
@@ -40,19 +42,23 @@ const CustomTooltip = ({ active, payload }) => {
 };
 
 export default function PredominantNationalitiesChart() {
+  const [selectedYear, setSelectedYear] = useState(years[0]);
+
   return (
     <div className="bg-white w-fit h-fit p-4 shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20">
       <div className="flex flex-row items-start justify-between">
-        <div className="mx-2 mb-4 w-full flex flex-col gap-2 text-xs text-blue-950">
+        <div className="mx-2 mb-4 w-full flex flex-col gap-2 text-blue-950">
           <h2 className="font-bold text-blue-950 text-lg">
             Naționalități predominante
           </h2>
           <div className="flex gap-2 justify-between">
-            <p>Anul 2023</p>
-            <button className="h-fit w-fit flex items-center gap-1 bg-gray-100 text-blue-950 text-sm px-2 py-1 rounded-md cursor-pointer hover:bg-gray-200">
-              An
-              <ChevronDownIcon className="w-4 h-4" />
-            </button>
+            <p className="text-xs">Anul {selectedYear}</p>
+            <ChartSelectButton
+              data={years}
+              btnTitle={"Anul"}
+              selectedData={selectedYear}
+              setSelectedData={setSelectedYear}
+            />
           </div>
         </div>
       </div>
@@ -78,7 +84,7 @@ export default function PredominantNationalitiesChart() {
             <Label
               width={30}
               position="center"
-              value={"2023"}
+              value={selectedYear}
               stroke="none"
             ></Label>
             {data01.map((entry, index) => (

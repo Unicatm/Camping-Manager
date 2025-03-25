@@ -69,6 +69,23 @@ const CustomTooltip = ({ active, payload }) => {
   return null;
 };
 
+const CustomLegend = (props) => {
+  const { payload } = props;
+  return (
+    <div className="flex flex-wrap gap-4 mt-2 justify-center">
+      {payload.map((entry, index) => (
+        <div key={index} className="flex items-center gap-2 text-sm">
+          <span
+            className="w-4 h-4 rounded-xs inline-block"
+            style={{ backgroundColor: entry.color }}
+          ></span>
+          <span className="text-blue-950 text-xs">{entry.value}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 export default function IncomingRevenueChart() {
   const [focusBar, setFocusBar] = useState(null);
   const [mouseLeave, setMouseLeave] = useState(true);
@@ -122,7 +139,7 @@ export default function IncomingRevenueChart() {
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="name" />
           <YAxis />
-          <Legend />
+          <Legend content={<CustomLegend />} />
           <Tooltip content={<CustomTooltip />} />
           <Bar
             dataKey="pv"

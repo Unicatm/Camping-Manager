@@ -2,6 +2,7 @@ import React from "react";
 import IncomingRevenueChart from "../components/charts/IncomingRevenueChart";
 import PredominantNationalitiesChart from "../components/charts/PredominantNationalitiesChart";
 import ReservationsTrendChart from "../components/charts/ReservationsTrendChart";
+import AgeChart from "../components/charts/AgeChart";
 
 export default function Stats() {
   return (
@@ -9,6 +10,7 @@ export default function Stats() {
       <IncomingRevenueChart />
       <PredominantNationalitiesChart />
       <ReservationsTrendChart />
+      <AgeChart />
     </div>
   );
 }

@@ -89,9 +89,9 @@ export default function ReservationsTrendChart() {
   return (
     <div className="bg-white w-fit h-fit p-4 shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20">
       <div className="flex flex-row items-start justify-between">
-        <div className="mx-2 mb-4 w-full flex justify-between items-center gap-2 text-xs text-blue-950">
+        <div className="mx-2 mb-6 w-full flex justify-between items-center gap-2 text-xs text-blue-950">
           <h2 className="font-bold text-blue-950 text-lg">
-            Trendul rezervărilor în timp
+            Trendul rezervărilor
           </h2>
           <button className="h-fit w-fit flex items-center gap-1 bg-gray-100 text-blue-950 text-sm px-2 py-1 rounded-md cursor-pointer hover:bg-gray-200">
             Ani
