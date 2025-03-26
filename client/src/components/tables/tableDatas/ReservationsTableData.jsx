@@ -28,7 +28,7 @@ function ReservationsTableData({
       <TableData>{dateFormatter(rezervare?.dataCheckIn)}</TableData>
       <TableData>{dateFormatter(rezervare?.dataCheckOut)}</TableData>
       <TableData>{rezervare?.facilitati["Adult"] || "0"}</TableData>
-      <TableData>{rezervare?.facilitati["Copii"] || "0"}</TableData>
+      <TableData>{rezervare?.facilitati["Copii 3-12 ani"] || "0"}</TableData>
       <TableData>{rezervare?.hasElectricity ? "Da" : "Nu"}</TableData>
       <TableData>
         {rezervare?.tipAuto.map((tip, idx) => (

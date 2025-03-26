@@ -1,5 +1,5 @@
-import React, { use, useEffect, useState } from "react";
-import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import React, { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   ResponsiveContainer,
   Area,
@@ -10,90 +10,24 @@ import {
   Tooltip,
 } from "recharts";
 import ChartMultiSelectButton from "./ChartMultiSelectButton";
+import { getMonthlyReservationsOnSelectedYears } from "../../api/reservationsApi";
 
-const data = [
-  {
-    name: "Ian",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Feb",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Mar",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Aprl",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Mai",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Iun",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Iul",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-  {
-    name: "Aug",
-    uv: 3245,
-    pv: 1232,
-    amt: 2100,
-  },
-  {
-    name: "Sept",
-    uv: 2343,
-    pv: 4300,
-    amt: 2100,
-  },
-  {
-    name: "Oct",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-  {
-    name: "Nov",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-  {
-    name: "Dec",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+const gradientIds = ["colorUv", "colorPv", "colorXy", "colorAb", "colorCd"];
+const colorIds = ["#8884d8", "#82ca9d", "#FF5733", "#FFC300", "#900C3F"];
 
-const years = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
-
-export default function ReservationsTrendChart() {
-  const [checkedYears, setCheckedYears] = useState({ [years[0]]: true });
+export default function ReservationsTrendChart({ years = [] }) {
+  const [checkedYears, setCheckedYears] = useState([]);
 
   useEffect(() => {
-    console.log(checkedYears);
-  }, [checkedYears]);
+    if (years.length > 0) {
+      setCheckedYears([years[0]]);
+    }
+  }, [years]);
+
+  const { data } = useQuery({
+    queryKey: ["monthly-reservations", checkedYears],
+    queryFn: () => getMonthlyReservationsOnSelectedYears(checkedYears),
+  });
 
   return (
     <div className="bg-white w-fit h-fit p-4 shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20">
@@ -107,14 +41,16 @@ export default function ReservationsTrendChart() {
             btnTitle={"Ani"}
             checkedData={checkedYears}
             setCheckedData={setCheckedYears}
+            minSelection={1}
+            maxSelection={5}
           />
         </div>
       </div>
       <ResponsiveContainer className="bg-white" width={500} height={220}>
         <AreaChart
-          width={730}
-          height={250}
-          data={data}
+          width={"100%"}
+          height={"100%"}
+          data={data || []}
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
           <defs>
@@ -126,25 +62,34 @@ export default function ReservationsTrendChart() {
               <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
               <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
             </linearGradient>
+            <linearGradient id="colorXy" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#FF5733" stopOpacity={0.8} />
+              <stop offset="95%" stopColor="#FF5733" stopOpacity={0} />
+            </linearGradient>
+            <linearGradient id="colorAb" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#FFC300" stopOpacity={0.8} />
+              <stop offset="95%" stopColor="#FFC300" stopOpacity={0} />
+            </linearGradient>
+            <linearGradient id="colorCd" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="5%" stopColor="#900C3F" stopOpacity={0.8} />
+              <stop offset="95%" stopColor="#900C3F" stopOpacity={0} />
+            </linearGradient>
           </defs>
-          <XAxis dataKey="name" />
+
+          <XAxis dataKey="month" />
           <YAxis />
           <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
-          <Area
-            type="monotone"
-            dataKey="uv"
-            stroke="#8884d8"
-            fillOpacity={1}
-            fill="url(#colorUv)"
-          />
-          <Area
-            type="monotone"
-            dataKey="pv"
-            stroke="#82ca9d"
-            fillOpacity={1}
-            fill="url(#colorPv)"
-          />
+          {checkedYears.map((year, index) => (
+            <Area
+              key={year}
+              type="monotone"
+              dataKey={year.toString()}
+              stroke={`${colorIds[index % colorIds.length]}`}
+              fillOpacity={1}
+              fill={`url(#${gradientIds[index % gradientIds.length]})`}
+            />
+          ))}
         </AreaChart>
       </ResponsiveContainer>
     </div>

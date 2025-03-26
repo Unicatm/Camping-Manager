@@ -1,6 +1,21 @@
 const Rezervare = require("../models/rezervareModel");
 const APIFeatures = require("./../utils/apiFeatures");
 
+const monthsMap = {
+  1: "Ian",
+  2: "Feb",
+  3: "Mar",
+  4: "Apr",
+  5: "Mai",
+  6: "Iun",
+  7: "Iul",
+  8: "Aug",
+  9: "Sep",
+  10: "Oct",
+  11: "Nov",
+  12: "Dec",
+};
+
 exports.getRezervare = async (req, res) => {
   try {
     const rezervare = await Rezervare.findById(req.params.id);
@@ -30,6 +45,149 @@ exports.getRezervariByClientId = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
+exports.getTopPredominantNationalitiesByYear = async (req, res) => {
+  try {
+    const year = req.params.year;
+
+    const nationalitati = await Rezervare.aggregate([
+      {
+        $match: {
+          dataCheckIn: {
+            $gte: new Date(year, 0, 2),
+            $lt: new Date(parseInt(year) + 1, 0, 2),
+          },
+        },
+      },
+      {
+        $lookup: {
+          from: "clients",
+          localField: "idClient",
+          foreignField: "_id",
+          as: "client",
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [{ $arrayElemAt: ["$client", 0] }, "$$ROOT"],
+          },
+        },
+      },
+      {
+        $project: {
+          client: 0,
+          _id: 0,
+        },
+      },
+      {
+        $project: {
+          nationalitate: 1,
+        },
+      },
+      {
+        $group: {
+          _id: "$nationalitate",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        year,
+        nationalitati,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
+exports.getAllAvailableYears = async (req, res) => {
+  try {
+    const years = await Rezervare.aggregate([
+      {
+        $group: {
+          _id: { $year: "$dataCheckIn" },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: { years: years.map((year) => year._id) },
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
+exports.getMonthlyReservationsOnSelectedYears = async (req, res) => {
+  try {
+    const years = req.query.years?.split(",").map(Number);
+
+    const monthlyReservations = await Rezervare.aggregate([
+      {
+        $match: {
+          $expr: { $in: [{ $year: "$dataCheckIn" }, years] },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$dataCheckIn" },
+            month: { $month: "$dataCheckIn" },
+          },
+          numarRezervari: { $sum: 1 },
+        },
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1 },
+      },
+    ]);
+
+    const formattedData = Object.values(monthsMap).map((monthName) => {
+      let entry = { month: monthName };
+      years.forEach((year) => {
+        entry[year] = 0;
+      });
+      return entry;
+    });
+
+    monthlyReservations.forEach(({ _id, numarRezervari }) => {
+      const { year, month } = _id;
+      const monthName = monthsMap[month];
+
+      const monthIndex = month - 1;
+      if (formattedData[monthIndex]) {
+        formattedData[monthIndex][year] = numarRezervari;
+      }
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: formattedData,
+    });
+  } catch (err) {
     res.status(404).json({
       status: "failed",
       message: err,

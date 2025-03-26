@@ -68,7 +68,7 @@ const CustomLegend = (props) => {
   );
 };
 
-export default function AgeChart() {
+export default function AgeChart({ data }) {
   const [focusBar, setFocusBar] = useState(null);
   const [mouseLeave, setMouseLeave] = useState(true);
   const [selectedYear, setSelectedYear] = useState(years[0]);

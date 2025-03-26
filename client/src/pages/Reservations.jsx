@@ -18,6 +18,7 @@ function Reservations() {
   const {
     data: rezervari,
     isFetching,
+    isError,
     refetch,
   } = useQuery({
     queryKey: ["rezervari", "list"],
@@ -58,7 +59,7 @@ function Reservations() {
 
   return (
     <div className="h-screen grow bg-blue-100/50">
-      <div className="relative w-11/12 py-8 place-self-center">
+      <div className="relative w-11/12 h-full mx-auto py-8 flex flex-col">
         <HeaderPage path="Rezervări" title="Rezervări" />
         <SearchAddSection
           openModal={() => {
@@ -84,6 +85,7 @@ function Reservations() {
           columns={rezervariTableHeads}
           forPreview={false}
           isFetching={isFetching}
+          isError={isError}
         >
           <ReservationsTableData
             rezervari={rezervari}

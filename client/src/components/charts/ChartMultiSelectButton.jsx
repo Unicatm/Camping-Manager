@@ -6,6 +6,8 @@ export default function ChartMultiSelectButton({
   data,
   checkedData,
   setCheckedData,
+  minSelection,
+  maxSelection,
 }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -19,8 +21,6 @@ export default function ChartMultiSelectButton({
 
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
@@ -29,10 +29,15 @@ export default function ChartMultiSelectButton({
   }, [isOpen]);
 
   const handleCheckboxChange = (value) => {
-    setCheckedData((prev) => ({
-      ...prev,
-      [value]: !prev[value],
-    }));
+    setCheckedData((prev) => {
+      if (prev.includes(value)) {
+        if (prev.length <= minSelection) return prev;
+        return prev.filter((year) => year !== value);
+      } else {
+        if (prev.length >= maxSelection) return prev;
+        return [...prev, value];
+      }
+    });
   };
 
   return (
@@ -47,21 +52,21 @@ export default function ChartMultiSelectButton({
       <div
         className={`${
           isOpen ? "" : "hidden"
-        } absolute top-full left-1/2 transform -translate-x-1/2 z-10 w-max h-40 mt-2 overflow-hidden bg-white shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20 cursor-default`}
+        } absolute top-full left-1/2 transform -translate-x-1/2 z-10 w-max min-h-fit max-h-40 mt-2 bg-white shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20 cursor-default`}
       >
-        <div className="flex flex-col gap-2 overflow-y-scroll h-full rounded-md text-blue-950">
-          {data.map((d, index) => (
+        <div className="flex flex-col overflow-y-auto h-full rounded-md text-blue-950">
+          {data?.map((year, index) => (
             <div
               key={index}
               className="flex items-center gap-2 px-2 py-1 text-sm hover:bg-gray-100"
             >
-              <label htmlFor={d}>{d}</label>
+              <label htmlFor={year}>{year}</label>
               <input
                 className="cursor-pointer"
                 type="checkbox"
-                id={d}
-                checked={checkedData[d] || false}
-                onChange={() => handleCheckboxChange(d)}
+                id={year}
+                checked={checkedData.includes(year)}
+                onChange={() => handleCheckboxChange(year)}
               />
             </div>
           ))}

@@ -26,6 +26,10 @@ const countryData = [
   "Spania",
   "Suedia",
   "Ungaria",
+  "Japonia",
+  "China",
+  "SUA",
+  "Egipt",
 ];
 
 export default countryData;

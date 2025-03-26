@@ -40,10 +40,10 @@ export default function ChartSelectButton({
       <div
         className={`${
           isOpen ? "" : "hidden"
-        } absolute top-full left-1/2 transform -translate-x-1/2 z-10 w-fit h-40 mt-2 overflow-hidden bg-white shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20 cursor-default`}
+        } absolute top-full left-1/2 transform -translate-x-1/2 z-10 w-fit min-h-fit max-h-40 mt-2 bg-white shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20 cursor-default`}
       >
-        <div className="flex flex-col gap-2 overflow-y-scroll h-full rounded-md text-blue-950">
-          {data.map((d, index) => (
+        <div className="flex flex-col overflow-y-auto h-full rounded-md text-blue-950">
+          {data?.map((d, index) => (
             <p
               key={index}
               className={`${

@@ -28,7 +28,29 @@ export const getRezervariByClientId = async (idClient) => {
   const res = await fetch(`${BASE_URL}/clienti/${idClient}`);
   const resData = await res.json();
   const data = resData.data.rezervari;
-  // console.log(data);
+  return data;
+};
+
+export const getTopPredominantNationalitiesByYear = async (year) => {
+  const res = await fetch(`${BASE_URL}/predominant-nationalities/${year}`);
+  const resData = await res.json();
+  const data = resData.data;
+  return data;
+};
+
+export const getAllAvailableYears = async () => {
+  const res = await fetch(`${BASE_URL}/years`);
+  const resData = await res.json();
+  const data = resData.data;
+  return data;
+};
+
+export const getMonthlyReservationsOnSelectedYears = async (years) => {
+  const res = await fetch(
+    `${BASE_URL}/number-reservations?years=${years.join(",")}`
+  );
+  const resData = await res.json();
+  const data = resData.data;
   return data;
 };
 

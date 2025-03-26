@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
 import {
   PieChart,
   Pie,
@@ -10,39 +12,43 @@ import {
   LabelList,
 } from "recharts";
 import ChartSelectButton from "./ChartSelectButton";
-
-const data01 = [
-  { value: 5, nationalitate: "România", procent: "30%" },
-  { value: 4, nationalitate: "Germania", procent: "70%" },
-  { value: 1, nationalitate: "Olanda", procent: "10%" },
-  { value: 1, nationalitate: "Austria", procent: "5%" },
-];
-
-const years = [2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021];
+import { getTopPredominantNationalitiesByYear } from "../../api/reservationsApi";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-const CustomTooltip = ({ active, payload }) => {
+const CustomTooltip = ({ active, payload, data }) => {
   if (active && payload && payload.length) {
+    const total = data?.reduce((sum, item) => sum + item.count, 0);
+    const procent = (payload[0].payload.count / total) * 100;
+
     return (
       <div className="bg-white p-2 border border-gray-300 rounded shadow-md">
         <p className="font-semibold text-blue-950">
           {payload[0].payload.nationalitate}
         </p>
         <p className="text-sm text-blue-950/80">
-          Număr: {payload[0].payload.value}
+          Număr: {payload[0].payload.count}
         </p>
-        <p className="text-sm text-blue-950/80">
-          Procente: {payload[0].payload.procent}
-        </p>
+        <p className="text-sm text-blue-950/80">Procente: {procent}%</p>
       </div>
     );
   }
   return null;
 };
 
-export default function PredominantNationalitiesChart() {
-  const [selectedYear, setSelectedYear] = useState(years[0]);
+export default function PredominantNationalitiesChart({ years }) {
+  const [selectedYear, setSelectedYear] = useState();
+
+  useEffect(() => {
+    if (years.length > 0) {
+      setSelectedYear(years[0]);
+    }
+  }, [years]);
+
+  const { data } = useQuery({
+    queryKey: ["nationalitati", selectedYear],
+    queryFn: () => getTopPredominantNationalitiesByYear(selectedYear),
+  });
 
   return (
     <div className="bg-white w-fit h-fit p-4 shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20">
@@ -63,36 +69,45 @@ export default function PredominantNationalitiesChart() {
         </div>
       </div>
       <ResponsiveContainer className="bg-white" width={300} height={220}>
-        <PieChart>
-          <Pie
-            data={data01}
-            cx={"50%"}
-            cy={"55%"}
-            innerRadius={50}
-            outerRadius={80}
-            fill="#8884d8"
-            paddingAngle={3}
-            label={(entry) => entry.nationalitate}
-            animationEasing="ease-in"
-          >
-            <LabelList
-              dataKey="procent"
-              position="inside"
-              fontSize={12}
-              fontWeight={50}
-            />
-            <Label
-              width={30}
-              position="center"
-              value={selectedYear}
-              stroke="none"
-            ></Label>
-            {data01.map((entry, index) => (
-              <Cell fill={COLORS[index % COLORS.length]} />
-            ))}
-          </Pie>
-          <Tooltip content={<CustomTooltip />} />
-        </PieChart>
+        {data?.nationalitati && data.nationalitati.length > 0 ? (
+          <PieChart>
+            <Pie
+              data={data.nationalitati}
+              cx={"50%"}
+              cy={"55%"}
+              innerRadius={50}
+              outerRadius={80}
+              fill="#8884d8"
+              paddingAngle={3}
+              label={(entry) => entry._id}
+              animationEasing="ease-in"
+              dataKey="count"
+            >
+              <LabelList
+                dataKey="count"
+                position="inside"
+                fontSize={12}
+                fontWeight={50}
+              />
+              <Label
+                width={30}
+                position="center"
+                value={selectedYear}
+                stroke="none"
+              />
+              {data.nationalitati.map((entry, index) => (
+                <Cell key={index} fill={COLORS[index % COLORS.length]} />
+              ))}
+            </Pie>
+            <Tooltip content={<CustomTooltip data={data.nationalitati} />} />
+          </PieChart>
+        ) : (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-blue-950/70 text-sm">
+              Nu există date disponibile
+            </p>
+          </div>
+        )}
       </ResponsiveContainer>
     </div>
   );
