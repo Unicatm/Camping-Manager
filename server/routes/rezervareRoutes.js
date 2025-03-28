@@ -9,9 +9,16 @@ router
   .post(rezervareController.createRezervare);
 
 router.route("/years").get(rezervareController.getAllAvailableYears);
+
 router
   .route("/number-reservations")
   .get(rezervareController.getMonthlyReservationsOnSelectedYears);
+
+router
+  .route("/incoming-revenue-years")
+  .get(rezervareController.getIncomingRevenueOnSelectedYears);
+
+router.route("/age-grouping/:year").get(rezervareController.getAgeGroups);
 
 router
   .route("/:id")

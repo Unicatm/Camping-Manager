@@ -65,7 +65,7 @@ export default function ChartMultiSelectButton({
                 className="cursor-pointer"
                 type="checkbox"
                 id={year}
-                checked={checkedData.includes(year)}
+                checked={checkedData?.includes(year)}
                 onChange={() => handleCheckboxChange(year)}
               />
             </div>

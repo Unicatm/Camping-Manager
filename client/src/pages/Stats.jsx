@@ -18,7 +18,7 @@ export default function Stats() {
       <IncomingRevenueChart years={years} />
       <PredominantNationalitiesChart years={years} />
       <ReservationsTrendChart years={years} />
-      {/* <AgeChart years={years} /> */}
+      <AgeChart years={years} />
     </div>
   );
 }

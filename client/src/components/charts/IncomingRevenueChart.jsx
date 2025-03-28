@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import {
   BarChart,
@@ -12,58 +13,29 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import ChartSelectButton from "./ChartSelectButton";
-
-// Saptamanal - L-D
-// Lunar - Ian - Dec
-// Anual range de cativa ani
-
-const data = [
-  {
-    name: "Ianuarie",
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Feb",
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    pv: 4300,
-    amt: 2100,
-  },
-];
+import ChartMultiSelectButton from "./ChartMultiSelectButton";
+import { getIncomingRevenueOnSelectedYears } from "../../api/reservationsApi";
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-white p-2 border border-gray-300 rounded shadow-md">
-        <p className="font-semibold text-blue-950">{payload[0].payload.name}</p>
-        <p className="text-sm text-blue-950/80">
-          Valoare: {payload[0].value} lei
+        <p className="font-semibold text-blue-950">
+          {payload[0].payload.month}
         </p>
+        {payload.map((entry, index) => (
+          <p
+            key={index}
+            className="text-sm flex items-center gap-2"
+            style={{ color: entry.color }}
+          >
+            <span
+              className="w-3 h-3 rounded-xs inline-block"
+              style={{ backgroundColor: entry.color }}
+            ></span>
+            {entry.name}: {entry.value} lei
+          </p>
+        ))}
       </div>
     );
   }
@@ -87,18 +59,34 @@ const CustomLegend = (props) => {
   );
 };
 
-export default function IncomingRevenueChart() {
+const colors = ["#8884d8", "#82ca9d", "#ffc658"];
+
+export default function IncomingRevenueChart({ years = [] }) {
   const [focusBar, setFocusBar] = useState(null);
   const [mouseLeave, setMouseLeave] = useState(true);
+  const [checkedYears, setCheckedYears] = useState([]);
+
+  useEffect(() => {
+    if (years.length > 0) {
+      setCheckedYears([years[0]]);
+    }
+  }, [years]);
+
+  const { data } = useQuery({
+    queryKey: ["revenue", checkedYears],
+    queryFn: () => getIncomingRevenueOnSelectedYears(checkedYears),
+  });
 
   return (
     <div className="bg-white w-fit h-fit p-4 shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20">
       <div className="flex flex-row justify-between">
         <div className="mx-2 mb-4 divide-blue-950/20 divide-x-[1px] flex flex-row items-center text-xs text-blue-950">
           <h2 className="font-bold text-blue-950 text-lg pr-2">Venitul</h2>
-          {/* <p className="pl-2">Săpt. 3 - Ian 2023</p> */}
-          {/* <p className="pl-2">Iulie 2024</p> */}
-          <p className="pl-2">Anul 2023</p>
+          <p className="pl-2">
+            {checkedYears.length === 1
+              ? `Anul ${checkedYears[0]}`
+              : `Anii ${checkedYears.join(", ")}`}
+          </p>
         </div>
 
         <div className="flex gap-2 text-sm">
@@ -106,14 +94,15 @@ export default function IncomingRevenueChart() {
             Lună
             <ChevronDownIcon className="w-4 h-4" />
           </button>
-          <button className="h-fit flex items-center gap-1 bg-gray-100 text-blue-950 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-200">
-            Lunar
-            <ChevronDownIcon className="w-4 h-4" />
-          </button>
-          <button className="h-fit flex items-center gap-1 bg-gray-100 text-blue-950 px-2 py-1 rounded-md cursor-pointer hover:bg-gray-200">
-            Anual
-            <ChevronDownIcon className="w-4 h-4" />
-          </button>
+
+          <ChartMultiSelectButton
+            data={years}
+            btnTitle={"Anual"}
+            minSelection={1}
+            maxSelection={4}
+            checkedData={checkedYears}
+            setCheckedData={setCheckedYears}
+          />
         </div>
       </div>
       <ResponsiveContainer className="bg-white" width={500} height={350}>
@@ -138,25 +127,30 @@ export default function IncomingRevenueChart() {
           }}
         >
           <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
+          <XAxis dataKey="month" />
           <YAxis />
           <Legend content={<CustomLegend />} />
           <Tooltip content={<CustomTooltip />} />
-          <Bar
-            dataKey="pv"
-            fill="oklch(0.546 0.245 262.881)"
-            radius={[5, 5, 0, 0]}
-          >
-            {data.map((entry, index) => (
-              <Cell
-                fill={
-                  focusBar === index || mouseLeave
-                    ? "oklch(0.546 0.245 262.881)"
-                    : "rgba(43, 92, 231, 0.2)"
-                }
-              />
-            ))}
-          </Bar>
+          {checkedYears.map((year, index) => (
+            <Bar
+              key={year}
+              dataKey={year.toString()}
+              fill={colors[index % colors.length]}
+              radius={[5, 5, 0, 0]}
+              stackId="a"
+            >
+              {data?.map((entry, cellIndex) => (
+                <Cell
+                  key={cellIndex}
+                  fill={
+                    focusBar === cellIndex || mouseLeave
+                      ? colors[index % colors.length]
+                      : `${colors[index % colors.length]}80`
+                  }
+                />
+              ))}
+            </Bar>
+          ))}
         </BarChart>
       </ResponsiveContainer>
     </div>

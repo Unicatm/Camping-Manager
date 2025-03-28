@@ -195,6 +195,184 @@ exports.getMonthlyReservationsOnSelectedYears = async (req, res) => {
   }
 };
 
+exports.getIncomingRevenueOnSelectedYears = async (req, res) => {
+  try {
+    const years = req.query.years?.split(",").map(Number);
+
+    const monthlyReservations = await Rezervare.aggregate([
+      {
+        $match: {
+          $expr: { $in: [{ $year: "$dataCheckIn" }, years] },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            year: { $year: "$dataCheckIn" },
+            month: { $month: "$dataCheckIn" },
+          },
+          totalRevenue: { $sum: "$suma" },
+        },
+      },
+      {
+        $sort: { "_id.year": 1, "_id.month": 1 },
+      },
+    ]);
+
+    const formattedData = Object.values(monthsMap).map((monthName) => {
+      let entry = { month: monthName };
+      years.forEach((year) => {
+        entry[year] = 0;
+      });
+      return entry;
+    });
+
+    monthlyReservations.forEach(({ _id, totalRevenue }) => {
+      const { year, month } = _id;
+      const monthName = monthsMap[month];
+
+      const monthIndex = month - 1;
+      if (formattedData[monthIndex]) {
+        formattedData[monthIndex][year] = totalRevenue;
+      }
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: formattedData,
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
+exports.getAgeGroups = async (req, res) => {
+  try {
+    const year = req.params.year;
+
+    const ageGroups = await Rezervare.aggregate([
+      {
+        $lookup: {
+          from: "clients",
+          localField: "idClient",
+          foreignField: "_id",
+          as: "clientInfo",
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [{ $arrayElemAt: ["$clientInfo", 0] }, "$$ROOT"],
+          },
+        },
+      },
+      {
+        $match: {
+          dataCheckIn: {
+            $gte: new Date(`${year}-01-01`),
+            $lt: new Date(`${year + 1}-01-01`),
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          dataCheckIn: 1,
+          dataNasterii: 1,
+          monthIndex: 1,
+        },
+      },
+      {
+        $addFields: {
+          age: {
+            $dateDiff: {
+              startDate: {
+                $toDate: "$dataNasterii",
+              },
+              endDate: "$$NOW",
+              unit: "year",
+            },
+          },
+          monthIndex: { $month: "$dataCheckIn" },
+        },
+      },
+      {
+        $project: {
+          dataNasterii: 0,
+        },
+      },
+      {
+        $group: {
+          _id: {
+            month: "$monthIndex",
+            ageGroup: {
+              $switch: {
+                branches: [
+                  { case: { $lt: ["$age", 25] }, then: "18-25" },
+                  { case: { $lt: ["$age", 35] }, then: "25-35" },
+                  { case: { $lt: ["$age", 55] }, then: "35-55" },
+                  { case: { $lt: ["$age", 75] }, then: "55-75" },
+                ],
+                default: "75+",
+              },
+            },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id.month",
+          ageGroups: {
+            $push: {
+              ageGroup: "$_id.ageGroup",
+              count: "$count",
+            },
+          },
+        },
+      },
+      {
+        $sort: { _id: 1 },
+      },
+    ]);
+
+    let completeData = Object.keys(monthsMap).map((monthIndex) => {
+      return {
+        month: monthsMap[monthIndex],
+        "18-25": 0,
+        "25-35": 0,
+        "35-55": 0,
+        "55-75": 0,
+        "+75": 0,
+      };
+    });
+
+    ageGroups.forEach((entry) => {
+      const monthIndex = entry._id;
+      const monthName = monthsMap[monthIndex];
+
+      let monthData = completeData.find((item) => item.month === monthName);
+
+      entry.ageGroups.forEach((group) => {
+        monthData[group.ageGroup] = group.count;
+      });
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: completeData,
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
 exports.getAllRezervari = async (req, res) => {
   try {
     const features = new APIFeatures(

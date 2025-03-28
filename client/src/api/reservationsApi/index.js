@@ -38,6 +38,22 @@ export const getTopPredominantNationalitiesByYear = async (year) => {
   return data;
 };
 
+export const getIncomingRevenueOnSelectedYears = async (years) => {
+  const res = await fetch(
+    `${BASE_URL}/incoming-revenue-years?years=${years.join(",")}`
+  );
+  const resData = await res.json();
+  const data = resData.data;
+  return data;
+};
+
+export const getAgeGroups = async (year) => {
+  const res = await fetch(`${BASE_URL}/age-grouping/${year}`);
+  const resData = await res.json();
+  const data = resData.data;
+  return data;
+};
+
 export const getAllAvailableYears = async () => {
   const res = await fetch(`${BASE_URL}/years`);
   const resData = await res.json();
