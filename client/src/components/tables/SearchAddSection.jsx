@@ -1,5 +1,5 @@
 import { PlusIcon } from "@heroicons/react/16/solid";
-import Input from "../forms/Input";
+import Input from "../ui/inputs/Input";
 
 function SearchAddSection({ openModal, buttonText, onSearch }) {
   const handleSearchChange = (e) => {

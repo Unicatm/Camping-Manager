@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getFacilitati } from "../../../api/facilitatiApi";
+import { getFacilitati } from "../../../../api/facilitatiApi";
 
 export default function PricesListWidget() {
   const { data: facilitati } = useQuery({

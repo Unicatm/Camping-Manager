@@ -10,8 +10,8 @@ import {
   ResponsiveContainer,
   LabelList,
 } from "recharts";
-import ChartSelectButton from "./ChartSelectButton";
-import { getTopPredominantNationalitiesByYear } from "../../api/reservationsApi";
+import ChartSelectButton from "../inputs/ChartSelectButton";
+import { getTopPredominantNationalitiesByYear } from "../../../../api/reservationsApi/index";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 

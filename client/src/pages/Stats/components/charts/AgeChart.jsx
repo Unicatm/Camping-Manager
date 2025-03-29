@@ -11,8 +11,8 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import ChartSelectButton from "./ChartSelectButton";
-import { getAgeGroups } from "../../api/reservationsApi";
+import ChartSelectButton from "../inputs/ChartSelectButton";
+import { getAgeGroups } from "../../../../api/reservationsApi/index";
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {

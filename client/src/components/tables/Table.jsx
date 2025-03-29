@@ -3,7 +3,7 @@ import { ArrowDownIcon } from "@heroicons/react/16/solid";
 
 const TableElement = ({ children }) => (
   <div className="relative h-full overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg bg-white">
-    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
       {children}
     </table>
   </div>
@@ -16,7 +16,7 @@ const TableColumns = ({
   sortedColumns,
 }) => {
   return (
-    <thead className="sticky top-0 text-xs text-white uppercase bg-blue-600">
+    <thead className="sticky top-0 text-md text-white bg-blue-600">
       <tr>
         {columns.map((th, index) => (
           <th
@@ -24,7 +24,7 @@ const TableColumns = ({
             scope="col"
             className={`${
               th.sorting ? "cursor-pointer" : ""
-            } px-6 py-3 not-first:text-right select-none`}
+            } px-4 py-3 font-medium select-none`}
           >
             <div
               onClick={() => {
@@ -58,7 +58,6 @@ const TableColumns = ({
 };
 
 const TableBody = ({ data, columns, children, forPreview, isFetching }) => {
-  console.log("Fetching: " + isFetching);
   return (
     <tbody>
       {isFetching ? (
@@ -74,7 +73,7 @@ const TableBody = ({ data, columns, children, forPreview, isFetching }) => {
         <tr>
           <td
             colSpan={columns.length + (forPreview ? 0 : 1)}
-            className="bg-white px-6 py-4 text-center"
+            className="bg-white text-center px-6 py-4"
           >
             Nu sunt date de afișat...
           </td>
@@ -87,19 +86,17 @@ const TableBody = ({ data, columns, children, forPreview, isFetching }) => {
 };
 
 const TableRow = ({ children }) => (
-  <tr className="bg-white border-b border-gray-200 hover:bg-gray-50">
+  <tr className="bg-white border-b border-blue-800/10 hover:bg-blue-50/40">
     {children}
   </tr>
 );
 
-const TableData = ({ children }) => (
-  <td className="px-6 py-4 not-first:text-right">{children}</td>
-);
+const TableData = ({ children }) => <td className="px-6 py-4">{children}</td>;
 
 const TableHead = ({ children }) => (
   <th
     scope="row"
-    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+    className="px-6 py-4 h-fit font-medium text-gray-900 whitespace-nowrap"
   >
     {children}
   </th>

@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import HeaderPage from "../components/HeaderPage";
-import ReservationsForm from "../components/forms/ReservationsForm";
-import SearchAddSection from "../components/tables/SearchAddSection";
-import Table from "../components/tables/Table";
-import ReservationsTableData from "../components/tables/tableDatas/ReservationsTableData";
-import rezervariTableHeads from "../components/tables/rezervariTabelHeads";
-import { deleteRezervare, getAllRezervari } from "../api/reservationsApi";
+import HeaderPage from "../../components/HeaderPage";
+import ReservationsForm from "./components/form/ReservationsForm";
+import SearchAddSection from "../../components/tables/SearchAddSection";
+import Table from "../../components/tables/Table";
+import ReservationsTableData from "./components/table/ReservationsTableData";
+import rezervariTableHeads from "./components/table/rezervariTabelHeads";
+import { deleteRezervare, getAllRezervari } from "../../api/reservationsApi";
 
 function Reservations() {
   const { id } = useParams();

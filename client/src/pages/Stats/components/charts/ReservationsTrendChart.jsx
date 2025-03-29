@@ -9,8 +9,8 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
-import ChartMultiSelectButton from "./ChartMultiSelectButton";
-import { getMonthlyReservationsOnSelectedYears } from "../../api/reservationsApi";
+import ChartMultiSelectButton from "../inputs/ChartMultiSelectButton";
+import { getMonthlyReservationsOnSelectedYears } from "../../../../api/reservationsApi/index";
 
 const gradientIds = ["colorUv", "colorPv", "colorXy", "colorAb", "colorCd"];
 const colorIds = ["#8884d8", "#82ca9d", "#FF5733", "#FFC300", "#900C3F"];

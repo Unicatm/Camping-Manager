@@ -4,7 +4,6 @@ import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import {
   BarChart,
   Bar,
-  Rectangle,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -13,8 +12,8 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import ChartMultiSelectButton from "./ChartMultiSelectButton";
-import { getIncomingRevenueOnSelectedYears } from "../../api/reservationsApi";
+import ChartMultiSelectButton from "../inputs/ChartMultiSelectButton";
+import { getIncomingRevenueOnSelectedYears } from "../../../../api/reservationsApi/index";
 
 const CustomTooltip = ({ active, payload }) => {
   if (active && payload && payload.length) {

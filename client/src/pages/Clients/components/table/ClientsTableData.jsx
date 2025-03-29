@@ -1,8 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { TableData, TableRow, TableHead } from "../Table";
+import {
+  TableData,
+  TableRow,
+  TableHead,
+} from "../../../../components/tables/Table";
 import { TrashIcon, PencilIcon } from "@heroicons/react/16/solid";
-import dateFormatter from "../../../utils/dateFormat";
+import dateFormatter from "../../../../utils/dateFormat";
 
 function ClientsTableData({ clienti, forPreview, onEdit, onDelete }) {
   return clienti.toReversed().map((client, index) => (

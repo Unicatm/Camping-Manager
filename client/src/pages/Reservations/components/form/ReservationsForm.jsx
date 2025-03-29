@@ -3,15 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { validationSchemaRezervare } from "./validationSchemes/validationSchemes";
+import { validationSchemaRezervare } from "./validationSchema";
 
 import {
   createRezervare,
   editRezervare,
   getRezervareById,
-} from "../../api/reservationsApi";
-import Calendar from "../ui/Calendar";
-import Input from "./Input";
+} from "../../../../api/reservationsApi";
+import Calendar from "../../../../components/ui/calendar/Calendar";
+import Input from "../../../../components/ui/inputs/Input";
 
 function ReservationsForm({ onClose, isEditing, rezervareId }) {
   const navigate = useNavigate();

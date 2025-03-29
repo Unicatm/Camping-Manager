@@ -1,7 +1,11 @@
 import { Link } from "react-router-dom";
 import { TrashIcon, PencilIcon } from "@heroicons/react/16/solid";
-import { TableData, TableRow, TableHead } from "../Table";
-import dateFormatter from "../../../utils/dateFormat";
+import {
+  TableData,
+  TableRow,
+  TableHead,
+} from "../../../../components/tables/Table";
+import dateFormatter from "../../../../utils/dateFormat";
 
 function ReservationsTableData({
   rezervari,

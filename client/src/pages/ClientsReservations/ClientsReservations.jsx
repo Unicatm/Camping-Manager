@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
-import HeaderPage from "../components/HeaderPage";
-import { getClientReservations } from "../api/clientApi";
-import Table from "../components/tables/Table";
-import ReservationsTableData from "../components/tables/tableDatas/ReservationsTableData";
-import rezervariTableHeads from "../components/tables/rezervariTabelHeads";
+import HeaderPage from "../../components/HeaderPage";
+import { getClientReservations } from "../../api/clientApi";
+import Table from "../../components/tables/Table";
+import ReservationsTableData from "../Reservations/components/table/ReservationsTableData";
+import rezervariTableHeads from "../Reservations/components/table/rezervariTabelHeads";
 
 function ClientsReservations() {
   const { id } = useParams();

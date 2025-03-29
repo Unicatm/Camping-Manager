@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { createClient, editClient, getClient } from "../../api/clientApi";
+import { createClient, editClient, getClient } from "../../../../api/clientApi";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import Calendar from "../ui/Calendar";
-import Input from "../forms/Input";
-import Select from "./Select";
-import countryData from "../forms/countryData";
-import { validationSchemaClient } from "./validationSchemes/validationSchemes";
+import Calendar from "../../../../components/ui/calendar/Calendar";
+import Input from "../../../../components/ui/inputs/Input";
+import Select from "../../../../components/ui/inputs/Select";
+import countryData from "./countryData";
+import { validationSchemaClient } from "./validationScheme";
 
 function ClientsForm({ onClose, isEditing, clientId }) {
   const navigate = useNavigate();

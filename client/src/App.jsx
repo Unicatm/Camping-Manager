@@ -1,12 +1,12 @@
 import "./App.css";
 import "./components/sideNav/SideNav";
 import { Route, Routes } from "react-router-dom";
-import Home from "./pages/Home";
-import Clients from "./pages/Clients";
-import Reservations from "./pages/Reservations";
-import Stats from "./pages/Stats";
+import Home from "./pages/Home/Home";
+import Clients from "./pages/Clients/Clients";
+import Reservations from "./pages/Reservations/Reservations";
+import Stats from "./pages/Stats/Stats";
 import SideNav from "./components/sideNav/SideNav";
-import ClientsReservations from "./pages/ClientsReservations";
+import ClientsReservations from "./pages/ClientsReservations/ClientsReservations";
 
 function App() {
   return (

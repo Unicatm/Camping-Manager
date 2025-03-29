@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import IncomingRevenueChart from "../components/charts/IncomingRevenueChart";
-import PredominantNationalitiesChart from "../components/charts/PredominantNationalitiesChart";
-import ReservationsTrendChart from "../components/charts/ReservationsTrendChart";
-import AgeChart from "../components/charts/AgeChart";
-import { getAllAvailableYears } from "../api/reservationsApi";
+import IncomingRevenueChart from "./components/charts/IncomingRevenueChart";
+import PredominantNationalitiesChart from "./components/charts/PredominantNationalitiesChart";
+import ReservationsTrendChart from "./components/charts/ReservationsTrendChart";
+import AgeChart from "./components/charts/AgeChart";
+import { getAllAvailableYears } from "../../api/reservationsApi";
 
 export default function Stats() {
   const { data } = useQuery({

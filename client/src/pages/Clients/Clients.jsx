@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteClient, getClienti } from "../api/clientApi";
-import HeaderPage from "../components/HeaderPage";
-import SearchAddSection from "../components/tables/SearchAddSection";
-import ClientsForm from "../components/forms/ClientsForm";
-import Table from "../components/tables/Table";
-import clientiTableHeads from "../components/tables/clientiTabelHeads";
-import ClientsTableData from "../components/tables/tableDatas/ClientsTableData";
+import { deleteClient, getClienti } from "../../api/clientApi";
+import HeaderPage from "../../components/HeaderPage";
+import SearchAddSection from "../../components/tables/SearchAddSection";
+import ClientsForm from "./components/form/ClientsForm";
+import Table from "../../components/tables/Table";
+import clientiTableHeads from "./components/table/clientiTabelHeads";
+import ClientsTableData from "./components/table/ClientsTableData";
 
 function Clients() {
   const { id } = useParams();

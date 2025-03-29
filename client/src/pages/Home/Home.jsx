@@ -1,5 +1,5 @@
-import NoReservationsWidget from "../components/ui/widgets/NoReservationsWidget";
-import PricesListWidget from "../components/ui/widgets/PricesListWidget";
+import NoReservationsWidget from "./components/widgets/NoReservationsWidget";
+import PricesListWidget from "./components/widgets/PricesListWidget";
 
 export default function Home() {
   console.log("Home component rendered");

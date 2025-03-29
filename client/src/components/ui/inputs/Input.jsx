@@ -1,4 +1,4 @@
-import Calendar from "../ui/Calendar";
+import Calendar from "../calendar/Calendar";
 
 function Input({
   width,
