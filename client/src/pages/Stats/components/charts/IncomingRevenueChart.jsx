@@ -105,52 +105,60 @@ export default function IncomingRevenueChart({ years = [] }) {
         </div>
       </div>
       <ResponsiveContainer className="bg-white" width={500} height={350}>
-        <BarChart
-          width={"100%"}
-          height={"100%"}
-          data={data}
-          margin={{
-            top: 30,
-            right: 10,
-            left: 10,
-            bottom: 5,
-          }}
-          onMouseMove={(state) => {
-            if (state.isTooltipActive) {
-              setFocusBar(state.activeTooltipIndex);
-              setMouseLeave(false);
-            } else {
-              setFocusBar(null);
-              setMouseLeave(true);
-            }
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
-          <YAxis />
-          <Legend content={<CustomLegend />} />
-          <Tooltip content={<CustomTooltip />} />
-          {checkedYears.map((year, index) => (
-            <Bar
-              key={year}
-              dataKey={year.toString()}
-              fill={colors[index % colors.length]}
-              radius={[5, 5, 0, 0]}
-              stackId="a"
-            >
-              {data?.map((entry, cellIndex) => (
-                <Cell
-                  key={cellIndex}
-                  fill={
-                    focusBar === cellIndex || mouseLeave
-                      ? colors[index % colors.length]
-                      : `${colors[index % colors.length]}80`
-                  }
-                />
-              ))}
-            </Bar>
-          ))}
-        </BarChart>
+        {data && data.length > 0 ? (
+          <BarChart
+            width={"100%"}
+            height={"100%"}
+            data={data}
+            margin={{
+              top: 30,
+              right: 10,
+              left: 10,
+              bottom: 5,
+            }}
+            onMouseMove={(state) => {
+              if (state.isTooltipActive) {
+                setFocusBar(state.activeTooltipIndex);
+                setMouseLeave(false);
+              } else {
+                setFocusBar(null);
+                setMouseLeave(true);
+              }
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="month" />
+            <YAxis />
+            <Legend content={<CustomLegend />} />
+            <Tooltip content={<CustomTooltip />} />
+            {checkedYears.map((year, index) => (
+              <Bar
+                key={year}
+                dataKey={year.toString()}
+                fill={colors[index % colors.length]}
+                radius={[5, 5, 0, 0]}
+                stackId="a"
+              >
+                {data?.map((entry, cellIndex) => (
+                  <Cell
+                    key={cellIndex}
+                    fill={
+                      focusBar === cellIndex || mouseLeave
+                        ? colors[index % colors.length]
+                        : `${colors[index % colors.length]}80`
+                    }
+                  />
+                ))}
+              </Bar>
+            ))}
+          </BarChart>
+        ) : (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-blue-950/70 text-sm">
+              Nu există date disponibile
+            </p>
+          </div>
+        )}
       </ResponsiveContainer>
     </div>
   );

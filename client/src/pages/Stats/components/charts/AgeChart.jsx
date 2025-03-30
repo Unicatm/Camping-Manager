@@ -68,13 +68,10 @@ export default function AgeChart({ years }) {
     queryFn: () => getAgeGroups(selectedYear),
   });
 
-  if (!data || data.length === 0) {
-    return (
-      <p className="text-center text-gray-500">Nu există date disponibile</p>
-    );
-  }
-
-  const ageGroups = Object.keys(data[0]).filter((key) => key !== "month");
+  const ageGroups =
+    data && data.length > 0
+      ? Object.keys(data[0]).filter((key) => key !== "month")
+      : [];
 
   return (
     <div className="bg-white w-fit h-fit p-4 shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20">
@@ -93,52 +90,60 @@ export default function AgeChart({ years }) {
         />
       </div>
       <ResponsiveContainer className="bg-white" width={500} height={350}>
-        <BarChart
-          data={data}
-          width={"100%"}
-          height={"100%"}
-          margin={{
-            top: 30,
-            right: 10,
-            left: 0,
-            bottom: 5,
-          }}
-          onMouseMove={(state) => {
-            if (state.isTooltipActive) {
-              setFocusBar(state.activeTooltipIndex);
-              setMouseLeave(false);
-            } else {
-              setFocusBar(null);
-              setMouseLeave(true);
-            }
-          }}
-        >
-          <XAxis dataKey="month" />
-          <YAxis />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip content={<CustomTooltip />} />
-          <Legend content={<CustomLegend />} />
-          {ageGroups.map((ageGroup, index) => (
-            <Bar
-              key={ageGroup}
-              dataKey={ageGroup}
-              fill={colors[index % colors.length]}
-              radius={[5, 5, 0, 0]}
-              stackId="a"
-            >
-              {data.map((entry, cellIndex) => (
-                <Cell
-                  key={cellIndex}
-                  fill={
-                    focusBar === cellIndex || mouseLeave
-                      ? colors[index % colors.length]
-                      : `${colors[index % colors.length]}80`
-                  }
-                />
-              ))}
-            </Bar>
-          ))}
-        </BarChart>
+        {data && data.length > 0 ? (
+          <BarChart
+            data={data}
+            width={"100%"}
+            height={"100%"}
+            margin={{
+              top: 30,
+              right: 10,
+              left: 0,
+              bottom: 5,
+            }}
+            onMouseMove={(state) => {
+              if (state.isTooltipActive) {
+                setFocusBar(state.activeTooltipIndex);
+                setMouseLeave(false);
+              } else {
+                setFocusBar(null);
+                setMouseLeave(true);
+              }
+            }}
+          >
+            <XAxis dataKey="month" />
+            <YAxis />
+            <CartesianGrid strokeDasharray="3 3" />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend content={<CustomLegend />} />
+            {ageGroups.map((ageGroup, index) => (
+              <Bar
+                key={ageGroup}
+                dataKey={ageGroup}
+                fill={colors[index % colors.length]}
+                radius={[5, 5, 0, 0]}
+                stackId="a"
+              >
+                {data.map((entry, cellIndex) => (
+                  <Cell
+                    key={cellIndex}
+                    fill={
+                      focusBar === cellIndex || mouseLeave
+                        ? colors[index % colors.length]
+                        : `${colors[index % colors.length]}80`
+                    }
+                  />
+                ))}
+              </Bar>
+            ))}
+          </BarChart>
+        ) : (
+          <div className="flex items-center justify-center h-full">
+            <p className="text-blue-950/70 text-sm">
+              Nu există date disponibile
+            </p>
+          </div>
+        )}
       </ResponsiveContainer>
     </div>
   );
