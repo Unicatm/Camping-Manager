@@ -10,7 +10,14 @@ export const validationSchemaRezervare = yup
       .matches(numbersRegex, "Trebuie să conțină numai cifre")
       .notRequired()
       .transform((value) => (value === "" ? null : value)),
-    tipAuto: yup.string().required("Selectează cel puțin un tip auto!"),
+    tipAuto: yup
+      .object()
+      .default({})
+      .test(
+        "not-empty",
+        "Selectează cel puțin un tip auto!",
+        (value) => value && Object.keys(value).length > 0
+      ),
     idLoc: yup.string().required("Trebuie să selectezi un loc!"),
     // .transform((value) => (value === "" ? null : value)),
     hasElectricity: yup.bool().notRequired(),

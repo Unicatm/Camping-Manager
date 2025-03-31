@@ -12,11 +12,14 @@ import {
 } from "../../../../api/reservationsApi";
 import Calendar from "../../../../components/ui/calendar/Calendar";
 import Input from "../../../../components/ui/inputs/Input";
+import QuantitySelect from "../../../../components/ui/inputs/QuantitySelect";
+import { getTipuriAuto } from "../../../../api/facilitatiApi";
 
 function ReservationsForm({ onClose, isEditing, rezervareId }) {
   const navigate = useNavigate();
   const [selectedDataIn, setSelectedDataIn] = useState(null);
   const [selectedDataOut, setSelectedDataOut] = useState(null);
+  const [tipuriAuto, setTipuriAuto] = useState({});
 
   const {
     register,
@@ -29,7 +32,7 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
       idClient: "",
       adulti: "",
       copii: "",
-      tipAuto: "",
+      tipAuto: {},
       idLoc: "",
       hasElectricity: false,
     },
@@ -39,6 +42,11 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
     queryKey: ["rezervare", rezervareId],
     queryFn: () => getRezervareById(rezervareId),
     enabled: !!rezervareId,
+  });
+
+  const { data: facilitati } = useQuery({
+    queryKey: ["facilitati"],
+    queryFn: getTipuriAuto,
   });
 
   useEffect(() => {
@@ -83,9 +91,8 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
     delete data.adulti;
     delete data.copii;
 
-    data.tipAuto = data.tipAuto ? [data.tipAuto] : [];
+    data.tipAuto = tipuriAuto;
 
-    console.log(data);
     if (!isEditing) {
       createRezervareMutation.mutate(data);
     } else {
@@ -96,7 +103,13 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
   };
 
   useEffect(() => {
+    setValue("tipAuto", tipuriAuto);
+  }, [tipuriAuto, setValue]);
+
+  useEffect(() => {
     if (rezervare && isEditing) {
+      setTipuriAuto(rezervare.tipAuto);
+
       setValue("idClient", rezervare.idClient || "");
       setValue(
         "dataCheckIn",
@@ -107,12 +120,13 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
         rezervare.dataCheckOut ? new Date(rezervare.dataCheckOut) : ""
       );
       setValue("adulti", rezervare.facilitati["Adult"] || "0");
-      setValue("copii", rezervare.facilitati["Copii"] || "0");
+      setValue("copii", rezervare.facilitati["Copii 3-12 ani"] || "0");
       setValue("idLoc", rezervare.idLoc || "");
-      setValue("tipAuto", rezervare.tipAuto[0] || "");
+      setTipuriAuto(rezervare.tipAuto || {});
+      setValue("tipAuto", rezervare.tipAuto || {});
       setValue("hasElectricity", rezervare.hasElectricity || "");
     }
-  }, [rezervare, setValue, isEditing]);
+  }, [rezervare, setValue, isEditing, tipuriAuto]);
 
   useEffect(() => {
     if (rezervare && rezervare.dataCheckIn && rezervare.dataCheckOut) {
@@ -130,7 +144,6 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
     >
       <div className="fixed inset-0 flex flex-col gap-6 items-center m-auto w-[40%] min-w-xl p-8 h-max bg-white shadow-md sm:rounded-lg">
         <h2 className="font-bold text-2xl">
-          {" "}
           {isEditing ? <p>Editează rezervarea</p> : <p>Adaugă o rezervare</p>}
         </h2>
         <Input
@@ -191,11 +204,17 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
           />
         </div>
         <div className="flex gap-6 w-full">
-          <Input
+          <QuantitySelect
             width="w-full"
             id="tipAuto"
             name="tipAuto"
             label="Tip Autovehicul"
+            data={tipuriAuto}
+            setData={(newValue) => {
+              setTipuriAuto(newValue);
+              setValue("tipAuto", newValue);
+            }}
+            labelData={facilitati}
             register={register}
             error={errors.tipAuto}
           />

@@ -24,7 +24,7 @@ const rezervareSchema = new mongoose.Schema({
     default: false,
   },
   tipAuto: {
-    type: [String],
+    type: Object,
     required: true,
   },
   status: {
@@ -63,12 +63,12 @@ async function calculeazaSume(querry) {
   }
 
   if (querry.tipAuto) {
-    for (const vehicul of querry.tipAuto) {
-      const facilitate = await mongoose
+    for (const [key, value] of [...Object.entries(querry.tipAuto)]) {
+      const tipAuto = await mongoose
         .model("Facilitate")
-        .findOne({ denumire: vehicul });
-      if (facilitate && typeof facilitate.pret === "number") {
-        costFacilitati += facilitate.pret;
+        .findOne({ denumire: key });
+      if (tipAuto && typeof tipAuto.pret === "number") {
+        costFacilitati += value * tipAuto.pret;
       }
     }
   }

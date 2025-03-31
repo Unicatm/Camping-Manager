@@ -10,3 +10,14 @@ export const getFacilitati = async () => {
   const resData = await res.json();
   return resData.data.facilitati;
 };
+
+export const getTipuriAuto = async () => {
+  const res = await fetch(`${BASE_URL}/tipuri-auto`);
+
+  if (!res.ok) {
+    throw new Error(`HTTP error! Status: ${res.status}`);
+  }
+
+  const resData = await res.json();
+  return resData.data.tipuriAuto;
+};

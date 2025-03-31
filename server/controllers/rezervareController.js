@@ -423,6 +423,7 @@ exports.createRezervare = async (req, res) => {
       },
     });
   } catch (err) {
+    console.log(err);
     res.status(404).json({
       status: "failed",
       message: err,

@@ -8,6 +8,8 @@ router
   .get(facilitateController.getAllFacilitati)
   .post(facilitateController.createFacilitate);
 
+router.route("/tipuri-auto").get(facilitateController.getTipuriAuto);
+
 router
   .route("/:id")
   .get(facilitateController.getFacilitate)

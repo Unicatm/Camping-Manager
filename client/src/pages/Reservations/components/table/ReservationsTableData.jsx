@@ -35,8 +35,10 @@ function ReservationsTableData({
       <TableData>{rezervare?.facilitati["Copii 3-12 ani"] || "0"}</TableData>
       <TableData>{rezervare?.hasElectricity ? "Da" : "Nu"}</TableData>
       <TableData>
-        {rezervare?.tipAuto.map((tip, idx) => (
-          <div key={idx}>{tip}</div>
+        {Object.entries(rezervare?.tipAuto || {}).map(([key, value], idx) => (
+          <div key={idx}>
+            {key}: {value}
+          </div>
         ))}
       </TableData>
       <TableData>{rezervare?.suma + " lei"}</TableData>
