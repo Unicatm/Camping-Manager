@@ -1,99 +1,20 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { createClient, editClient, getClient } from "../../../../api/clientApi";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Calendar from "../../../../components/ui/calendar/Calendar";
 import Input from "../../../../components/ui/inputs/Input";
 import Select from "../../../../components/ui/inputs/Select";
 import countryData from "./countryData";
-import { validationSchemaClient } from "./validationScheme";
+import useClientForm from "../../hooks/useClientForm";
 
 function ClientsForm({ onClose, isEditing, clientId }) {
-  const navigate = useNavigate();
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedCountry, setSelectedCountry] = useState(countryData[0]);
-
   const {
     register,
     handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(validationSchemaClient),
-    defaultValues: {
-      cnp: "",
-      nume: "",
-      nationalitate: "",
-      email: "",
-      nrTelefon: "",
-    },
-  });
-
-  const { data: client } = useQuery({
-    queryKey: ["clienti", clientId],
-    queryFn: () => getClient(clientId),
-    enabled: !!clientId,
-  });
-
-  const queryClient = useQueryClient();
-
-  const createClientMutation = useMutation({
-    mutationFn: createClient,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clienti", "list"] });
-      queryClient.invalidateQueries({ queryKey: ["clientGrowthData"] });
-      onClose();
-    },
-  });
-
-  const updateClientMutation = useMutation({
-    mutationFn: (data) => editClient(clientId, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clienti", "list"] });
-      onClose();
-      navigate("/clienti");
-    },
-  });
-
-  const onSubmit = (data) => {
-    console.log(data);
-
-    data.dataNasterii = selectedDate
-      ? selectedDate.toISOString().split("T")[0]
-      : "";
-    data.nationalitate = selectedCountry;
-
-    if (!isEditing) {
-      createClientMutation.mutate(data);
-    } else {
-      updateClientMutation.mutate(data);
-      setSelectedDate(data.dataNasterii);
-    }
-  };
-
-  useEffect(() => {
-    if (client && isEditing) {
-      setValue("cnp", client.cnp || "");
-      setValue("nume", client.nume || "");
-      setSelectedCountry(client.nationalitate);
-      console.log(client.nationalitate);
-      setValue(
-        "dataNasterii",
-        client.dataNasterii ? new Date(client.dataNasterii) : ""
-      );
-      setValue("email", client.email || "");
-      setValue("nrTelefon", client.nrTelefon || "");
-    }
-  }, [client, setValue, isEditing]);
-
-  useEffect(() => {
-    if (client && client.dataNasterii) {
-      const dataNasteriiDb = new Date(client.dataNasterii);
-      setSelectedDate(dataNasteriiDb);
-    }
-  }, [client]);
+    onSubmit,
+    errors,
+    selectedDate,
+    setSelectedDate,
+    selectedCountry,
+    setSelectedCountry,
+  } = useClientForm({ isEditing, clientId, onClose });
 
   return (
     <form

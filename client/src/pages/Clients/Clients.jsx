@@ -1,60 +1,25 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { deleteClient, getClienti } from "../../api/clientApi";
+import { useState } from "react";
 import HeaderPage from "../../components/HeaderPage";
 import SearchAddSection from "../../components/tables/SearchAddSection";
 import ClientsForm from "./components/form/ClientsForm";
 import Table from "../../components/tables/Table";
 import clientiTableHeads from "./components/table/clientiTabelHeads";
 import ClientsTableData from "./components/table/ClientsTableData";
-import ReservationsTrendChart from "../Stats/components/charts/ReservationsTrendChart";
 import ClientsWidgets from "./components/widgets/ClientsWidgets";
+import useFetchClients from "./hooks/useFetchClients";
+import useDeleteClient from "./hooks/useDeleteClient";
+import useModal from "../../components/hooks/useModal";
+import useHandleEdit from "./hooks/useHandleEdit";
 
 function Clients() {
-  const { id } = useParams();
-  const [isEditing, setIsEditing] = useState(false);
-  const [selectedClientId, setSelectedClientId] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortedColumns, setSortedColumns] = useState({});
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const {
-    data: clienti,
-    isFetching,
-    isError,
-  } = useQuery({
-    queryKey: ["clienti", "list"],
-    queryFn: getClienti,
-  });
-
-  const queryClient = useQueryClient();
-
-  const deleteMutationClient = useMutation({
-    mutationFn: deleteClient,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["clienti", "list"] });
-      queryClient.invalidateQueries({ queryKey: ["clientGrowthData"] });
-    },
-  });
-
-  const handleDeleteClient = (id) => {
-    deleteMutationClient.mutate(id);
-  };
-
-  const handleEdit = (clientId) => {
-    setIsEditing(true);
-    setSelectedClientId(clientId);
-    setIsModalOpen(true);
-  };
-
-  useEffect(() => {
-    if (isEditing) {
-      setIsModalOpen(true);
-      setSelectedClientId(id);
-    }
-  }, [id]);
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const { data: clienti, isError, isFetching } = useFetchClients();
+  const handleDeleteClient = useDeleteClient();
+  const { isEditing, selectedClientId, handleEdit, resetEdit } =
+    useHandleEdit(openModal);
 
   const filteredClienti = () => {
     if (!clienti) return [];
@@ -91,7 +56,7 @@ function Clients() {
       <div className="relative w-11/12 h-full mx-auto py-8 flex flex-col">
         <HeaderPage path="Clienți" title="Clienți" />
         <SearchAddSection
-          openModal={() => setIsModalOpen(true)}
+          openModal={() => openModal()}
           buttonText="Adaugă un client"
           onSearch={(term) => setSearchTerm(term)}
         />
@@ -117,9 +82,8 @@ function Clients() {
         {isModalOpen && (
           <ClientsForm
             onClose={() => {
-              setIsModalOpen(false);
-              setSelectedClientId(null);
-              setIsEditing(false);
+              closeModal();
+              resetEdit();
             }}
             isEditing={isEditing}
             clientId={selectedClientId}
