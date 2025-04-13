@@ -8,6 +8,7 @@ import Table from "../../components/tables/Table";
 import ReservationsTableData from "./components/table/ReservationsTableData";
 import rezervariTableHeads from "./components/table/rezervariTabelHeads";
 import { deleteRezervare, getAllRezervari } from "../../api/reservationsApi";
+import ReservationsWidgets from "./widgets/ReservationsWidgets";
 
 function Reservations() {
   const { id } = useParams();
@@ -25,14 +26,15 @@ function Reservations() {
     queryFn: getAllRezervari,
   });
 
-  console.log(rezervari);
-
   const queryClient = useQueryClient();
 
   const deleteMutationRezervare = useMutation({
     mutationFn: deleteRezervare,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["rezervari", "list"] });
+      queryClient.invalidateQueries({ queryKey: ["totalReservations"] });
+      queryClient.invalidateQueries({ queryKey: ["averageDaysSpent"] });
+      queryClient.invalidateQueries({ queryKey: ["totalActiveReservations"] });
       refetch();
     },
   });
@@ -69,6 +71,9 @@ function Reservations() {
           }}
           buttonText="Adaugă o rezervare"
         />
+
+        <ReservationsWidgets />
+
         {isModalOpen && (
           <ReservationsForm
             onClose={() => {

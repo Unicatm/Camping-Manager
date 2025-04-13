@@ -62,6 +62,9 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
     mutationFn: createRezervare,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["rezervari", "list"] });
+      queryClient.invalidateQueries({ queryKey: ["totalReservations"] });
+      queryClient.invalidateQueries({ queryKey: ["averageDaysSpent"] });
+      queryClient.invalidateQueries({ queryKey: ["totalActiveReservations"] });
       onClose();
     },
   });
@@ -70,6 +73,9 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
     mutationFn: (data) => editRezervare(rezervareId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["rezervari", "list"] });
+      queryClient.invalidateQueries({ queryKey: ["totalReservations"] });
+      queryClient.invalidateQueries({ queryKey: ["averageDaysSpent"] });
+      queryClient.invalidateQueries({ queryKey: ["totalActiveReservations"] });
       onClose();
       navigate("/rezervari");
     },

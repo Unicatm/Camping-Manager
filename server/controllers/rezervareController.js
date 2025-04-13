@@ -412,6 +412,83 @@ exports.getAllRezervari = async (req, res) => {
   }
 };
 
+exports.getTotalNumberOfReservations = async (req, res) => {
+  try {
+    const total = await Rezervare.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: total,
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
+exports.getTotalNumberOfActiveReservations = async (req, res) => {
+  try {
+    const total = await Rezervare.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: total,
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
+exports.getAvarageDaysSpent = async (req, res) => {
+  try {
+    const averageDays = await Rezervare.aggregate([
+      {
+        $group: {
+          _id: null,
+          total: {
+            $avg: {
+              $dateDiff: {
+                startDate: "$dataCheckIn",
+                endDate: "$dataCheckOut",
+                unit: "day",
+              },
+            },
+          },
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: averageDays,
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
 exports.createRezervare = async (req, res) => {
   try {
     const newRezervare = await Rezervare.create(req.body);

@@ -21,6 +21,16 @@ router
 router.route("/age-grouping/:year").get(rezervareController.getAgeGroups);
 
 router
+  .route("/total-number-of-reservations")
+  .get(rezervareController.getTotalNumberOfReservations);
+
+router
+  .route("/total-number-of-active-reservations")
+  .get(rezervareController.getTotalNumberOfActiveReservations);
+
+router.route("/average-days").get(rezervareController.getAvarageDaysSpent);
+
+router
   .route("/:id")
   .get(rezervareController.getRezervare)
   .patch(rezervareController.updateRezervare)

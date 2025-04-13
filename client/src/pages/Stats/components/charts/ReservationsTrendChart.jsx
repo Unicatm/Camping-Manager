@@ -46,7 +46,7 @@ export default function ReservationsTrendChart({ years = [] }) {
           />
         </div>
       </div>
-      <ResponsiveContainer className="bg-white" width={500} height={220}>
+      <ResponsiveContainer className="bg-white" width={500} height={180}>
         {data && data.length > 0 ? (
           <AreaChart
             width={"100%"}

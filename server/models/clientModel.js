@@ -15,6 +15,8 @@ const clientSchema = new mongoose.Schema({
   dataNasterii: Date,
 });
 
+clientSchema.set("timestamps", true);
+
 const Client = mongoose.model("Client", clientSchema);
 
 module.exports = Client;

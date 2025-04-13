@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Client = require("../models/clientModel");
 const APIFeatures = require("./../utils/apiFeatures");
+const dayjs = require("dayjs");
 
 exports.getClient = async (req, res) => {
   try {
@@ -85,6 +86,67 @@ exports.getAllClients = async (req, res) => {
       },
     });
   } catch (err) {
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
+exports.getClientGrowthData = async (req, res) => {
+  try {
+    const currentMonth = new Date();
+    const lastMonth = dayjs(currentMonth).subtract(1, "month").toDate();
+
+    const data = await Client.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: dayjs(lastMonth).startOf("month").toDate(),
+            $lte: dayjs(currentMonth).endOf("month").toDate(),
+          },
+        },
+      },
+      {
+        $project: {
+          month: { $month: "$createdAt" },
+        },
+      },
+      {
+        $group: {
+          _id: "$month",
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+    const totalClients = await Client.countDocuments();
+
+    const currentMonthNumber = currentMonth.getMonth() + 1;
+    const lastMonthNumber =
+      currentMonthNumber === 1 ? 12 : currentMonthNumber - 1;
+
+    const currentMonthClients =
+      data.find((d) => d._id === currentMonthNumber)?.count || 0;
+    const lastMonthClients =
+      data.find((d) => d._id === lastMonthNumber)?.count || 0;
+
+    const changeValue = currentMonthClients - lastMonthClients;
+    const changePercentage =
+      lastMonthClients === 0
+        ? 100
+        : Math.round((changeValue / lastMonthClients) * 100);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        total: totalClients,
+        changeValue,
+        changePercentage,
+      },
+    });
+  } catch (err) {
+    console.log(err);
     res.status(404).json({
       status: "failed",
       message: err,

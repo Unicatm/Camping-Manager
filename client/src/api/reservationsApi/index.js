@@ -70,6 +70,30 @@ export const getMonthlyReservationsOnSelectedYears = async (years) => {
   return data;
 };
 
+export const getTotalNumberOfReservations = async () => {
+  const res = await fetch(`${BASE_URL}/total-number-of-reservations`);
+
+  const resData = await res.json();
+  const data = resData.data[0];
+  return data;
+};
+
+export const getTotalNumberOfActiveReservations = async () => {
+  const res = await fetch(`${BASE_URL}/total-number-of-active-reservations`);
+
+  const resData = await res.json();
+  const data = resData.data[0];
+  return data;
+};
+
+export const getAvarageDaysSpent = async () => {
+  const res = await fetch(`${BASE_URL}/average-days`);
+
+  const resData = await res.json();
+  const data = resData.data[0];
+  return data;
+};
+
 export const createRezervare = async (rezervare) => {
   const res = await fetch(BASE_URL, {
     method: "POST",

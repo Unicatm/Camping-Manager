@@ -57,6 +57,14 @@ export const createClient = async (client) => {
   return res.json();
 };
 
+export const getClientGrowthData = async () => {
+  const res = await fetch(`${BASE_URL}/client-growth-data`);
+
+  const resData = await res.json();
+  const data = resData.data;
+  return data;
+};
+
 export const deleteClient = async (id) => {
   const res = await fetch(`${BASE_URL}/${id}`, {
     method: "DELETE",

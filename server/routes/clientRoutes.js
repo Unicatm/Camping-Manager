@@ -8,6 +8,8 @@ router
   .get(clientController.getAllClients)
   .post(clientController.createClient);
 
+router.route("/client-growth-data").get(clientController.getClientGrowthData);
+
 router
   .route("/:id")
   .get(clientController.getClient)

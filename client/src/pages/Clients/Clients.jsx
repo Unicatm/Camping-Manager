@@ -8,6 +8,8 @@ import ClientsForm from "./components/form/ClientsForm";
 import Table from "../../components/tables/Table";
 import clientiTableHeads from "./components/table/clientiTabelHeads";
 import ClientsTableData from "./components/table/ClientsTableData";
+import ReservationsTrendChart from "../Stats/components/charts/ReservationsTrendChart";
+import ClientsWidgets from "./components/widgets/ClientsWidgets";
 
 function Clients() {
   const { id } = useParams();
@@ -33,6 +35,7 @@ function Clients() {
     mutationFn: deleteClient,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clienti", "list"] });
+      queryClient.invalidateQueries({ queryKey: ["clientGrowthData"] });
     },
   });
 
@@ -52,10 +55,6 @@ function Clients() {
       setSelectedClientId(id);
     }
   }, [id]);
-
-  useEffect(() => {
-    console.log(sortedColumns);
-  }, [sortedColumns]);
 
   const filteredClienti = () => {
     if (!clienti) return [];
@@ -96,6 +95,8 @@ function Clients() {
           buttonText="Adaugă un client"
           onSearch={(term) => setSearchTerm(term)}
         />
+
+        <ClientsWidgets />
 
         <Table
           data={filteredClienti()}

@@ -43,6 +43,7 @@ function ClientsForm({ onClose, isEditing, clientId }) {
     mutationFn: createClient,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clienti", "list"] });
+      queryClient.invalidateQueries({ queryKey: ["clientGrowthData"] });
       onClose();
     },
   });
