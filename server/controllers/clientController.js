@@ -93,6 +93,31 @@ exports.getAllClients = async (req, res) => {
   }
 };
 
+exports.getClientsNameAndCnp = async (req, res) => {
+  try {
+    const data = await Client.aggregate([
+      {
+        $project: {
+          _id: 1,
+          nume: 1,
+          cnp: 1,
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      results: data.length,
+      data,
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
 exports.getClientGrowthData = async (req, res) => {
   try {
     const currentMonth = new Date();
@@ -146,7 +171,6 @@ exports.getClientGrowthData = async (req, res) => {
       },
     });
   } catch (err) {
-    console.log(err);
     res.status(404).json({
       status: "failed",
       message: err,

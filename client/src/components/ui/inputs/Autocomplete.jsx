@@ -1,6 +1,14 @@
 import { useState } from "react";
 
-const Autocomplete = ({ data, width, flex, id, label }) => {
+export default function Autocomplete({
+  data,
+  width,
+  flex,
+  id,
+  label,
+  onSelect,
+  error,
+}) {
   const [suggestions, setSuggestions] = useState([]);
   const [suggestionIndex, setSuggestionIndex] = useState(0);
   const [suggestionsActive, setSuggestionsActive] = useState(false);
@@ -12,7 +20,7 @@ const Autocomplete = ({ data, width, flex, id, label }) => {
 
     if (query.length > 0) {
       const filteredSuggestions = data.filter((suggestion) =>
-        suggestion.toLowerCase().includes(query.toLowerCase())
+        suggestion.nume.toLowerCase().includes(query.toLowerCase())
       );
       setSuggestions(filteredSuggestions);
       setSuggestionsActive(true);
@@ -36,9 +44,11 @@ const Autocomplete = ({ data, width, flex, id, label }) => {
   };
 
   const handleClick = (e) => {
-    setValue(e.target.innerText);
+    setValue(e.nume);
     setSuggestions([]);
     setSuggestionsActive(false);
+
+    if (onSelect) onSelect(e);
   };
 
   const handleKeyDown = (e) => {
@@ -69,6 +79,11 @@ const Autocomplete = ({ data, width, flex, id, label }) => {
         onKeyDown={handleKeyDown}
         className="relative w-full bg-white placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
       />
+      {error && (
+        <span className="absolute -bottom-6 left-0 text-xs text-red-700 bg-red-200/0 py-1 px-2 rounded-xl">
+          {error.message}
+        </span>
+      )}
       {suggestionsActive && (
         <ul className="absolute z-10 bg-white w-full h-40 overflow-y-scroll rounded-b-md border border-slate-200 py-2 transition duration-300 ease shadow-sm">
           {suggestions.map((suggestion, index) => (
@@ -77,15 +92,14 @@ const Autocomplete = ({ data, width, flex, id, label }) => {
               className={`p-1 cursor-pointer px-3 ${
                 index === suggestionIndex ? "bg-gray-100" : "hover:bg-gray-100"
               }`}
-              onMouseDown={handleClick}
+              onMouseDown={() => handleClick(suggestion)}
             >
-              {suggestion}
+              <h2>{suggestion.nume}</h2>
+              <p className="text-gray-500">{"ID: " + suggestion.cnp}</p>
             </li>
           ))}
         </ul>
       )}
     </div>
   );
-};
-
-export default Autocomplete;
+}

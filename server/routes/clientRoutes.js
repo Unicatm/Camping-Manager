@@ -9,6 +9,7 @@ router
   .post(clientController.createClient);
 
 router.route("/client-growth-data").get(clientController.getClientGrowthData);
+router.route("/clients-name-cnp").get(clientController.getClientsNameAndCnp);
 
 router
   .route("/:id")

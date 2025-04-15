@@ -4,7 +4,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchemaRezervare } from "./validationSchema";
-
 import {
   createRezervare,
   editRezervare,
@@ -12,8 +11,10 @@ import {
 } from "../../../../api/reservationsApi";
 import Calendar from "../../../../components/ui/calendar/Calendar";
 import Input from "../../../../components/ui/inputs/Input";
+import Autocomplete from "../../../../components/ui/inputs/Autocomplete";
 import QuantitySelect from "../../../../components/ui/inputs/QuantitySelect";
 import { getTipuriAuto } from "../../../../api/facilitatiApi";
+import { getClientsNameAndCnp } from "../../../../api/clientApi";
 
 function ReservationsForm({ onClose, isEditing, rezervareId }) {
   const navigate = useNavigate();
@@ -47,6 +48,11 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
   const { data: facilitati } = useQuery({
     queryKey: ["facilitati"],
     queryFn: getTipuriAuto,
+  });
+
+  const { data: clientiAutocomplete } = useQuery({
+    queryKey: ["clientiAutocomplete"],
+    queryFn: getClientsNameAndCnp,
   });
 
   useEffect(() => {
@@ -152,13 +158,13 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
         <h2 className="font-bold text-2xl">
           {isEditing ? <p>Editează rezervarea</p> : <p>Adaugă o rezervare</p>}
         </h2>
-        <Input
+        <Autocomplete
+          data={clientiAutocomplete}
           width="w-full"
           label="Client"
-          id="idClient"
           placeholder="Client..."
           name="idClient"
-          register={register}
+          onSelect={(client) => setValue("idClient", client._id)}
           error={errors.idClient}
         />
         <div className="flex gap-6 w-full pb-4">
