@@ -21,6 +21,7 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
   const [selectedDataIn, setSelectedDataIn] = useState(null);
   const [selectedDataOut, setSelectedDataOut] = useState(null);
   const [tipuriAuto, setTipuriAuto] = useState({});
+  const [selectedClient, setSelectedClient] = useState({});
 
   const {
     register,
@@ -61,6 +62,14 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
       setSelectedDataOut(rezervare.dataCheckOut);
     }
   }, [rezervare]);
+
+  useEffect(() => {
+    setSelectedClient(
+      isEditing && clientiAutocomplete?.length
+        ? clientiAutocomplete.find((c) => c._id === rezervare?.idClient)
+        : null
+    );
+  }, [isEditing, clientiAutocomplete, rezervare]);
 
   const queryClient = useQueryClient();
 
@@ -122,7 +131,6 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
     if (rezervare && isEditing) {
       setTipuriAuto(rezervare.tipAuto);
 
-      setValue("idClient", rezervare.idClient || "");
       setValue(
         "dataCheckIn",
         rezervare.dataCheckIn ? new Date(rezervare.dataCheckIn) : ""
@@ -137,8 +145,9 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
       setTipuriAuto(rezervare.tipAuto || {});
       setValue("tipAuto", rezervare.tipAuto || {});
       setValue("hasElectricity", rezervare.hasElectricity || "");
+      setValue("idClient", selectedClient?._id);
     }
-  }, [rezervare, setValue, isEditing, tipuriAuto]);
+  }, [rezervare, setValue, isEditing, tipuriAuto, selectedClient]);
 
   useEffect(() => {
     if (rezervare && rezervare.dataCheckIn && rezervare.dataCheckOut) {
@@ -164,7 +173,15 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
           label="Client"
           placeholder="Client..."
           name="idClient"
-          onSelect={(client) => setValue("idClient", client._id)}
+          defaultValue={selectedClient}
+          onSelect={(client) => {
+            console.log(client);
+            if (client && client._id) {
+              setValue("idClient", client._id);
+            } else {
+              setValue("idClient", "");
+            }
+          }}
           error={errors.idClient}
         />
         <div className="flex gap-6 w-full pb-4">

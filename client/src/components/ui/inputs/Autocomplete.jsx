@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Autocomplete({
   data,
@@ -8,14 +8,22 @@ export default function Autocomplete({
   label,
   onSelect,
   error,
+  defaultValue = null,
 }) {
   const [suggestions, setSuggestions] = useState([]);
   const [suggestionIndex, setSuggestionIndex] = useState(0);
   const [suggestionsActive, setSuggestionsActive] = useState(false);
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(defaultValue?.nume || "");
+
+  useEffect(() => {
+    if (defaultValue?.nume) {
+      setValue(defaultValue.nume);
+    }
+  }, [defaultValue]);
 
   const handleChange = (e) => {
     const query = e.target.value;
+    setValue("");
     setValue(query);
 
     if (query.length > 0) {
@@ -29,6 +37,10 @@ export default function Autocomplete({
       setSuggestionsActive(true);
     } else {
       setSuggestionsActive(false);
+    }
+
+    if (onSelect) {
+      onSelect(null);
     }
   };
 
@@ -57,8 +69,8 @@ export default function Autocomplete({
     } else if (e.keyCode === 40 && suggestionIndex < suggestions.length - 1) {
       setSuggestionIndex(suggestionIndex + 1);
     } else if (e.keyCode === 13) {
-      setValue(suggestions[suggestionIndex]);
-      setSuggestionsActive(false);
+      e.preventDefault();
+      handleClick(suggestions[suggestionIndex]);
     }
   };
 

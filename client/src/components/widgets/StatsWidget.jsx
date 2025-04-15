@@ -28,7 +28,9 @@ StatsWidget.DisplayData = function DisplayData() {
   const { data } = useStatsWidgetContext();
   return (
     <div className="flex items-center gap-4 w-fit h-max pt-2">
-      <p className="text-4xl font-medium">{data?.total}</p>
+      <p className="text-4xl font-medium">
+        {data?.total != null ? Number(Number(data.total).toFixed(2)) : null}
+      </p>
     </div>
   );
 };
@@ -38,7 +40,10 @@ StatsWidget.DisplayDataLabel = function DisplayDataLabel({ label }) {
   return (
     <div>
       <div className="flex items-center gap-4 w-fit h-max pt-2">
-        <p className="text-4xl font-medium">{data?.total}</p>
+        <p className="text-4xl font-medium">
+          {" "}
+          {data?.total != null ? Number(Number(data.total).toFixed(2)) : null}
+        </p>
         <p className="text-xs px-2 py-1 rounded-sm bg-green-100 text-green-600 ">
           {label}
         </p>
@@ -60,7 +65,10 @@ StatsWidget.ChangeIndicator = function ChangeIndicator({ referenceText }) {
   return (
     <div>
       <div className="flex items-center gap-4 w-fit h-max py-2">
-        <p className="text-4xl font-medium">{data?.total}</p>
+        <p className="text-4xl font-medium">
+          {" "}
+          {data?.total != null ? Number(Number(data.total).toFixed(2)) : null}
+        </p>
         <p
           className={`text-xs py-0.5 px-1 rounded-sm ${
             isLower ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"
