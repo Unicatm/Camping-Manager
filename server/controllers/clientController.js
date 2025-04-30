@@ -41,9 +41,10 @@ exports.getClientWithReservations = async (req, res) => {
       },
       {
         $project: {
-          _id: 1,
-          nume: 1,
-          rezervari: 1,
+          createdAt: 0,
+          updatedAt: 0,
+          __v: 0,
+          _id: 0,
         },
       },
     ]);
@@ -60,7 +61,6 @@ exports.getClientWithReservations = async (req, res) => {
       data: clientsWithReservations,
     });
   } catch (err) {
-    console.log(err);
     res.status(404).json({
       status: "failed",
       message: err,
@@ -107,7 +107,6 @@ exports.getClientsNameAndCnp = async (req, res) => {
 
     res.status(200).json({
       status: "success",
-      results: data.length,
       data,
     });
   } catch (err) {

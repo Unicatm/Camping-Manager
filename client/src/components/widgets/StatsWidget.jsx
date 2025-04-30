@@ -4,10 +4,14 @@ import {
   useStatsWidgetContext,
 } from "./useStatsWidgetContext";
 
-function StatsWidget({ data, children }) {
+function StatsWidget({ data, children, ...props }) {
   return (
     <StatsWidgetContext.Provider value={{ data }}>
-      <div className="w-full min-w-50 h-max p-4 rounded-md shadow-sm bg-white text-blue-950">
+      <div
+        className={`${
+          props.width || "w-full"
+        } min-w-50 h-max p-4 rounded-md shadow-sm bg-white text-blue-950`}
+      >
         {children}
       </div>
     </StatsWidgetContext.Provider>
