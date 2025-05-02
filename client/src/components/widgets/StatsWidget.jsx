@@ -4,26 +4,29 @@ import {
   useStatsWidgetContext,
 } from "./useStatsWidgetContext";
 
-function StatsWidget({ data, children, ...props }) {
+function StatsWidget({ data, icon: Icon, children, ...props }) {
   return (
     <StatsWidgetContext.Provider value={{ data }}>
       <div
         className={`${
           props.width || "w-full"
-        } min-w-50 h-max p-4 rounded-md shadow-sm bg-white text-blue-950`}
+        } flex flex-row items-center justify-between min-w-50 h-full p-4 rounded-md shadow-xs shadow-blue-950/20 border-[1px] border-black/10 bg-white text-black`}
       >
-        {children}
+        <div>{children}</div>
+        {!Icon ? null : (
+          <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center">
+            <Icon className="h-5 w-5 text-blue-600" />
+          </div>
+        )}
       </div>
     </StatsWidgetContext.Provider>
   );
 }
 
-StatsWidget.Title = function StatsWidgetTitle({ title, icon: Icon }) {
+StatsWidget.Title = function StatsWidgetTitle({ title }) {
   return (
-    <div className="flex items-center gap-2">
-      {!Icon ? null : <Icon className="w-5 h-5 self-center" />}
-
-      <h2 className="w-fit text-md font-medium text-blue-950">{title}</h2>
+    <div>
+      <h2 className="text-sm font-medium text-slate-500">{title}</h2>
     </div>
   );
 };
@@ -31,8 +34,8 @@ StatsWidget.Title = function StatsWidgetTitle({ title, icon: Icon }) {
 StatsWidget.DisplayData = function DisplayData() {
   const { data } = useStatsWidgetContext();
   return (
-    <div className="flex items-center gap-4 w-fit h-max pt-2">
-      <p className="text-4xl font-medium">
+    <div className="flex items-center justify-between pt-2">
+      <p className="text-2xl font-bold text-slate-900">
         {data?.total != null ? Number(Number(data.total).toFixed(2)) : null}
       </p>
     </div>
@@ -42,13 +45,13 @@ StatsWidget.DisplayData = function DisplayData() {
 StatsWidget.DisplayDataLabel = function DisplayDataLabel({ label }) {
   const { data } = useStatsWidgetContext();
   return (
-    <div>
-      <div className="flex items-center gap-4 w-fit h-max pt-2">
-        <p className="text-4xl font-medium">
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-4 w-fit h-max pt-4">
+        <p className="text-2xl font-bold text-slate-900">
           {" "}
           {data?.total != null ? Number(Number(data.total).toFixed(2)) : null}
         </p>
-        <p className="text-xs px-2 py-1 rounded-sm bg-green-100 text-green-600 ">
+        <p className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-600 ">
           {label}
         </p>
       </div>
@@ -74,8 +77,10 @@ StatsWidget.ChangeIndicator = function ChangeIndicator({ referenceText }) {
           {data?.total != null ? Number(Number(data.total).toFixed(2)) : null}
         </p>
         <p
-          className={`text-xs py-0.5 px-1 rounded-sm ${
-            isLower ? "bg-red-100 text-red-600" : "bg-green-100 text-green-600"
+          className={`text-xs py-0.5 px-1.5 rounded-full border-[1px] ${
+            isLower
+              ? "bg-red-100 text-red-600 border-red-300"
+              : "bg-green-100 text-green-600 border-green-300"
           }`}
         >
           {data?.changePercentage + "%"}

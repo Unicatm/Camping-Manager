@@ -14,7 +14,7 @@ export default function Stats() {
   const years = data?.years || [];
 
   return (
-    <div className="h-screen overflow-y-scroll flex gap-4 grow flex-wrap bg-blue-100/50">
+    <div className="h-screen overflow-y-scroll flex gap-4 grow flex-wrap bg-blue-50/90">
       <IncomingRevenueChart years={years} />
       <PredominantNationalitiesChart years={years} />
       <ReservationsTrendChart years={years} />

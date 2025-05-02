@@ -6,8 +6,8 @@ import useActiveReservationsData from "./hooks/useActiveReservationsData";
 export default function ActiveReservationsWidget() {
   const { data: totalActiveReservations } = useActiveReservationsData();
   return (
-    <StatsWidget data={totalActiveReservations}>
-      <StatsWidget.Title title="Rezervari in curs" icon={RiLoopLeftFill} />
+    <StatsWidget data={totalActiveReservations} icon={RiLoopLeftFill}>
+      <StatsWidget.Title title="Rezervari in curs" />
       <StatsWidget.DisplayDataLabel label="În curs" />
     </StatsWidget>
   );

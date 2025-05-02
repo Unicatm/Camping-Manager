@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import HeaderPage from "../../components/HeaderPage";
 import ReservationsForm from "./components/form/ReservationsForm";
-import SearchAddSection from "../../components/tables/SearchAddSection";
 import Table from "../../components/tables/Table";
 import ReservationsTableData from "./components/table/ReservationsTableData";
 import rezervariTableHeads from "./components/table/rezervariTabelHeads";
 import { deleteRezervare, getAllRezervari } from "../../api/reservationsApi";
 import ReservationsWidgets from "./widgets/ReservationsWidgets";
+import ReservationsHeaderSection from "./components/ReservationsHeaderSection";
+import ReservationsFilterSection from "./components/ReservationsFilterSection";
 
 function Reservations() {
   const { id } = useParams();
@@ -54,25 +54,22 @@ function Reservations() {
     if (isEditing) {
       setIsModalOpen(true);
       setSelectedRezervareId(id);
-      console.log("Rez uf");
-      console.log(id);
     }
   }, [id]);
 
   return (
-    <div className="h-screen grow bg-blue-100/50">
+    <div className="h-screen grow bg-blue-50/90">
       <div className="relative w-11/12 h-full mx-auto py-8 flex flex-col">
-        <HeaderPage path="Rezervări" title="Rezervări" />
-        <SearchAddSection
+        <ReservationsHeaderSection
           openModal={() => {
             setIsEditing(false);
             setSelectedRezervareId(null);
             setIsModalOpen(true);
           }}
-          buttonText="Adaugă o rezervare"
         />
 
         <ReservationsWidgets />
+        <ReservationsFilterSection />
 
         {isModalOpen && (
           <ReservationsForm
@@ -85,20 +82,22 @@ function Reservations() {
             isEditing={isEditing}
           />
         )}
-        <Table
-          data={rezervari}
-          columns={rezervariTableHeads}
-          forPreview={false}
-          isFetching={isFetching}
-          isError={isError}
-        >
-          <ReservationsTableData
-            rezervari={rezervari}
+        <div className="flex-1 overflow-hidden">
+          <Table
+            data={rezervari}
+            columns={rezervariTableHeads}
             forPreview={false}
-            onEdit={handleEdit}
-            onDelete={handleDeleteRezervare}
-          />
-        </Table>
+            isFetching={isFetching}
+            isError={isError}
+          >
+            <ReservationsTableData
+              rezervari={rezervari}
+              forPreview={false}
+              onEdit={handleEdit}
+              onDelete={handleDeleteRezervare}
+            />
+          </Table>
+        </div>
       </div>
     </div>
   );

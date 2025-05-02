@@ -1,5 +1,4 @@
 import { useState } from "react";
-import HeaderPage from "../../components/HeaderPage";
 import SearchAddSection from "../../components/tables/SearchAddSection";
 import ClientsForm from "./components/form/ClientsForm";
 import Table from "../../components/tables/Table";
@@ -10,6 +9,8 @@ import useFetchClients from "./hooks/useFetchClients";
 import useDeleteClient from "./hooks/useDeleteClient";
 import useModal from "../../components/hooks/useModal";
 import useHandleEdit from "./hooks/useHandleEdit";
+import ClientsHeaderSection from "./components/ClientsHeaderSection";
+import ClientsFilterSection from "./components/ClientsFilterSection";
 
 function Clients() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -52,16 +53,12 @@ function Clients() {
   filteredClienti();
 
   return (
-    <div className="h-screen grow bg-blue-100/50">
+    <div className="h-screen grow bg-blue-50/90">
       <div className="relative w-11/12 h-full mx-auto py-8 flex flex-col">
-        <HeaderPage path="Clienți" title="Clienți" />
-        <SearchAddSection
-          openModal={() => openModal()}
-          buttonText="Adaugă un client"
-          onSearch={(term) => setSearchTerm(term)}
-        />
+        <ClientsHeaderSection openModal={() => openModal()} />
 
         <ClientsWidgets />
+        <ClientsFilterSection onSearch={(term) => setSearchTerm(term)} />
 
         <Table
           data={filteredClienti()}

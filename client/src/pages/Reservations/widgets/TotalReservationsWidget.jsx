@@ -7,8 +7,8 @@ export default function TotalReservationsWidget() {
   const { data: totalReservations } = useTotalReservationsData();
 
   return (
-    <StatsWidget data={totalReservations}>
-      <StatsWidget.Title title="Rezervari totale" icon={RiLoopLeftFill} />
+    <StatsWidget data={totalReservations} icon={RiLoopLeftFill}>
+      <StatsWidget.Title title="Rezervari totale" />
       <StatsWidget.DisplayData />
     </StatsWidget>
   );

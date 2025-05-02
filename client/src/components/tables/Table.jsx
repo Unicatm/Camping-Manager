@@ -1,9 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ArrowDownIcon } from "@heroicons/react/16/solid";
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  ArrowsRightLeftIcon,
+} from "@heroicons/react/16/solid";
+import { LuArrowUpDown } from "react-icons/lu";
 
 const TableElement = ({ children }) => (
-  <div className="relative h-full overflow-x-auto overflow-y-auto shadow-md sm:rounded-lg bg-white">
-    <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+  <div className="relative h-full rounded-lg overflow-x-auto overflow-y-auto bg-white border border-slate-200">
+    <table className="w-full text-sm text-left rounded-lg text-slate-600">
       {children}
     </table>
   </div>
@@ -16,7 +21,7 @@ const TableColumns = ({
   sortedColumns,
 }) => {
   return (
-    <thead className="sticky top-0 text-md text-white bg-blue-600">
+    <thead className="sticky top-0 text-sm font-medium text-slate-500 bg-slate-50 border-b border-slate-200">
       <tr>
         {columns.map((th, index) => (
           <th
@@ -30,28 +35,24 @@ const TableColumns = ({
               onClick={() => {
                 handleSortClick(index);
               }}
-              className="flex gap-2"
+              className="flex items-center gap-2"
             >
               {th.title}
               {th.sorting ? (
-                <ArrowDownIcon
-                  className={`
-                  ${
-                    sortedColumns[th.id] === "none"
-                      ? "text-blue-400"
-                      : "text-white"
-                  }
-                  ${sortedColumns[th.id] === "asc" ? "rotate-180" : ""}
-                  w-4 h-4
-                `}
-                />
+                sortedColumns[th.id] === "none" ? (
+                  <LuArrowUpDown className="w-4 h-4 text-slate-400" />
+                ) : sortedColumns[th.id] === "asc" ? (
+                  <ArrowUpIcon className="w-4 h-4 text-blue-600" />
+                ) : (
+                  <ArrowDownIcon className="w-4 h-4 text-blue-600" />
+                )
               ) : (
                 ""
               )}
             </div>
           </th>
         ))}
-        {forPreview ? null : <th scope="col" className="px-6 py-3"></th>}
+        {forPreview ? null : <th scope="col" className="px-4 py-3"></th>}
       </tr>
     </thead>
   );
@@ -64,7 +65,7 @@ const TableBody = ({ data, columns, children, forPreview, isFetching }) => {
         <tr>
           <td
             colSpan={columns.length + (forPreview ? 0 : 1)}
-            className="bg-white px-6 py-4 text-center"
+            className="bg-white px-4 py-3 text-center text-slate-500"
           >
             {"Datele se încarcă..."}
           </td>
@@ -73,7 +74,7 @@ const TableBody = ({ data, columns, children, forPreview, isFetching }) => {
         <tr>
           <td
             colSpan={columns.length + (forPreview ? 0 : 1)}
-            className="bg-white text-center px-6 py-4"
+            className="bg-white text-center px-4 py-3 text-slate-500"
           >
             Nu sunt date de afișat...
           </td>
@@ -86,17 +87,19 @@ const TableBody = ({ data, columns, children, forPreview, isFetching }) => {
 };
 
 const TableRow = ({ children }) => (
-  <tr className="bg-white border-b border-blue-800/10 hover:bg-blue-50/40">
+  <tr className="bg-white border-b border-slate-200 hover:bg-slate-50">
     {children}
   </tr>
 );
 
-const TableData = ({ children }) => <td className="px-6 py-4">{children}</td>;
+const TableData = ({ className, children }) => (
+  <td className={`${className} px-4 py-3`}>{children}</td>
+);
 
 const TableHead = ({ children }) => (
   <th
     scope="row"
-    className="px-6 py-4 h-fit font-medium text-gray-900 whitespace-nowrap"
+    className="px-4 py-3 z-50 font-medium text-slate-900 whitespace-nowrap"
   >
     {children}
   </th>
@@ -162,25 +165,23 @@ export const Table = ({
   }, [sortedColumns]);
 
   return (
-    <>
-      <TableElement>
-        <TableColumns
-          columns={columns}
-          forPreview={forPreview}
-          handleSortClick={handleSortClick}
-          sortedColumns={sortedColumns}
-        />
-        <TableBody
-          data={data}
-          columns={columns}
-          isError={isError}
-          forPreview={forPreview}
-          isFetching={isFetching}
-        >
-          {children}
-        </TableBody>
-      </TableElement>
-    </>
+    <TableElement>
+      <TableColumns
+        columns={columns}
+        forPreview={forPreview}
+        handleSortClick={handleSortClick}
+        sortedColumns={sortedColumns}
+      />
+      <TableBody
+        data={data}
+        columns={columns}
+        isError={isError}
+        forPreview={forPreview}
+        isFetching={isFetching}
+      >
+        {children}
+      </TableBody>
+    </TableElement>
   );
 };
 

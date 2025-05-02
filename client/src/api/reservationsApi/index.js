@@ -20,7 +20,6 @@ export const getRezervareById = async (id) => {
 
   const resData = await res.json();
   const data = resData.data.rezervare;
-  console.log(data);
   return data;
 };
 

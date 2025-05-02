@@ -6,8 +6,8 @@ import useAverageDays from "./hooks/useAverageDays";
 export default function FreeSpacesWidget({ width }) {
   const { data: averageDays } = useAverageDays();
   return (
-    <StatsWidget width={width} data={averageDays}>
-      <StatsWidget.Title title="Locuri libere" icon={RiLoopLeftFill} />
+    <StatsWidget width={width} data={averageDays} icon={RiLoopLeftFill}>
+      <StatsWidget.Title title="Locuri libere" />
       <StatsWidget.DisplayData />
     </StatsWidget>
   );

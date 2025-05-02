@@ -59,12 +59,14 @@ export default function QuantitySelect({
 
   return (
     <div ref={dropdownRef} className={`relative ${width} ${flex}`}>
-      <label
-        htmlFor={id}
-        className="block mb-2 text-sm text-blue-950 font-medium"
-      >
-        {label}
-      </label>
+      {label ? (
+        <label
+          htmlFor={id}
+          className="block mb-2 text-sm text-blue-950 font-medium"
+        >
+          {label}
+        </label>
+      ) : null}
       <div
         className="h-fit flex items-center justify-between flex-nowrap gap-1 bg-white border border-slate-200 px-3 py-2 text-sm text-blue-950 rounded-md cursor-pointer"
         onClick={() => setIsOpen((prev) => !prev)}

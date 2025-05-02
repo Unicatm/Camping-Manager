@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
-import { TrashIcon, PencilIcon } from "@heroicons/react/16/solid";
 import {
   TableData,
   TableRow,
   TableHead,
 } from "../../../../components/tables/Table";
 import dateFormatter from "../../../../utils/dateFormat";
+import DropdownDeleteMenu from "../../../../components/tables/DropdownDeleteMenu";
 
 function ReservationsTableData({
   rezervari,
@@ -22,17 +22,30 @@ function ReservationsTableData({
         ) : (
           <Link
             to={`/clienti/${rezervare?.idClient}`}
-            className="underline underline-offset-2"
+            className="hover:text-slate-700"
           >
             {rezervare?.numeClient || props.numeClient}
           </Link>
         )}
       </TableHead>
       <TableData>{rezervare?.idLoc}</TableData>
+      <TableData>
+        <div
+          className={`w-fit px-2 py-0.5 text-xs rounded-full border-[1px] cursor-pointer transition-all duration-200 ease-in-out hover:transition-all hover:duration-200 hover:ease-in-out ${
+            rezervare?.status == "În curs"
+              ? "bg-green-100 border-green-200 text-green-700 hover:bg-green-200/70 hover:border-green-300 hover:text-green-800"
+              : "bg-orange-100 border-orange-200 text-orange-700 hover:bg-orange-200/70 hover:border-orange-300 hover:text-orange-800"
+          }`}
+        >
+          {rezervare?.status}
+        </div>
+      </TableData>
       <TableData>{dateFormatter(rezervare?.dataCheckIn)}</TableData>
       <TableData>{dateFormatter(rezervare?.dataCheckOut)}</TableData>
-      <TableData>{rezervare?.facilitati["Adult"] || "0"}</TableData>
-      <TableData>{rezervare?.facilitati["Copii 3-12 ani"] || "0"}</TableData>
+      <TableData>
+        <div>{`${rezervare?.facilitati["Adult"] || "0"} Adulți`}</div>
+        <div>{`${rezervare?.facilitati["Copii 3-12 ani"] || "0"} Copii`}</div>
+      </TableData>
       <TableData>{rezervare?.hasElectricity ? "Da" : "Nu"}</TableData>
       <TableData>
         {Object.entries(rezervare?.tipAuto || {}).map(([key, value], idx) => (
@@ -45,25 +58,11 @@ function ReservationsTableData({
       <TableData>{rezervare?.sumaPerDay + " lei"}</TableData>
 
       {!forPreview ? (
-        <td className="flex justify-center items-center space-x-4 px-2 py-3">
-          <button
-            className="font-medium text-blue-500 hover:underline p-2 cursor-pointer"
-            onClick={() => {
-              console.log("Edit clicked, rezervare._id:", rezervare._id);
-              onEdit(rezervare._id);
-            }}
-          >
-            <PencilIcon className="w-4 h-4" />
-          </button>
-          <button
-            className="font-medium text-rose-600 hover:underline p-2 cursor-pointer"
-            onClick={() => {
-              onDelete(rezervare._id);
-            }}
-          >
-            <TrashIcon className="w-4 h-4" />
-          </button>
-        </td>
+        <DropdownDeleteMenu
+          rezervareId={rezervare._id}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
       ) : null}
     </TableRow>
   ));

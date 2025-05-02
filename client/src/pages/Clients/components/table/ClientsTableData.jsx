@@ -5,17 +5,14 @@ import {
   TableRow,
   TableHead,
 } from "../../../../components/tables/Table";
-import { TrashIcon, PencilIcon } from "@heroicons/react/16/solid";
 import dateFormatter from "../../../../utils/dateFormat";
+import DropdownDeleteMenu from "../../../../components/tables/DropdownDeleteMenu";
 
 function ClientsTableData({ clienti, forPreview, onEdit, onDelete }) {
   return clienti.toReversed().map((client, index) => (
     <TableRow key={index}>
       <TableHead>
-        <Link
-          to={`/clienti/${client._id}`}
-          className="underline underline-offset-2"
-        >
+        <Link to={`/clienti/${client._id}`} className="hover:text-slate-700">
           {client.nume}
         </Link>
       </TableHead>
@@ -33,22 +30,11 @@ function ClientsTableData({ clienti, forPreview, onEdit, onDelete }) {
         )}
       </TableData>
       {!forPreview ? (
-        <td className="flex justify-center items-center space-x-2 px-2 py-3">
-          <button
-            className="font-medium text-blue-500 hover:underline p-2 cursor-pointer"
-            onClick={() => onEdit(client._id)}
-          >
-            <PencilIcon className="w-4 h-4" />
-          </button>
-          <button
-            className="font-medium text-rose-600 hover:underline p-2 cursor-pointer"
-            onClick={() => {
-              onDelete(client._id);
-            }}
-          >
-            <TrashIcon className="w-4 h-4" />
-          </button>
-        </td>
+        <DropdownDeleteMenu
+          rezervareId={client._id}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
       ) : null}
     </TableRow>
   ));
