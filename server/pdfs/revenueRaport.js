@@ -44,59 +44,110 @@ exports.RevenueRaport = async (req, res) => {
     },
   ]);
 
-  const doc = new PDFDocument({ margin: 30, size: "A4" });
+  const reportTitle = `Raport Venituri`;
+  const periodTitle = `Raport venituri 01.01.${year} - 31.01.${year}`;
+  const totalRevenue = data.reduce((sum, rez) => sum + (rez.suma || 0), 0);
+
+  const doc = new PDFDocument({ margin: 30, size: "A4", bufferPages: true });
 
   res.setHeader("Content-Type", "application/pdf");
-  res.setHeader("Content-Disposition", "inline; filename=raport.pdf");
+  res.setHeader(
+    "Content-Disposition",
+    `inline; filename="Raport_Venituri_${
+      year || moment().format("YYYY-MM-DD")
+    }.pdf"`
+  );
   doc.pipe(res);
 
-  doc.fontSize(25).text("Raport");
+  doc
+    .fillColor("#000000")
+    .fontSize(20)
+    .text(reportTitle, { align: "center" })
+    .moveDown(0.5);
 
-  const rows = data.map((rez) => [
-    rez.nume,
-    rez.dataCheckIn?.toISOString().split("T")[0] || "-",
-    rez.dataCheckOut?.toISOString().split("T")[0] || "-",
-    `${rez.suma} RON`,
-  ]);
+  doc.moveDown(2);
+
+  doc
+    .font("Helvetica-Bold")
+    .fillColor("#000000")
+    .fontSize(10)
+    .text(periodTitle)
+    .moveDown(1);
 
   const table = {
-    title: "Venituri",
-    headers: ["Client", "Data Check-In", "Data Check-Out", "Total RON"],
-    rows: rows,
+    headers: [
+      {
+        label: "Client",
+        property: "client",
+        width: 180,
+        renderer: (value) => value || "-",
+      },
+      {
+        label: "Data Check-In",
+        property: "checkIn",
+        width: 100,
+      },
+      {
+        label: "Data Check-Out",
+        property: "checkOut",
+        width: 100,
+      },
+      {
+        label: "Total RON",
+        property: "suma",
+        width: 120,
+        align: "right",
+      },
+    ],
+    datas: [
+      ...data.map((rez) => ({
+        client: rez.nume,
+        checkIn: rez.dataCheckIn?.toISOString().split("T")[0] || "-",
+        checkOut: rez.dataCheckOut?.toISOString().split("T")[0] || "-",
+        suma: `${rez.suma} RON`,
+        options: {
+          fontSize: 9,
+          separation: true,
+        },
+      })),
+      {
+        client: {
+          label: "TOTAL GENERAL",
+          options: {
+            colSpan: 3,
+            font: "Helvetica-Bold",
+            alignment: "right",
+          },
+        },
+        suma: {
+          label: `${totalRevenue.toFixed(2)} RON`,
+          options: {
+            font: "Helvetica-Bold",
+            alignment: "right",
+          },
+        },
+      },
+    ],
   };
 
   const tableOptions = {
     width: doc.page.width - 60,
-    columnsSize: [150, 120, 120, 120],
+    columnsSize: [150, 150, 150, 120],
     prepareHeader: () => {
-      doc.font("Helvetica-Bold").fontSize(10).fillColor("#FFFFFF");
+      doc.font("Helvetica-Bold").fontSize(10).fillColor("#000000");
+      return doc;
     },
-    prepareRow: (row, indexColumn, indexRow, rectRow) => {
-      doc.font("Helvetica").fontSize(10);
-      if (indexRow % 2 === 0) {
-        doc.addBackground(rectRow, "#F3F4F6", 1);
-      }
-      doc.fillColor("#000000");
+    prepareRow: (row, indexColumn, indexRow, rectRow, rectCell) => {
+      doc.font("Helvetica").fontSize(8).fillColor("#000000");
     },
     divider: {
-      horizontal: { width: 0.5, color: "#E5E7EB" },
-      vertical: { width: 0.5, color: "#E5E7EB" },
+      horizontal: { width: 0.1, color: "#94a3b8" },
     },
-    padding: 5,
-    borderWidth: 1,
-    borderColor: "#E5E7EB",
+    padding: 8,
+    headerBackground: "#60a5fa",
   };
 
-  doc.moveDown();
-
-  if (rows.length === 0) {
-    doc
-      .moveDown()
-      .fontSize(12)
-      .text("Nu sunt rezultate disponibile pentru acest an.");
-  } else {
-    await doc.table(table, tableOptions);
-  }
+  doc.table(table, tableOptions);
 
   doc.end();
 };

@@ -10,7 +10,7 @@ export default function ClientsHeaderSection({ openModal }) {
     >
       <button
         onClick={openModal}
-        className="cursor-pointer flex justify-center items-center gap-2 w-max bg-blue-700 text-white text-sm px-4 py-2 rounded-md"
+        className="cursor-pointer flex justify-center items-center gap-2 w-max bg-blue-700 text-white text-sm px-4 py-2 rounded-md transition-all duration-300 ease-in-out hover:bg-blue-800 hover:transition-all hover:duration-300 hover:ease-in-out"
       >
         <PlusIcon className="h-4 w-4 stroke-3" />
         <p className="whitespace-nowrap">Adaugă un client</p>
