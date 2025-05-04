@@ -30,6 +30,13 @@ export const getRezervariByClientId = async (idClient) => {
   return data;
 };
 
+export const getExpensesByClientId = async (idClient) => {
+  const res = await fetch(`${BASE_URL}/clienti/expenses/${idClient}`);
+  const resData = await res.json();
+  const data = resData.data;
+  return data;
+};
+
 export const getTopPredominantNationalitiesByYear = async (year) => {
   const res = await fetch(`${BASE_URL}/predominant-nationalities/${year}`);
   const resData = await res.json();

@@ -31,12 +31,13 @@ StatsWidget.Title = function StatsWidgetTitle({ title }) {
   );
 };
 
-StatsWidget.DisplayData = function DisplayData() {
+StatsWidget.DisplayData = function DisplayData({ unit }) {
   const { data } = useStatsWidgetContext();
   return (
     <div className="flex items-center justify-between pt-2">
       <p className="text-2xl font-bold text-slate-900">
-        {data?.total != null ? Number(Number(data.total).toFixed(2)) : null}
+        {data?.total != null ? Number(Number(data.total).toFixed(2)) : null}{" "}
+        {unit}
       </p>
     </div>
   );

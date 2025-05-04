@@ -5,8 +5,7 @@ const rezervariTableHeads = [
   { title: "Check-In" },
   { title: "Check-Out" },
   { title: "Persoane" },
-  { title: "Electricitate" },
-  { title: "Tip Auto" },
+  { title: "Facilități" },
   { title: "Total" },
   { title: "Per zi" },
 ];

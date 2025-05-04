@@ -46,8 +46,9 @@ function ReservationsTableData({
         <div>{`${rezervare?.facilitati["Adult"] || "0"} Adulți`}</div>
         <div>{`${rezervare?.facilitati["Copii 3-12 ani"] || "0"} Copii`}</div>
       </TableData>
-      <TableData>{rezervare?.hasElectricity ? "Da" : "Nu"}</TableData>
       <TableData>
+        {"Electric: "}
+        {rezervare?.hasElectricity ? "Da" : "Nu"}
         {Object.entries(rezervare?.tipAuto || {}).map(([key, value], idx) => (
           <div key={idx}>
             {key}: {value}

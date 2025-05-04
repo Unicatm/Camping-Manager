@@ -43,5 +43,8 @@ router
 router
   .route("/clienti/:idClient")
   .get(rezervareController.getRezervariByClientId);
+router
+  .route("/clienti/expenses/:idClient")
+  .get(rezervareController.getExpensesByClientId);
 
 module.exports = router;

@@ -7,7 +7,7 @@ import {
 import { LuArrowUpDown } from "react-icons/lu";
 
 const TableElement = ({ children }) => (
-  <div className="relative h-full rounded-lg overflow-x-auto overflow-y-auto bg-white border border-slate-200">
+  <div className="relative h-full flex-grow rounded-lg overflow-x-auto overflow-y-auto bg-white border border-slate-200">
     <table className="w-full text-sm text-left rounded-lg text-slate-600">
       {children}
     </table>
@@ -62,16 +62,16 @@ const TableBody = ({ data, columns, children, forPreview, isFetching }) => {
   return (
     <tbody>
       {isFetching ? (
-        <tr>
+        <tr className="h-full">
           <td
             colSpan={columns.length + (forPreview ? 0 : 1)}
             className="bg-white px-4 py-3 text-center text-slate-500"
           >
-            {"Datele se încarcă..."}
+            Datele se încarcă...
           </td>
         </tr>
       ) : data.length === 0 ? (
-        <tr>
+        <tr className="h-max">
           <td
             colSpan={columns.length + (forPreview ? 0 : 1)}
             className="bg-white text-center px-4 py-3 text-slate-500"

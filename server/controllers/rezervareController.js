@@ -1,5 +1,6 @@
 const Rezervare = require("../models/rezervareModel");
 const APIFeatures = require("./../utils/apiFeatures");
+const mongoose = require("mongoose");
 
 const monthsMap = {
   1: "Ian",
@@ -41,6 +42,57 @@ exports.getRezervariByClientId = async (req, res) => {
       status: "success",
       data: {
         rezervari,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
+exports.getExpensesByClientId = async (req, res) => {
+  try {
+    const idClient = new mongoose.Types.ObjectId(req.params.idClient);
+
+    const [expensesData] = await Rezervare.aggregate([
+      {
+        $match: { idClient: idClient },
+      },
+      {
+        $addFields: {
+          zileCampate: {
+            $divide: [
+              { $subtract: ["$dataCheckOut", "$dataCheckIn"] },
+              1000 * 60 * 60 * 24,
+            ],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$idClient",
+          totalCheltuieli: { $sum: "$suma" },
+          numarRezervari: { $sum: 1 },
+          totalZileCampate: { $sum: "$zileCampate" },
+          medieZileCampate: { $avg: "$zileCampate" },
+        },
+      },
+      {
+        $addFields: {
+          medieZileCampate: { $round: ["$medieZileCampate", 0] },
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        cheltuieli: expensesData?.totalCheltuieli || 0,
+        numarRezervari: expensesData?.numarRezervari || 0,
+        medieZileCampate: expensesData?.medieZileCampate || 0,
       },
     });
   } catch (err) {

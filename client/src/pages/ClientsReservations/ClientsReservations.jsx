@@ -6,6 +6,7 @@ import ReservationsTableData from "../Reservations/components/table/Reservations
 import rezervariTableHeads from "../Reservations/components/table/rezervariTabelHeads";
 import ClientProfile from "./components/ClientProfile";
 import HeaderSection from "../../components/headerSection/HeaderSection";
+import ClientWidgetsSection from "./components/ClientWidgetsSection";
 
 function ClientsReservations() {
   const { id } = useParams();
@@ -16,22 +17,34 @@ function ClientsReservations() {
   });
 
   return (
-    <div className="h-screen grow bg-blue-50/90">
-      <div className="relative w-11/12 py-8 place-self-center">
-        <HeaderSection title={`${data?.nume}`} />
-        <ClientProfile client={data} />
-        <Table
-          data={data?.rezervari}
-          columns={rezervariTableHeads}
-          forPreview={true}
-          isFetching={isFetching}
-        >
-          <ReservationsTableData
-            rezervari={data?.rezervari}
-            numeClient={data?.nume}
-            forPreview={true}
-          />
-        </Table>
+    <div className="w-full h-screen flex flex-col bg-blue-50/90">
+      <div className="w-11/12 mx-auto py-8 flex flex-col flex-grow">
+        <HeaderSection
+          title={"Profil client"}
+          subtitle={"Vizualizează și gestionează informațiile clienților"}
+        />
+
+        <div className="grid grid-cols-4 grid-rows-5 gap-6 flex-grow h-full">
+          <ClientProfile client={data} />
+
+          <div className="col-start-2 col-end-5 row-start-1 row-end-6 flex flex-col gap-6">
+            <ClientWidgetsSection idClient={id} />
+            <div className="flex-grow overflow-auto">
+              <Table
+                data={data?.rezervari ?? []}
+                columns={rezervariTableHeads}
+                forPreview={true}
+                isFetching={isFetching}
+              >
+                <ReservationsTableData
+                  rezervari={data?.rezervari}
+                  numeClient={data?.nume}
+                  forPreview={true}
+                />
+              </Table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
