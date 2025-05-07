@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAvarageDaysSpent } from "../../../../api/reservationsApi";
+import { getAvarageDaysSpent } from "../../../../../api/reservationsApi";
 
 export default function useAverageDays() {
   return useQuery({

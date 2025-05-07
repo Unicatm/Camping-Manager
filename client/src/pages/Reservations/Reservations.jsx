@@ -6,9 +6,9 @@ import Table from "../../components/tables/Table";
 import ReservationsTableData from "./components/table/ReservationsTableData";
 import rezervariTableHeads from "./components/table/rezervariTabelHeads";
 import { deleteRezervare, getAllRezervari } from "../../api/reservationsApi";
-import ReservationsWidgets from "./widgets/ReservationsWidgets";
 import ReservationsHeaderSection from "./components/ReservationsHeaderSection";
 import ReservationsFilterSection from "./components/ReservationsFilterSection";
+import ReservationsWidgets from "./components/widgets/ReservationsWidgets";
 
 function Reservations() {
   const { id } = useParams();

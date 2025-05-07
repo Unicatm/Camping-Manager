@@ -527,6 +527,11 @@ exports.getAvarageDaysSpent = async (req, res) => {
           },
         },
       },
+      {
+        $addFields: {
+          total: { $round: ["$total", 0] },
+        },
+      },
     ]);
 
     res.status(200).json({

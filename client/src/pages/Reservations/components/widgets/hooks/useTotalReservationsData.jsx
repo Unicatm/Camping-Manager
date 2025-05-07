@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getTotalNumberOfReservations } from "../../../../api/reservationsApi";
+import { getTotalNumberOfReservations } from "../../../../../api/reservationsApi";
 
 export default function useTotalReservationsData() {
   return useQuery({
