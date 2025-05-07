@@ -29,6 +29,12 @@ function ClientsReservations() {
 
           <div className="col-start-2 col-end-5 row-start-1 row-end-6 flex flex-col gap-6">
             <ClientWidgetsSection idClient={id} />
+            <div>
+              <h2 className="text-lg font-bold">Istoricul rezervărilor</h2>
+              <p className="text-sm text-slate-500">
+                Toate rezervările clientului {data?.nume}
+              </p>
+            </div>
             <div className="flex-grow overflow-auto">
               <Table
                 data={data?.rezervari ?? []}

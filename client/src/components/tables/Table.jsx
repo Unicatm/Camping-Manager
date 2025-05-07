@@ -7,7 +7,7 @@ import {
 import { LuArrowUpDown } from "react-icons/lu";
 
 const TableElement = ({ children }) => (
-  <div className="relative h-full flex-grow rounded-lg overflow-x-auto overflow-y-auto bg-white border border-slate-200">
+  <div className="relative h-full flex-grow rounded-lg overflow-x-auto overflow-y-auto bg-white border border-slate-300">
     <table className="w-full text-sm text-left rounded-lg text-slate-600">
       {children}
     </table>
@@ -21,7 +21,7 @@ const TableColumns = ({
   sortedColumns,
 }) => {
   return (
-    <thead className="sticky top-0 text-sm font-medium text-slate-500 bg-slate-50 border-b border-slate-200">
+    <thead className="sticky top-0 text-sm font-medium text-slate-500 bg-slate-50 border-b border-slate-300">
       <tr>
         {columns.map((th, index) => (
           <th
