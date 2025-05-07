@@ -6,7 +6,7 @@ import Clients from "./pages/Clients/Clients";
 import Reservations from "./pages/Reservations/Reservations";
 import Stats from "./pages/Stats/Stats";
 import SideNav from "./components/sideNav/SideNav";
-import ClientsReservations from "./pages/ClientsReservations/ClientsReservations";
+import ClientProfile from "./pages/ClientProfile/ClientProfile";
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/acasa" element={<Home />} />
         <Route path="/clienti" element={<Clients />} />
-        <Route path="/clienti/:id" element={<ClientsReservations />} />
+        <Route path="/clienti/:id" element={<ClientProfile />} />
         <Route path="/rezervari" element={<Reservations />} />
         <Route path="/stats" element={<Stats />} />
       </Routes>

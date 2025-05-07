@@ -73,8 +73,7 @@ StatsWidget.ChangeIndicator = function ChangeIndicator({ referenceText }) {
   return (
     <div>
       <div className="flex items-center gap-4 w-fit h-max py-2">
-        <p className="text-4xl font-medium">
-          {" "}
+        <p className="text-3xl font-medium">
           {data?.total != null ? Number(Number(data.total).toFixed(2)) : null}
         </p>
         <p

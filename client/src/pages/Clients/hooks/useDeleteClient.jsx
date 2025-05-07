@@ -9,6 +9,7 @@ export default function useDeleteClient() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clienti", "list"] });
       queryClient.invalidateQueries({ queryKey: ["clientGrowthData"] });
+      queryClient.invalidateQueries({ queryKey: ["weeklyNewClientsStats"] });
     },
   });
 

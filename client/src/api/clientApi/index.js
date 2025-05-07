@@ -58,7 +58,15 @@ export const createClient = async (client) => {
 };
 
 export const getClientGrowthData = async () => {
-  const res = await fetch(`${BASE_URL}/client-growth-data`);
+  const res = await fetch(`${BASE_URL}/stats/client-growth-data`);
+
+  const resData = await res.json();
+  const data = resData.data;
+  return data;
+};
+
+export const getWeeklyNewClientsStats  = async () => {
+  const res = await fetch(`${BASE_URL}/stats/weekly-new-data`);
 
   const resData = await res.json();
   const data = resData.data;

@@ -176,6 +176,47 @@ exports.getClientGrowthData = async (req, res) => {
   }
 };
 
+exports.getWeeklyNewClientsStats = async (req, res) => {
+  try {
+    const today = new Date();
+
+    const startOfThisWeek = new Date(today);
+    startOfThisWeek.setDate(today.getDate() - 7);
+
+    const startOfLastWeek = new Date(today);
+    startOfLastWeek.setDate(today.getDate() - 14);
+
+    const newClientsCurrentWeek = await Client.countDocuments({
+      createdAt: { $gte: startOfThisWeek },
+    });
+
+    const lastWeekCount = await Client.countDocuments({
+      createdAt: { $gte: startOfLastWeek, $lt: startOfThisWeek },
+    });
+
+    const difference = newClientsCurrentWeek - lastWeekCount;
+    const percentChange =
+      lastWeekCount === 0
+        ? 100
+        : Math.round((difference / lastWeekCount) * 100);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        total: newClientsCurrentWeek,
+        changeValue: difference,
+        changePercentage: percentChange,
+      },
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      status: "error",
+      message: "Eroare la extragerea statisticilor de clienți noi.",
+    });
+  }
+};
+
 exports.createClient = async (req, res) => {
   try {
     const newClient = await Client.create(req.body);

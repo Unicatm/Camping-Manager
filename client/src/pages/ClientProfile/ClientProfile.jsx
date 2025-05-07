@@ -4,9 +4,9 @@ import { getClientReservations } from "../../api/clientApi";
 import Table from "../../components/tables/Table";
 import ReservationsTableData from "../Reservations/components/table/ReservationsTableData";
 import rezervariTableHeads from "../Reservations/components/table/rezervariTabelHeads";
-import ClientProfile from "./components/ClientProfile";
-import HeaderSection from "../../components/headerSection/HeaderSection";
+import ClientCard from "./components/ClientCard";
 import ClientWidgetsSection from "./components/ClientWidgetsSection";
+import ClientProfileHeaderSection from "./components/ClientProfileHeaderSection";
 
 function ClientsReservations() {
   const { id } = useParams();
@@ -19,13 +19,10 @@ function ClientsReservations() {
   return (
     <div className="w-full h-screen flex flex-col bg-blue-50/90">
       <div className="w-11/12 mx-auto py-8 flex flex-col flex-grow">
-        <HeaderSection
-          title={"Profil client"}
-          subtitle={"Vizualizează și gestionează informațiile clienților"}
-        />
+        <ClientProfileHeaderSection />
 
         <div className="grid grid-cols-4 grid-rows-5 gap-6 flex-grow h-full">
-          <ClientProfile client={data} />
+          <ClientCard client={data} />
 
           <div className="col-start-2 col-end-5 row-start-1 row-end-6 flex flex-col gap-6">
             <ClientWidgetsSection idClient={id} />

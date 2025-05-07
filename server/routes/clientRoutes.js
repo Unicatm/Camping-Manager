@@ -8,9 +8,6 @@ router
   .get(clientController.getAllClients)
   .post(clientController.createClient);
 
-router.route("/client-growth-data").get(clientController.getClientGrowthData);
-router.route("/clients-name-cnp").get(clientController.getClientsNameAndCnp);
-
 router
   .route("/:id")
   .get(clientController.getClient)
@@ -20,5 +17,13 @@ router
 router
   .route("/rezervari/:clientId")
   .get(clientController.getClientWithReservations);
+
+router
+  .route("/stats/client-growth-data")
+  .get(clientController.getClientGrowthData);
+router
+  .route("/stats/weekly-new-data")
+  .get(clientController.getWeeklyNewClientsStats);
+router.route("/clients-name-cnp").get(clientController.getClientsNameAndCnp);
 
 module.exports = router;
