@@ -21,7 +21,10 @@ exports.getFacilitate = async (req, res) => {
 
 exports.getAllFacilitati = async (req, res) => {
   try {
-    const features = new APIFeatures(Facilitate.find(), req.query)
+    const features = new APIFeatures(
+      Facilitate.find().sort({ _id: -1 }),
+      req.query
+    )
       .filter()
       .sort()
       .limitFields()

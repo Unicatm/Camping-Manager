@@ -10,7 +10,22 @@
 
 :root {
   font-family: system-ui, Poppins, sans-serif;
+}
 
-  /* color: rgba(255, 255, 255, 0.87);
-  background-color: #242424; */
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #b2b2b2;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #757575;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #606060;
 }

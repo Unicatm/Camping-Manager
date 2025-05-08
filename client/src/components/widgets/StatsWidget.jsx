@@ -10,7 +10,7 @@ function StatsWidget({ data, icon: Icon, children, ...props }) {
       <div
         className={`${
           props.width || "w-full"
-        } flex flex-row items-center justify-between min-w-50 h-full p-4 rounded-md shadow-sm shadow-slate-200 border-[1px] border-slate-300 bg-white text-black`}
+        } flex flex-row items-center ${props.grid} justify-between min-w-50 h-full p-4 rounded-xl border-[1px] border-slate-300 bg-white text-black`}
       >
         <div>{children}</div>
         {!Icon ? null : (

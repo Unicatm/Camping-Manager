@@ -12,7 +12,7 @@ import { ro } from "date-fns/locale";
 
 export default function ClientProfile({ client }) {
   return (
-    <div className="col-start-1 col-end-2 row-start-1 row-end-6 bg-white rounded-lg p-6 shadow-sm shadow-slate-200 w-full h-full border-[1px] border-slate-300">
+    <div className="col-start-1 col-end-2 row-start-1 row-end-6 bg-white rounded-xl p-6 shadow-sm shadow-slate-200 w-full h-full border-[1px] border-slate-300">
       <h2 className="text-lg font-bold mb-6">Informații Client</h2>
 
       <div className="flex flex-col items-center text-center mb-6">
