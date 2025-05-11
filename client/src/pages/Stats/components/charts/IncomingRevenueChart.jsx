@@ -77,7 +77,7 @@ export default function IncomingRevenueChart({ years = [] }) {
   });
 
   return (
-    <div className="bg-white w-fit h-fit p-4 shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20">
+    <div className="col-start-1 col-end-3 bg-white w-full min-h-[300px] p-4 shadow-md shadow-blue-950/10 rounded-xl border-[1px] border-blue-950/20">
       <div className="flex flex-row justify-between">
         <div className="mx-2 mb-4 divide-blue-950/20 divide-x-[1px] flex flex-row items-center text-xs text-blue-950">
           <h2 className="font-bold text-blue-950 text-lg pr-2">Venitul</h2>
@@ -104,62 +104,64 @@ export default function IncomingRevenueChart({ years = [] }) {
           />
         </div>
       </div>
-      <ResponsiveContainer className="bg-white" width={500} height={350}>
-        {data && data.length > 0 ? (
-          <BarChart
-            width={"100%"}
-            height={"100%"}
-            data={data}
-            margin={{
-              top: 30,
-              right: 10,
-              left: 10,
-              bottom: 5,
-            }}
-            onMouseMove={(state) => {
-              if (state.isTooltipActive) {
-                setFocusBar(state.activeTooltipIndex);
-                setMouseLeave(false);
-              } else {
-                setFocusBar(null);
-                setMouseLeave(true);
-              }
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="month" />
-            <YAxis />
-            <Legend content={<CustomLegend />} />
-            <Tooltip content={<CustomTooltip />} />
-            {checkedYears.map((year, index) => (
-              <Bar
-                key={year}
-                dataKey={year.toString()}
-                fill={colors[index % colors.length]}
-                radius={[5, 5, 0, 0]}
-                stackId="a"
-              >
-                {data?.map((entry, cellIndex) => (
-                  <Cell
-                    key={cellIndex}
-                    fill={
-                      focusBar === cellIndex || mouseLeave
-                        ? colors[index % colors.length]
-                        : `${colors[index % colors.length]}80`
-                    }
-                  />
-                ))}
-              </Bar>
-            ))}
-          </BarChart>
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <p className="text-blue-950/70 text-sm">
-              Nu există date disponibile
-            </p>
-          </div>
-        )}
-      </ResponsiveContainer>
+      <div className="h-[280px] w-full">
+        <ResponsiveContainer className="bg-white" width="100%" height="100%">
+          {data && data.length > 0 ? (
+            <BarChart
+              width={"100%"}
+              height={"100%"}
+              data={data}
+              margin={{
+                top: 30,
+                right: 10,
+                left: 10,
+                bottom: 0,
+              }}
+              onMouseMove={(state) => {
+                if (state.isTooltipActive) {
+                  setFocusBar(state.activeTooltipIndex);
+                  setMouseLeave(false);
+                } else {
+                  setFocusBar(null);
+                  setMouseLeave(true);
+                }
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Legend content={<CustomLegend />} />
+              <Tooltip content={<CustomTooltip />} />
+              {checkedYears.map((year, index) => (
+                <Bar
+                  key={year}
+                  dataKey={year.toString()}
+                  fill={colors[index % colors.length]}
+                  radius={[5, 5, 0, 0]}
+                  stackId="a"
+                >
+                  {data?.map((entry, cellIndex) => (
+                    <Cell
+                      key={cellIndex}
+                      fill={
+                        focusBar === cellIndex || mouseLeave
+                          ? colors[index % colors.length]
+                          : `${colors[index % colors.length]}80`
+                      }
+                    />
+                  ))}
+                </Bar>
+              ))}
+            </BarChart>
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-blue-950/70 text-sm">
+                Nu există date disponibile
+              </p>
+            </div>
+          )}
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }

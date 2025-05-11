@@ -10,16 +10,18 @@ import ClientProfile from "./pages/ClientProfile/ClientProfile";
 
 function App() {
   return (
-    <div className="h-screen flex">
+    <div className="flex h-screen overflow-hidden">
       <SideNav />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/acasa" element={<Home />} />
-        <Route path="/clienti" element={<Clients />} />
-        <Route path="/clienti/:id" element={<ClientProfile />} />
-        <Route path="/rezervari" element={<Reservations />} />
-        <Route path="/stats" element={<Stats />} />
-      </Routes>
+      <div className="flex-1 overflow-y-auto">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/acasa" element={<Home />} />
+          <Route path="/clienti" element={<Clients />} />
+          <Route path="/clienti/:id" element={<ClientProfile />} />
+          <Route path="/rezervari" element={<Reservations />} />
+          <Route path="/stats" element={<Stats />} />
+        </Routes>
+      </div>
     </div>
   );
 }

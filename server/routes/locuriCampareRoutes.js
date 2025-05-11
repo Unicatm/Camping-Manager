@@ -9,6 +9,10 @@ router
   .post(locuriCampareController.createLocuriCampare);
 
 router
+  .route("/get-total-number-of-spaces")
+  .get(locuriCampareController.getTotalLocuriCampare);
+
+router
   .route("/:id")
   .get(locuriCampareController.getLoc)
   .patch(locuriCampareController.updateLocCampare)

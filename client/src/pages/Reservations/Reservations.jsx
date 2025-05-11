@@ -35,6 +35,7 @@ function Reservations() {
       queryClient.invalidateQueries({ queryKey: ["totalReservations"] });
       queryClient.invalidateQueries({ queryKey: ["averageDaysSpent"] });
       queryClient.invalidateQueries({ queryKey: ["totalActiveReservations"] });
+      queryClient.invalidateQueries({ queryKey: ["currentYearRevenue"] });
       refetch();
     },
   });
@@ -44,7 +45,6 @@ function Reservations() {
   };
 
   const handleEdit = (rezervareId) => {
-    console.log("handleEdit called with rezervareId:", rezervareId);
     setIsEditing(true);
     setSelectedRezervareId(rezervareId);
     setIsModalOpen(true);

@@ -67,6 +67,13 @@ export const getAllAvailableYears = async () => {
   return data;
 };
 
+export const getCurrentYearRevenue = async () => {
+  const res = await fetch(`${BASE_URL}/get-current-year-revenue`);
+  const resData = await res.json();
+  const data = resData.data;
+  return data;
+};
+
 export const getMonthlyReservationsOnSelectedYears = async (years) => {
   const res = await fetch(
     `${BASE_URL}/number-reservations?years=${years.join(",")}`

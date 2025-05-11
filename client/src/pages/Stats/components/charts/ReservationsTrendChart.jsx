@@ -30,7 +30,7 @@ export default function ReservationsTrendChart({ years = [] }) {
   });
 
   return (
-    <div className="bg-white w-fit h-fit p-4 shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20">
+    <div className="col-start-1 col-end-3 bg-white w-full p-4 shadow-md shadow-blue-950/10 rounded-xl border-[1px] border-blue-950/20">
       <div className="flex flex-row items-start justify-between">
         <div className="mx-2 mb-6 w-full flex justify-between items-center gap-2 text-xs text-blue-950">
           <h2 className="font-bold text-blue-950 text-lg">
@@ -46,60 +46,62 @@ export default function ReservationsTrendChart({ years = [] }) {
           />
         </div>
       </div>
-      <ResponsiveContainer className="bg-white" width={500} height={180}>
-        {data && data.length > 0 ? (
-          <AreaChart
-            width={"100%"}
-            height={"100%"}
-            data={data || []}
-            margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
-          >
-            <defs>
-              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
-              </linearGradient>
-              <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
-              </linearGradient>
-              <linearGradient id="colorXy" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#FF5733" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#FF5733" stopOpacity={0} />
-              </linearGradient>
-              <linearGradient id="colorAb" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#FFC300" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#FFC300" stopOpacity={0} />
-              </linearGradient>
-              <linearGradient id="colorCd" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#900C3F" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#900C3F" stopOpacity={0} />
-              </linearGradient>
-            </defs>
+      <div className="h-[250px] w-full">
+        <ResponsiveContainer className="bg-white" width="100%" height="100%">
+          {data && data.length > 0 ? (
+            <AreaChart
+              width={"100%"}
+              height={"100%"}
+              data={data || []}
+              margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
+            >
+              <defs>
+                <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="colorPv" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#82ca9d" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="colorXy" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#FF5733" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#FF5733" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="colorAb" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#FFC300" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#FFC300" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="colorCd" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#900C3F" stopOpacity={0.8} />
+                  <stop offset="95%" stopColor="#900C3F" stopOpacity={0} />
+                </linearGradient>
+              </defs>
 
-            <XAxis dataKey="month" />
-            <YAxis />
-            <CartesianGrid strokeDasharray="3 3" />
-            <Tooltip />
-            {checkedYears.map((year, index) => (
-              <Area
-                key={year}
-                type="monotone"
-                dataKey={year.toString()}
-                stroke={`${colorIds[index % colorIds.length]}`}
-                fillOpacity={1}
-                fill={`url(#${gradientIds[index % gradientIds.length]})`}
-              />
-            ))}
-          </AreaChart>
-        ) : (
-          <div className="flex items-center justify-center h-full">
-            <p className="text-blue-950/70 text-sm">
-              Nu există date disponibile
-            </p>
-          </div>
-        )}
-      </ResponsiveContainer>
+              <XAxis dataKey="month" />
+              <YAxis />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              {checkedYears.map((year, index) => (
+                <Area
+                  key={year}
+                  type="monotone"
+                  dataKey={year.toString()}
+                  stroke={`${colorIds[index % colorIds.length]}`}
+                  fillOpacity={1}
+                  fill={`url(#${gradientIds[index % gradientIds.length]})`}
+                />
+              ))}
+            </AreaChart>
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <p className="text-blue-950/70 text-sm">
+                Nu există date disponibile
+              </p>
+            </div>
+          )}
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }

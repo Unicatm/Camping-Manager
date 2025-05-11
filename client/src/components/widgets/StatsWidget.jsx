@@ -8,9 +8,9 @@ function StatsWidget({ data, icon: Icon, children, ...props }) {
   return (
     <StatsWidgetContext.Provider value={{ data }}>
       <div
-        className={`${
-          props.width || "w-full"
-        } flex flex-row items-center ${props.grid} justify-between min-w-50 h-full p-4 rounded-xl border-[1px] border-slate-300 bg-white text-black`}
+        className={`${props.width || "w-full"} flex flex-row items-center ${
+          props.grid
+        } justify-between min-w-50 h-full p-4 rounded-xl border-[1px] border-slate-300 bg-white text-black`}
       >
         <div>{children}</div>
         {!Icon ? null : (

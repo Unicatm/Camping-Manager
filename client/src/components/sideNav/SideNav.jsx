@@ -13,7 +13,7 @@ function SideNav() {
 
   return (
     <div
-      className={`flex flex-col min-h-screen bg-white shadow-lg transition-all duration-300 ease-in-out ${
+      className={`flex flex-col sticky top-0 min-h-screen bg-white shadow-lg transition-all duration-300 ease-in-out ${
         isExpanded ? "w-60" : "w-16"
       }`}
     >

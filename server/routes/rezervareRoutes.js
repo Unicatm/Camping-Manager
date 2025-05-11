@@ -28,6 +28,8 @@ router
   .route("/total-number-of-active-reservations")
   .get(rezervareController.getTotalNumberOfActiveReservations);
 
+router.route("/get-current-year-revenue").get(rezervareController.getCurrentYearRevenue);
+
 router.route("/average-days").get(rezervareController.getAvarageDaysSpent);
 
 router

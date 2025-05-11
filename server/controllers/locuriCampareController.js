@@ -44,6 +44,24 @@ exports.getAllLocuriCampare = async (req, res) => {
   }
 };
 
+exports.getTotalLocuriCampare = async (req, res) => {
+  try {
+    const spaces = await LocuriCampare.aggregate([
+      { $group: { _id: null, total: { $sum: 1 } } },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: spaces,
+    });
+  } catch (err) {
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
 exports.createLocuriCampare = async (req, res) => {
   try {
     const newLoc = await LocuriCampare.create(req.body);

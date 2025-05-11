@@ -104,6 +104,45 @@ exports.getExpensesByClientId = async (req, res) => {
   }
 };
 
+exports.getCurrentYearRevenue = async (req, res) => {
+  try {
+    const currentYear = new Date().getFullYear();
+
+    const startOfYear = new Date(`${currentYear}-01-01T00:00:00.000Z`);
+    const endOfYear = new Date(`${currentYear}-12-31T23:59:59.999Z`);
+
+    const [expensesData] = await Rezervare.aggregate([
+      {
+        $match: {
+          dataCheckIn: {
+            $gte: startOfYear,
+            $lte: endOfYear,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          total: { $sum: "$suma" },
+        },
+      },
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        total: expensesData?.total || 0,
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({
+      status: "failed",
+      message: err,
+    });
+  }
+};
+
 exports.getTopPredominantNationalitiesByYear = async (req, res) => {
   try {
     const year = req.params.year;
