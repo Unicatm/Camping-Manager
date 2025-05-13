@@ -1,8 +1,10 @@
 const express = require("express");
-const pdfsController = require("../pdfs/revenueRaport");
+const revenueController = require("../pdfs/revenueRaport");
+const clientPdfController = require("../pdfs/clientRaport");
 
 const router = express.Router();
 
-router.route("/revenue-raport").get(pdfsController.RevenueRaport);
+router.route("/revenue-raport").get(revenueController.RevenueRaport);
+router.route("/client-raport/:id").get(clientPdfController.ClientRaport);
 
 module.exports = router;

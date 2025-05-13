@@ -19,7 +19,7 @@ function ClientsReservations() {
   return (
     <div className="w-full h-screen flex flex-col bg-blue-50/90">
       <div className="w-11/12 mx-auto py-8 flex flex-col flex-grow">
-        <ClientProfileHeaderSection />
+        <ClientProfileHeaderSection id={id} />
 
         <div className="grid grid-cols-4 grid-rows-5 gap-6 flex-grow h-full">
           <ClientCard client={data} />

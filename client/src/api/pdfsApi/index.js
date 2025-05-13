@@ -9,3 +9,13 @@ export const getRevenueRaport = async () => {
 
   return res;
 };
+
+export const getClientRaport = async (id) => {
+  const res = await fetch(`${BASE_URL}/client-raport/${id}`);
+
+  if (!res.ok) {
+    throw new Error(`HTTP error! Status: ${res.status}`);
+  }
+
+  return res;
+};
