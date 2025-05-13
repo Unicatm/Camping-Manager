@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { getRezervariCuCheckoutInUrmatoareleDouaZile } from "../../../api/reservationsApi";
+import { useNavigate } from "react-router-dom";
 
 export default function CheckOutCard() {
   const { data: rezervari, isLoading } = useQuery({
@@ -32,30 +33,41 @@ export default function CheckOutCard() {
   );
 }
 
-const Field = ({ rezervare }) => (
-  <div className="flex items-center justify-between bg-blue-50 rounded-xl px-4 py-3">
-    <div className="flex items-center space-x-4">
-      <div className="bg-blue-200 text-blue-800 font-bold rounded-full w-12 h-12 flex items-center justify-center text-lg">
-        {rezervare?.idClient?.nume?.charAt(0).toUpperCase() || "A"}
+const Field = ({ rezervare }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/rezervari?highlight=${rezervare._id}`);
+  };
+
+  return (
+    <div className="flex items-center justify-between bg-blue-50 rounded-xl px-4 py-3">
+      <div className="flex items-center space-x-4">
+        <div className="bg-blue-200 text-blue-800 font-bold rounded-full w-12 h-12 flex items-center justify-center text-lg">
+          {rezervare?.idClient?.nume?.charAt(0).toUpperCase() || "A"}
+        </div>
+        <div>
+          <div className="font-semibold text-lg">
+            {rezervare.idClient?.nume || "Client Necunoscut"}
+          </div>
+          <div className="text-gray-500 text-sm">
+            {rezervare.idLoc?._id || "N/A"} • {rezervare.facilitati?.Adult || 0}{" "}
+            Adulți, {rezervare.facilitati?.["Copii 3-12 ani"] || 0} Copii •{" "}
+            {rezervare.tipAuto ? Object.keys(rezervare.tipAuto).length : 0}{" "}
+            Autovehicule
+          </div>
+          <div className="text-blue-700 font-medium text-xs mt-1">
+            Check-out în {rezervare.zileRamase}{" "}
+            {rezervare.zileRamase === 1 ? "zi" : "zile"}
+          </div>
+        </div>
       </div>
-      <div>
-        <div className="font-semibold text-lg">
-          {rezervare.idClient?.nume || "Client Necunoscut"}
-        </div>
-        <div className="text-gray-500 text-sm">
-          {rezervare.idLoc?._id || "N/A"} • {rezervare.facilitati?.Adult || 0}{" "}
-          Adulți, {rezervare.facilitati?.["Copii 3-12 ani"] || 0} Copii •{" "}
-          {rezervare.tipAuto ? Object.keys(rezervare.tipAuto).length : 0}{" "}
-          Autovehicule
-        </div>
-        <div className="text-blue-700 font-medium text-xs mt-1">
-          Check-out în {rezervare.zileRamase}{" "}
-          {rezervare.zileRamase === 1 ? "zi" : "zile"}
-        </div>
-      </div>
+      <button
+        onClick={handleClick}
+        className="text-sm text-gray-600 font-medium border border-gray-300 rounded-lg px-4 py-2 bg-white hover:bg-gray-50 transition cursor-pointer"
+      >
+        Vizualizează
+      </button>
     </div>
-    <button className="text-sm text-gray-600 font-medium border border-gray-300 rounded-lg px-4 py-2 bg-white hover:bg-gray-50 transition cursor-pointer">
-      Vizualizează
-    </button>
-  </div>
-);
+  );
+};

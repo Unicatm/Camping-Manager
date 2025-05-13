@@ -1,11 +1,15 @@
 import React from "react";
 import { RiLoopLeftFill } from "react-icons/ri";
+import { BanknotesIcon } from "@heroicons/react/20/solid";
 import useActiveReservationsData from "../../Reservations/components/widgets/hooks/useActiveReservationsData";
 import SimpleLabelWidget from "../../../components/widgets/SimpleLabelWidget";
 import SimpleWidget from "../../../components/widgets/SimpleWidget";
+import useCurrentYearRevenue from "../../Stats/hooks/useCurrentYearRevenue";
 
 export default function WidgetsSection() {
   const { data: totalActiveReservations } = useActiveReservationsData();
+  const { data: currentYearRevenue } = useCurrentYearRevenue();
+
   return (
     <>
       <SimpleLabelWidget
@@ -15,12 +19,11 @@ export default function WidgetsSection() {
         icon={RiLoopLeftFill}
         grid={"col-start-1 col-end-2 row-start-2 row-end-3"}
       />
-      <SimpleLabelWidget
-        title={"Rezervari in curs"}
-        data={totalActiveReservations}
-        label={"În curs"}
-        icon={RiLoopLeftFill}
-        grid={"col-start-2 col-end-3 row-start-2 row-end-3"}
+      <SimpleWidget
+        title={"Încasări an curent"}
+        data={currentYearRevenue}
+        icon={BanknotesIcon}
+        unit={"lei"}
       />
       <SimpleWidget
         title={"Locuri libere"}

@@ -3,8 +3,14 @@ import ActionCard from "./ActionCard";
 import { BsFillPersonPlusFill } from "react-icons/bs";
 import { ChartBarIcon, MapIcon } from "@heroicons/react/20/solid";
 import { BsCalendarPlus } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 export default function ActionSection() {
+  const navigateStats = useNavigate();
+
+  const handleClick = () => {
+    navigateStats(`/stats`);
+  };
   return (
     <>
       <ActionCard
@@ -34,6 +40,7 @@ export default function ActionSection() {
         icon={ChartBarIcon}
         color={"emerald"}
         grid={"self-stretch col-start-2 col-end-3 row-start-1 row-end-2"}
+        handleClick={handleClick}
       />
     </>
   );

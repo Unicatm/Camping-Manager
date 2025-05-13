@@ -7,10 +7,11 @@ export default function ActionCard({
   icon: Icon,
   color,
   grid,
+  handleClick,
 }) {
   const c = colorClasses[color] || colorClasses.blue;
   return (
-    <div className="group">
+    <div onClick={handleClick} className="group">
       <div
         className={`group bg-linear-to-r h-full ${grid} ${c.bg} ${c.hover} rounded-xl p-6 flex items-center space-x-4 cursor-pointer transition-colors duration-300 ease-in-out hover:transition-colors hover:duration-300 hover:ease-in-out`}
       >

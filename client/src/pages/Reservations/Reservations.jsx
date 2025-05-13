@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import ReservationsForm from "./components/form/ReservationsForm";
 import Table from "../../components/tables/Table";
@@ -15,6 +15,8 @@ function Reservations() {
   const [isEditing, setIsEditing] = useState(false);
   const [selectedRezervareId, setSelectedRezervareId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchParams] = useSearchParams();
+  const highlightId = searchParams.get("highlight");
 
   const {
     data: rezervari,
@@ -96,6 +98,7 @@ function Reservations() {
               forPreview={false}
               onEdit={handleEdit}
               onDelete={handleDeleteRezervare}
+              highlightId={highlightId}
             />
           </Table>
         </div>

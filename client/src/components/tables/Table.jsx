@@ -86,8 +86,12 @@ const TableBody = ({ data, columns, children, forPreview, isFetching }) => {
   );
 };
 
-const TableRow = ({ children }) => (
-  <tr className="bg-white border-b border-slate-200 hover:bg-slate-50">
+const TableRow = ({ children, isHighlighted }) => (
+  <tr
+    className={`border-b border-slate-200 hover:bg-slate-50 transition duration-300 ${
+      isHighlighted ? "bg-yellow-50" : "bg-white"
+    }`}
+  >
     {children}
   </tr>
 );

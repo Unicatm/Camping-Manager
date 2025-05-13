@@ -5,7 +5,7 @@ import useToggleDropdown from "../hooks/useToggleDropdown";
 export default function DropdownDeleteMenu({ rezervareId, onEdit, onDelete }) {
   const { isOpen, toggle, dropdownRef, toggleRef } = useToggleDropdown();
   return (
-    <td>
+    <td className="relative">
       <button
         ref={toggleRef}
         onClick={toggle}
@@ -16,7 +16,7 @@ export default function DropdownDeleteMenu({ rezervareId, onEdit, onDelete }) {
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="absolute right-0 mt-2 z-10 flex flex-col gap-1 text-sm text-slate-600 bg-white p-2 border border-slate-200 rounded-md shadow-md"
+          className="absolute right-0 mt-2 z-50 flex flex-col gap-1 text-sm text-slate-600 bg-white p-2 border border-slate-200 rounded-md shadow-md"
         >
           <button
             className="py-0.5 text-left hover:text-slate-800 cursor-pointer"
