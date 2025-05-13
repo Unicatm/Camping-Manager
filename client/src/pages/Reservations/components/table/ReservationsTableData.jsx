@@ -14,7 +14,7 @@ function ReservationsTableData({
   onDelete,
   ...props
 }) {
-  return rezervari.map((rezervare, index) => (
+  return rezervari.toReversed().map((rezervare, index) => (
     <TableRow key={index}>
       <TableHead>
         {forPreview ? (

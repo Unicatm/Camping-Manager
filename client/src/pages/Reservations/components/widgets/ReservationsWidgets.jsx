@@ -1,6 +1,12 @@
 import React from "react";
 import SimpleWidget from "../../../../components/widgets/SimpleWidget";
-import { RiLoopLeftFill } from "react-icons/ri";
+import {
+  SunIcon,
+  BanknotesIcon,
+  BookmarkIcon,
+  MapPinIcon,
+  Battery50Icon,
+} from "@heroicons/react/20/solid";
 import SimpleLabelWidget from "../../../../components/widgets/SimpleLabelWidget";
 import useAverageDays from "./hooks/useAverageDays";
 import useTotalReservationsData from "./hooks/useTotalReservationsData";
@@ -15,23 +21,23 @@ export default function ReservationsWidgets() {
       <SimpleWidget
         title={"Rezervari totale"}
         data={totalReservations}
-        icon={RiLoopLeftFill}
+        icon={BookmarkIcon}
       />
       <SimpleLabelWidget
         title={"Rezervari in curs"}
         data={totalActiveReservations}
         label={"În curs"}
-        icon={RiLoopLeftFill}
+        icon={Battery50Icon}
       />
       <SimpleWidget
         title={"Media zilelor petrecute"}
         data={averageDays}
-        icon={RiLoopLeftFill}
+        icon={SunIcon}
       />
       <SimpleWidget
         title={"Locuri libere"}
         data={averageDays}
-        icon={RiLoopLeftFill}
+        icon={MapPinIcon}
       />
     </div>
   );

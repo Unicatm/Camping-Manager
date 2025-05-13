@@ -98,7 +98,7 @@ export default function Autocomplete({
       )}
       {suggestionsActive && (
         <ul className="absolute z-10 bg-white w-full h-40 overflow-y-scroll rounded-b-md border border-slate-200 py-2 transition duration-300 ease shadow-sm">
-          {suggestions.map((suggestion, index) => (
+          {suggestions?.map((suggestion, index) => (
             <li
               key={index}
               className={`p-1 cursor-pointer px-3 ${

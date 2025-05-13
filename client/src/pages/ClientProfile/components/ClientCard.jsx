@@ -17,7 +17,7 @@ export default function ClientProfile({ client }) {
 
       <div className="flex flex-col items-center text-center mb-6">
         <div className="bg-blue-100 text-blue-700 w-16 h-16 flex items-center justify-center rounded-full text-2xl font-semibold">
-          MI
+          {client?.nume?.charAt(0).toUpperCase() || "A"}
         </div>
         <h3 className="text-xl font-bold mt-2">{client?.nume}</h3>
         <p className="text-sm text-slate-500">

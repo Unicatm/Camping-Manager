@@ -530,6 +530,11 @@ exports.getTotalNumberOfActiveReservations = async (req, res) => {
   try {
     const total = await Rezervare.aggregate([
       {
+        $match: {
+          status: { $in: ["În curs"] },
+        },
+      },
+      {
         $group: {
           _id: "$status",
           total: { $sum: 1 },
@@ -582,6 +587,52 @@ exports.getAvarageDaysSpent = async (req, res) => {
       status: "failed",
       message: err,
     });
+  }
+};
+
+exports.getRezervariCuCheckoutInUrmatoareleDouaZile = async (req, res) => {
+  try {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const twoDaysLater = new Date();
+    twoDaysLater.setDate(today.getDate() + 2);
+    twoDaysLater.setHours(23, 59, 59, 999);
+
+    const rezervari = await Rezervare.find(
+      {
+        status: "În curs",
+        dataCheckOut: {
+          $gte: today,
+          $lte: twoDaysLater,
+        },
+      },
+      {
+        suma: 0,
+        sumaPerDay: 0,
+        status: 0,
+      }
+    )
+      .populate("idClient", "nume")
+      .populate("idLoc", "_id");
+
+    const rezervariCuZileRamase = rezervari.map((rez) => {
+      const timeDiff = rez.dataCheckOut.getTime() - today.getTime();
+      const zileRamase = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+
+      return {
+        ...rez.toObject(),
+        zileRamase,
+      };
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: rezervariCuZileRamase,
+    });
+  } catch (error) {
+    console.error("Eroare la obținerea rezervărilor:", error);
+    res.status(500).json({ message: "Eroare server", error });
   }
 };
 
@@ -641,5 +692,23 @@ exports.deleteRezervare = async (req, res) => {
       status: "fail",
       message: error,
     });
+  }
+};
+
+exports.actualizeazaRezervariExpirate = async () => {
+  try {
+    const now = new Date();
+
+    const result = await Rezervare.updateMany(
+      {
+        status: "În curs",
+        dataCheckOut: { $lt: now },
+      },
+      { $set: { status: "Terminată" } }
+    );
+
+    console.log(`Rezervări actualizate: ${result.modifiedCount}`);
+  } catch (err) {
+    console.error("Eroare la actualizarea rezervărilor:", err);
   }
 };

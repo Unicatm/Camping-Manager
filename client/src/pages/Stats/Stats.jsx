@@ -4,9 +4,12 @@ import PredominantNationalitiesChart from "./components/charts/PredominantNation
 import ReservationsTrendChart from "./components/charts/ReservationsTrendChart";
 import AgeChart from "./components/charts/AgeChart";
 import { getAllAvailableYears } from "../../api/reservationsApi";
-import { RiLoopLeftFill } from "react-icons/ri";
-import { MdOutlinePlace, MdOutlineBookmarks } from "react-icons/md";
-import { BanknotesIcon, UserGroupIcon } from "@heroicons/react/24/outline";
+import {
+  BanknotesIcon,
+  UserGroupIcon,
+  BookmarkIcon,
+  MapPinIcon,
+} from "@heroicons/react/20/solid";
 import useTotalReservationsData from "../Reservations/components/widgets/hooks/useTotalReservationsData";
 import SimpleWidget from "../../components/widgets/SimpleWidget";
 import useClientGrowthData from "../Clients/components/widgets/hooks/useClientGrowthData";
@@ -34,7 +37,7 @@ export default function Stats() {
           <SimpleWidget
             title={"Rezervari totale"}
             data={totalReservations}
-            icon={MdOutlineBookmarks}
+            icon={BookmarkIcon}
           />
           <SimpleWidget
             title={"Număr clienți"}
@@ -44,7 +47,7 @@ export default function Stats() {
           <SimpleWidget
             title={"Total locuri"}
             data={totalNumberOfSpaces}
-            icon={MdOutlinePlace}
+            icon={MapPinIcon}
           />
           <SimpleWidget
             title={"Încasări an curent"}

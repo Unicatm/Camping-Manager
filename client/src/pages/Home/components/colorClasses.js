@@ -17,6 +17,18 @@ const colorClasses = {
     iconBg: "bg-emerald-500",
     subtitle: "text-emerald-100",
   },
+  yellow: {
+    bg: "from-amber-600 to-amber-500",
+    hover: "group-hover:from-amber-700 group-hover:to-amber-600",
+    iconBg: "bg-amber-500",
+    subtitle: "text-amber-100",
+  },
+  violet: {
+    bg: "from-violet-600 to-violet-500",
+    hover: "group-hover:from-violet-700 group-hover:to-violet-600",
+    iconBg: "bg-violet-500",
+    subtitle: "text-violet-100",
+  },
 };
 
 export { colorClasses };

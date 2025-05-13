@@ -29,8 +29,8 @@ const rezervareSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ["În desfășurare", "Terminată"],
-    default: "În desfășurare",
+    enum: ["În curs", "Terminată"],
+    default: "În curs",
   },
   facilitati: {
     type: Object,

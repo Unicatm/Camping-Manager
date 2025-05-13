@@ -107,6 +107,14 @@ export const getAvarageDaysSpent = async () => {
   return data;
 };
 
+export const getRezervariCuCheckoutInUrmatoareleDouaZile = async () => {
+  const res = await fetch(`${BASE_URL}/checkout-viitoare`);
+
+  const resData = await res.json();
+  const data = resData.data;
+  return data;
+};
+
 export const createRezervare = async (rezervare) => {
   const res = await fetch(BASE_URL, {
     method: "POST",

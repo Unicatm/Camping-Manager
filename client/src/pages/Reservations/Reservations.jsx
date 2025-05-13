@@ -36,6 +36,7 @@ function Reservations() {
       queryClient.invalidateQueries({ queryKey: ["averageDaysSpent"] });
       queryClient.invalidateQueries({ queryKey: ["totalActiveReservations"] });
       queryClient.invalidateQueries({ queryKey: ["currentYearRevenue"] });
+      queryClient.invalidateQueries({ queryKey: ["checkoutCard"] });
       refetch();
     },
   });

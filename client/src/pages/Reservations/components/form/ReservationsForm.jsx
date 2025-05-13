@@ -81,6 +81,7 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
       queryClient.invalidateQueries({ queryKey: ["averageDaysSpent"] });
       queryClient.invalidateQueries({ queryKey: ["totalActiveReservations"] });
       queryClient.invalidateQueries({ queryKey: ["currentYearRevenue"] });
+      queryClient.invalidateQueries({ queryKey: ["checkoutCard"] });
       onClose();
     },
   });
@@ -93,6 +94,7 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
       queryClient.invalidateQueries({ queryKey: ["averageDaysSpent"] });
       queryClient.invalidateQueries({ queryKey: ["totalActiveReservations"] });
       queryClient.invalidateQueries({ queryKey: ["currentYearRevenue"] });
+      queryClient.invalidateQueries({ queryKey: ["checkoutCard"] });
       onClose();
       navigate("/rezervari");
     },

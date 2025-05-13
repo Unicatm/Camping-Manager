@@ -8,6 +8,8 @@ router
   .get(clientController.getAllClients)
   .post(clientController.createClient);
 
+router.route("/clients-name-cnp").get(clientController.getClientsNameAndCnp);
+
 router
   .route("/:id")
   .get(clientController.getClient)
@@ -24,6 +26,7 @@ router
 router
   .route("/stats/weekly-new-data")
   .get(clientController.getWeeklyNewClientsStats);
-router.route("/clients-name-cnp").get(clientController.getClientsNameAndCnp);
+
+  
 
 module.exports = router;

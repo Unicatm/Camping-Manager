@@ -1,6 +1,13 @@
+import { useQuery } from "@tanstack/react-query";
 import React from "react";
+import { getRezervariCuCheckoutInUrmatoareleDouaZile } from "../../../api/reservationsApi";
 
 export default function CheckOutCard() {
+  const { data: rezervari, isLoading } = useQuery({
+    queryKey: ["checkoutCard"],
+    queryFn: getRezervariCuCheckoutInUrmatoareleDouaZile,
+  });
+
   return (
     <div className="col-start-3 col-end-5 row-start-3 row-end-7 bg-white rounded-xl border border-gray-200 p-6 flex flex-col">
       <h2 className="text-2xl font-bold mb-1">Check-out-uri pentru astăzi</h2>
@@ -9,25 +16,41 @@ export default function CheckOutCard() {
       </p>
 
       <div className="flex-1 overflow-y-auto space-y-4 pr-2">
-        <Field />
-        <Field />
-        <Field />
-        <Field />
+        {isLoading ? (
+          <p className="text-sm text-gray-400">Se încarcă...</p>
+        ) : rezervari.length === 0 ? (
+          <p className="text-sm text-gray-400">
+            Niciun client cu check-out în curând.
+          </p>
+        ) : (
+          rezervari.map((rezervare) => (
+            <Field key={rezervare._id} rezervare={rezervare} />
+          ))
+        )}
       </div>
     </div>
   );
 }
 
-const Field = ({ client }) => (
+const Field = ({ rezervare }) => (
   <div className="flex items-center justify-between bg-blue-50 rounded-xl px-4 py-3">
     <div className="flex items-center space-x-4">
       <div className="bg-blue-200 text-blue-800 font-bold rounded-full w-12 h-12 flex items-center justify-center text-lg">
-        RV
+        {rezervare?.idClient?.nume?.charAt(0).toUpperCase() || "A"}
       </div>
       <div>
-        <div className="font-semibold text-lg">Radu Vlad</div>
+        <div className="font-semibold text-lg">
+          {rezervare.idClient?.nume || "Client Necunoscut"}
+        </div>
         <div className="text-gray-500 text-sm">
-          S2 • 2 Adulți, 0 Copii • 1 Mașină
+          {rezervare.idLoc?._id || "N/A"} • {rezervare.facilitati?.Adult || 0}{" "}
+          Adulți, {rezervare.facilitati?.["Copii 3-12 ani"] || 0} Copii •{" "}
+          {rezervare.tipAuto ? Object.keys(rezervare.tipAuto).length : 0}{" "}
+          Autovehicule
+        </div>
+        <div className="text-blue-700 font-medium text-xs mt-1">
+          Check-out în {rezervare.zileRamase}{" "}
+          {rezervare.zileRamase === 1 ? "zi" : "zile"}
         </div>
       </div>
     </div>

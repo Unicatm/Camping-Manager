@@ -18,6 +18,10 @@ router
   .route("/incoming-revenue-years")
   .get(rezervareController.getIncomingRevenueOnSelectedYears);
 
+router
+  .route("/checkout-viitoare")
+  .get(rezervareController.getRezervariCuCheckoutInUrmatoareleDouaZile);
+
 router.route("/age-grouping/:year").get(rezervareController.getAgeGroups);
 
 router
@@ -28,7 +32,9 @@ router
   .route("/total-number-of-active-reservations")
   .get(rezervareController.getTotalNumberOfActiveReservations);
 
-router.route("/get-current-year-revenue").get(rezervareController.getCurrentYearRevenue);
+router
+  .route("/get-current-year-revenue")
+  .get(rezervareController.getCurrentYearRevenue);
 
 router.route("/average-days").get(rezervareController.getAvarageDaysSpent);
 
