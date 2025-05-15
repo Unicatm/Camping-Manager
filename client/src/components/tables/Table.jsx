@@ -21,7 +21,7 @@ const TableColumns = ({
   sortedColumns,
 }) => {
   return (
-    <thead className="sticky top-0 text-sm font-medium text-slate-500 bg-slate-50 border-b border-slate-300">
+    <thead className="sticky top-0 z-50 text-sm font-medium text-slate-500 bg-slate-50 border-b border-slate-300">
       <tr>
         {columns.map((th, index) => (
           <th
@@ -60,7 +60,7 @@ const TableColumns = ({
 
 const TableBody = ({ data, columns, children, forPreview, isFetching }) => {
   return (
-    <tbody>
+    <tbody className="relative z-10">
       {isFetching ? (
         <tr className="h-full">
           <td
@@ -88,7 +88,7 @@ const TableBody = ({ data, columns, children, forPreview, isFetching }) => {
 
 const TableRow = ({ children, isHighlighted }) => (
   <tr
-    className={`border-b border-slate-200 hover:bg-slate-50 transition duration-300 ${
+    className={`relative z-50 border-b border-slate-200 hover:bg-slate-50 transition duration-300 ${
       isHighlighted ? "bg-yellow-50" : "bg-white"
     }`}
   >

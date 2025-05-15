@@ -9,7 +9,7 @@ export default function DropdownDeleteMenu({ rezervareId, onEdit, onDelete }) {
       <button
         ref={toggleRef}
         onClick={toggle}
-        className="font-medium text-slate-500 bg-white border border-slate-200 rounded-md hover:underline p-1 cursor-pointer hover:text-slate-600/90 hover:border-slate-300/80"
+        className="z-0 font-medium text-slate-500 bg-white border border-slate-200 rounded-md hover:underline p-1 cursor-pointer hover:text-slate-600/90 hover:border-slate-300/80"
       >
         <EllipsisHorizontalIcon className="w-4 h-4" />
       </button>

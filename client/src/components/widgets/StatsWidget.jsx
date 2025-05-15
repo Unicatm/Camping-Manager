@@ -36,7 +36,7 @@ StatsWidget.DisplayData = function DisplayData({ unit }) {
   return (
     <div className="flex items-center justify-between pt-2">
       <p className="text-2xl font-bold text-slate-900">
-        {data?.total != null ? Number(Number(data.total).toFixed(2)) : null}{" "}
+        {data?.total != null ? Number(Number(data.total).toFixed(2)) : 0}{" "}
         {unit}
       </p>
     </div>
@@ -50,7 +50,7 @@ StatsWidget.DisplayDataLabel = function DisplayDataLabel({ label }) {
       <div className="flex items-center gap-4 w-fit h-max pt-4">
         <p className="text-2xl font-bold text-slate-900">
           {" "}
-          {data?.total != null ? Number(Number(data.total).toFixed(2)) : null}
+          {data?.total != null ? Number(Number(data.total).toFixed(2)) : 0}
         </p>
         <p className="text-xs px-2 py-1 rounded-full bg-green-100 text-green-600 ">
           {label}
@@ -74,7 +74,7 @@ StatsWidget.ChangeIndicator = function ChangeIndicator({ referenceText }) {
     <div>
       <div className="flex items-center gap-4 w-fit h-max py-2">
         <p className="text-3xl font-medium">
-          {data?.total != null ? Number(Number(data.total).toFixed(2)) : null}
+          {data?.total != null ? Number(Number(data.total).toFixed(2)) : 0}
         </p>
         <p
           className={`text-xs py-0.5 px-1.5 rounded-full border-[1px] ${
