@@ -7,6 +7,7 @@ import Reservations from "./pages/Reservations/Reservations";
 import Stats from "./pages/Stats/Stats";
 import SideNav from "./components/sideNav/SideNav";
 import ClientProfile from "./pages/ClientProfile/ClientProfile";
+import CampingMap from "./pages/CampingMap/CampingMap";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/clienti" element={<Clients />} />
           <Route path="/clienti/:id" element={<ClientProfile />} />
           <Route path="/rezervari" element={<Reservations />} />
+          <Route path="/map" element={<CampingMap />} />
           <Route path="/stats" element={<Stats />} />
         </Routes>
       </div>

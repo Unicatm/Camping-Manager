@@ -3,6 +3,7 @@ import {
   UserGroupIcon,
   CreditCardIcon,
   ChartBarIcon,
+  MapIcon,
 } from "@heroicons/react/20/solid";
 
 const navLinks = [
@@ -20,6 +21,11 @@ const navLinks = [
     route: "/clienti",
     title: "Clienți",
     icon: UserGroupIcon,
+  },
+  {
+    route: "/map",
+    title: "Hartă",
+    icon: MapIcon,
   },
   {
     route: "/stats",

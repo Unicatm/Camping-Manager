@@ -1,3 +1,4 @@
+import CampMap from "../CampingMap/Map";
 import ActionSection from "./components/ActionSection";
 import CheckOutCard from "./components/CheckOutCard";
 import PriceList from "./components/PriceList/PriceList";
