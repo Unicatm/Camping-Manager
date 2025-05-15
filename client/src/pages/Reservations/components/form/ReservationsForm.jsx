@@ -15,6 +15,8 @@ import Autocomplete from "../../../../components/ui/inputs/Autocomplete";
 import QuantitySelect from "../../../../components/ui/inputs/QuantitySelect";
 import { getTipuriAuto } from "../../../../api/facilitatiApi";
 import { getClientsNameAndCnp } from "../../../../api/clientApi";
+import { getAllLocuriCampare } from "../../../../api/locuriApi";
+import Select from "../../../../components/ui/inputs/Select";
 
 function ReservationsForm({ onClose, isEditing, rezervareId }) {
   const navigate = useNavigate();
@@ -27,6 +29,7 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchemaRezervare),
@@ -49,6 +52,11 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
   const { data: facilitati } = useQuery({
     queryKey: ["facilitati"],
     queryFn: getTipuriAuto,
+  });
+
+  const { data: locuri } = useQuery({
+    queryKey: ["locuri"],
+    queryFn: getAllLocuriCampare,
   });
 
   const { data: clientiAutocomplete } = useQuery({
@@ -251,13 +259,15 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
             register={register}
             error={errors.tipAuto}
           />
-          <Input
+          <Select
+            data={locuri}
             width="w-full"
             id="idLoc"
             name="idLoc"
             label="Loc"
             register={register}
             error={errors.idLoc}
+            value={watch("idLoc")}
           />
         </div>
 
