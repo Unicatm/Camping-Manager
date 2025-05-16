@@ -17,10 +17,11 @@ import { getTipuriAuto } from "../../../../api/facilitatiApi";
 import { getClientsNameAndCnp } from "../../../../api/clientApi";
 import { getAllLocuriCampare } from "../../../../api/locuriApi";
 import Select from "../../../../components/ui/inputs/Select";
+import { formatDateForServer } from "../../../../utils/dateFormat";
 
 function ReservationsForm({ onClose, isEditing, rezervareId }) {
   const navigate = useNavigate();
-  const [selectedDataIn, setSelectedDataIn] = useState(null);
+  const [selectedDataIn, setSelectedDataIn] = useState(new Date());
   const [selectedDataOut, setSelectedDataOut] = useState(null);
   const [tipuriAuto, setTipuriAuto] = useState({});
   const [selectedClient, setSelectedClient] = useState({});
@@ -109,12 +110,8 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
   });
 
   const onSubmit = (data) => {
-    data.dataCheckIn = selectedDataIn
-      ? selectedDataIn.toISOString().split("T")[0]
-      : "";
-    data.dataCheckOut = selectedDataOut
-      ? selectedDataOut.toISOString().split("T")[0]
-      : "";
+    data.dataCheckIn = formatDateForServer(selectedDataIn);
+    data.dataCheckOut = formatDateForServer(selectedDataOut);
 
     data.facilitati = {
       Adult: parseInt(data.adulti, 10) || 0,
@@ -230,18 +227,34 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
             name="dataCheckIn"
             label="Data Check-In"
             selected={selectedDataIn}
-            onDateChange={setSelectedDataIn}
-            register={register}
+            onDateChange={(date) => {
+              setSelectedDataIn(date);
+              setValue("dataCheckIn", date);
+              if (selectedDataOut && date > selectedDataOut) {
+                setSelectedDataOut(null);
+                setValue("dataCheckOut", "");
+              }
+            }}
+            selectsStart
+            startDate={selectedDataIn}
+            endDate={selectedDataOut}
             error={errors.dataCheckIn}
+            register={register}
           />
           <Calendar
             id="dataCheckOut"
             name="dataCheckOut"
             label="Data Check-Out"
             selected={selectedDataOut}
-            onDateChange={setSelectedDataOut}
-            register={register}
+            onDateChange={(date) => {
+              setSelectedDataOut(date);
+              setValue("dataCheckOut", date);
+            }}
+            selectsEnd
+            startDate={selectedDataIn}
+            endDate={selectedDataOut}
             error={errors.dataCheckOut}
+            register={register}
           />
         </div>
         <div className="flex gap-6 w-full">

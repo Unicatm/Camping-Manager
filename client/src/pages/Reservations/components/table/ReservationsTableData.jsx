@@ -4,7 +4,7 @@ import {
   TableRow,
   TableHead,
 } from "../../../../components/tables/Table";
-import dateFormatter from "../../../../utils/dateFormat";
+import { dateFormatter } from "../../../../utils/dateFormat";
 import DropdownDeleteMenu from "../../../../components/tables/DropdownDeleteMenu";
 import { useEffect, useState } from "react";
 

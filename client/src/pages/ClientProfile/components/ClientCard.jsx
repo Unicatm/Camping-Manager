@@ -6,7 +6,7 @@ import {
   EnvelopeIcon,
   PhoneIcon,
 } from "@heroicons/react/24/outline";
-import dateFormatter from "../../../utils/dateFormat";
+import {dateFormatter} from "../../../utils/dateFormat";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
 

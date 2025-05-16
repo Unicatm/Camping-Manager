@@ -6,6 +6,7 @@ import countryData from "../components/form/countryData";
 import useCreateClient from "./useCreateClient";
 import useUpdateClient from "./useUpdateClient";
 import useGetClientById from "./useGetClientById";
+import { formatDateForServer } from "../../../utils/dateFormat";
 
 export default function useClientForm({ isEditing, clientId, onClose }) {
   const [selectedDate, setSelectedDate] = useState(null);
@@ -32,9 +33,7 @@ export default function useClientForm({ isEditing, clientId, onClose }) {
   const updateClientMutation = useUpdateClient(clientId, onClose);
 
   const onSubmit = (data) => {
-    data.dataNasterii = selectedDate
-      ? selectedDate.toISOString().split("T")[0]
-      : "";
+    data.dataNasterii = formatDateForServer(selectedDate);
     data.nationalitate = selectedCountry;
 
     if (!isEditing) {

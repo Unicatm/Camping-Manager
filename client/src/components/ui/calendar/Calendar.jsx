@@ -1,76 +1,109 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import CustomHeader from "./components/CustomHeader";
 import CustomInput from "./components/CustomInput";
 import "react-datepicker/dist/react-datepicker.css";
 import "./custom-datepicker.css";
 
-export default function Calendar({
-  onDateChange,
+const Calendar = ({
   id,
   name,
-  selected,
-  birthDate,
   label,
-}) {
+  selected,
+  onDateChange,
+  selectsStart,
+  selectsEnd,
+  startDate,
+  endDate,
+  minDate,
+  maxDate,
+  error,
+  birthDate,
+  register,
+}) => {
   const currentYear = new Date().getFullYear();
   const dateLastMajorYear = new Date(new Date().setFullYear(currentYear - 18));
 
-  const [startDate, setStartDate] = useState(
+  const [localDate, setLocalDate] = useState(
     selected || (birthDate ? dateLastMajorYear : new Date())
   );
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (selected) {
-      setStartDate(new Date(selected));
+      setLocalDate(new Date(selected));
     }
   }, [selected]);
 
   const handleDateChange = (date) => {
-    setStartDate(date);
-    setIsOpen(true);
+    setLocalDate(date);
     if (onDateChange) {
       onDateChange(date);
     }
   };
 
+  const dayClassName = (date) => {
+    const isDisabled =
+      (minDate && date < minDate) ||
+      (maxDate && date > maxDate) ||
+      (selectsEnd && startDate && date < startDate);
+
+    return isDisabled ? "disabled-day" : null;
+  };
+
   return (
     <div className="relative w-full">
-      {label !== null ? (
+      {label && (
         <label
           htmlFor={id}
           className="block mb-2 text-sm text-blue-950 font-medium"
         >
           {label}
         </label>
-      ) : (
-        ""
       )}
       <DatePicker
-        dateFormat={"dd-MM-yyyy"}
+        id={id}
+        name={name}
+        selected={selected}
+        onChange={handleDateChange}
+        selectsStart={selectsStart}
+        selectsEnd={selectsEnd}
+        startDate={startDate}
+        endDate={endDate}
+        minDate={minDate}
+        maxDate={maxDate}
+        dayClassName={dayClassName}
         calendarClassName="custom-calendar"
         showPopperArrow={false}
-        selected={startDate}
-        onChange={handleDateChange}
-        showYearDropdown
-        customInput={<CustomInput id={id} name={name} setIsOpen={setIsOpen} />}
+        dateFormat="dd-MM-yyyy"
+        customInput={
+          <CustomInput
+            id={id}
+            name={name}
+            setIsOpen={setIsOpen}
+            register={register}
+          />
+        }
         renderCustomHeader={(props) => (
           <CustomHeader
             {...props}
-            setStartDate={setStartDate}
-            startDate={startDate}
+            setStartDate={setLocalDate}
+            startDate={localDate}
             handleDateChange={handleDateChange}
             birthDate={birthDate}
           />
         )}
         open={isOpen}
-        onClickOutside={(e) => {
-          if (!e.target.closest("input")) {
-            setIsOpen(false);
-          }
-        }}
+        onClickOutside={() => setIsOpen(false)}
+        onSelect={() => setIsOpen(false)}
       />
+      {error && (
+        <span className="absolute -bottom-6 left-0 text-xs text-red-700">
+          {error.message}
+        </span>
+      )}
     </div>
   );
-}
+};
+
+export default Calendar;

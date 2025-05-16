@@ -5,11 +5,11 @@ import {
   TableRow,
   TableHead,
 } from "../../../../components/tables/Table";
-import dateFormatter from "../../../../utils/dateFormat";
 import DropdownDeleteMenu from "../../../../components/tables/DropdownDeleteMenu";
+import { dateFormatter } from "../../../../utils/dateFormat";
 
 function ClientsTableData({ clienti, forPreview, onEdit, onDelete }) {
-  return clienti.toReversed().map((client, index) => (
+  return clienti?.map((client, index) => (
     <TableRow key={index}>
       <TableHead>
         <Link to={`/clienti/${client._id}`} className="hover:text-slate-700">
