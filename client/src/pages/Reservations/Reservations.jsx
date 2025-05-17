@@ -39,6 +39,7 @@ function Reservations() {
       queryClient.invalidateQueries({ queryKey: ["totalActiveReservations"] });
       queryClient.invalidateQueries({ queryKey: ["currentYearRevenue"] });
       queryClient.invalidateQueries({ queryKey: ["checkoutCard"] });
+      queryClient.invalidateQueries({ queryKey: ["locuriZi"] });
       refetch();
     },
   });

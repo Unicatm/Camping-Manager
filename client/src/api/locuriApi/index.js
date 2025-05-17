@@ -21,3 +21,14 @@ export const getTotalNumberLocuriCampare = async () => {
   const resData = await res.json();
   return resData.data[0];
 };
+
+export const getLocuriZi = async () => {
+  const res = await fetch(`${BASE_URL}/locuri/zi`);
+
+  if (!res.ok) {
+    throw new Error(`HTTP error! Status: ${res.status}`);
+  }
+
+  const resData = await res.json();
+  return resData.data.rezultat;
+};

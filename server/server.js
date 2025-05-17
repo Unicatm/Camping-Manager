@@ -11,6 +11,6 @@ mongoose.connect(DB).then(() => console.log("DB connection successfull!"));
 require("./routes/cronJobs");
 
 const port = 3000;
-app.listen(port, "0.0.0.0", () => {
+app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
