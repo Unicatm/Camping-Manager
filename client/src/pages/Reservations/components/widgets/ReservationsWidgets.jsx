@@ -17,7 +17,7 @@ export default function ReservationsWidgets() {
   const { data: averageDays } = useAverageDays();
   const { data: totalActiveReservations } = useActiveReservationsData();
   return (
-    <div className="flex flex-row items-center justify-between gap-4 pb-6">
+    <div className="flex flex-col lg:flex-row items-center justify-between gap-4 pb-10 lg:pb-6">
       <SimpleWidget
         title={"Rezervari totale"}
         data={totalReservations}

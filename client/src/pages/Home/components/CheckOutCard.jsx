@@ -41,9 +41,9 @@ const Field = ({ rezervare }) => {
   };
 
   return (
-    <div className="flex items-center justify-between bg-blue-50 rounded-xl px-4 py-3">
-      <div className="flex items-center space-x-4">
-        <div className="bg-blue-200 text-blue-800 font-bold rounded-full w-12 h-12 flex items-center justify-center text-lg">
+    <div className="flex gap-4 lg:gap:0 flex-col lg:flex-row items-start lg:items-center justify-between bg-blue-50 rounded-xl px-4 py-3">
+      <div className="flex gap-2 lg:gap:0 flex-col lg:flex-row items-start lg:items-center space-x-4">
+        <div className="bg-blue-200 text-blue-800 font-bold rounded-full w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center text-md lg:text-lg">
           {rezervare?.idClient?.nume?.charAt(0).toUpperCase() || "A"}
         </div>
         <div>

@@ -17,28 +17,26 @@ export default function PriceList() {
   });
 
   return (
-    <div className="col-start-1 col-end-3 row-start-3 row-end-7 p-6 bg-white rounded-xl border border-gray-200 flex flex-col">
-      <div className="flex justify-between items-start">
+    <div className="p-6 bg-white rounded-xl border border-gray-200 flex flex-col lg:col-start-1 lg:col-end-3 lg:row-start-3 lg:row-end-7">
+      <div className="flex flex-col lg:flex-row lg:justify-between items-start pb-4 lg:pb-0">
         <div>
-          <h1 className="text-2xl font-bold mb-1">Pricing List</h1>
+          <h1 className="text-2xl font-bold mb-1">Lista de prețuri</h1>
           <p className="text-gray-500 text-sm mb-6">
-            Current rates for different spot types
+            Prețurile curente ale facilităților
           </p>
         </div>
         <ExportButton handleOpenPdf={""} />
       </div>
 
-      <div className="overflow-y-auto">
-        <Table
-          data={preturi}
-          columns={priceListTabelHeads}
-          forPreview={false}
-          isFetching={isFetching}
-          isError={isError}
-        >
-          <PriceListTableData data={preturi} forPreview={false} />
-        </Table>
-      </div>
+      <Table
+        data={preturi}
+        columns={priceListTabelHeads}
+        forPreview={false}
+        isFetching={isFetching}
+        isError={isError}
+      >
+        <PriceListTableData data={preturi} forPreview={false} />
+      </Table>
     </div>
   );
 }

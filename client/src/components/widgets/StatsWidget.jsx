@@ -8,9 +8,11 @@ function StatsWidget({ data, icon: Icon, children, ...props }) {
   return (
     <StatsWidgetContext.Provider value={{ data }}>
       <div
-        className={`${props.width || "w-full"} flex flex-row items-center ${
+        className={`${props.width || "w-full"} ${
+          props.display
+        } flex flex-row items-center ${
           props.grid
-        } justify-between min-w-50 h-full p-4 rounded-xl border-[1px] border-slate-300 bg-white text-black`}
+        } justify-between min-w-50 h-full xl:h-fit p-4 rounded-xl border-[1px] border-slate-300 bg-white text-black`}
       >
         <div>{children}</div>
         {!Icon ? null : (
@@ -36,8 +38,7 @@ StatsWidget.DisplayData = function DisplayData({ unit }) {
   return (
     <div className="flex items-center justify-between pt-2">
       <p className="text-2xl font-bold text-slate-900">
-        {data?.total != null ? Number(Number(data.total).toFixed(2)) : 0}{" "}
-        {unit}
+        {data?.total != null ? Number(Number(data.total).toFixed(2)) : 0} {unit}
       </p>
     </div>
   );
@@ -47,7 +48,7 @@ StatsWidget.DisplayDataLabel = function DisplayDataLabel({ label }) {
   const { data } = useStatsWidgetContext();
   return (
     <div className="flex items-center justify-between">
-      <div className="flex items-center gap-4 w-fit h-max pt-4">
+      <div className="flex items-center gap-4 w-fit h-max pt-2">
         <p className="text-2xl font-bold text-slate-900">
           {" "}
           {data?.total != null ? Number(Number(data.total).toFixed(2)) : 0}

@@ -7,7 +7,7 @@ import {
 import { LuArrowUpDown } from "react-icons/lu";
 
 const TableElement = ({ children }) => (
-  <div className="relative h-full flex-grow rounded-xl overflow-x-auto overflow-y-auto bg-white border border-slate-300">
+  <div className="h-96 lg:h-fill relative flex-grow rounded-xl overflow-x-auto overflow-y-auto bg-white border border-slate-300">
     <table className="w-full text-sm text-left rounded-xl text-slate-600">
       {children}
     </table>

@@ -24,6 +24,7 @@ export default function WidgetsSection() {
         data={currentYearRevenue}
         icon={BanknotesIcon}
         unit={"lei"}
+        display={"hidden lg:flex"}
       />
       <SimpleWidget
         title={"Locuri libere"}

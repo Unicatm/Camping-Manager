@@ -4,17 +4,8 @@ import PredominantNationalitiesChart from "./components/charts/PredominantNation
 import ReservationsTrendChart from "./components/charts/ReservationsTrendChart";
 import AgeChart from "./components/charts/AgeChart";
 import { getAllAvailableYears } from "../../api/reservationsApi";
-import {
-  BanknotesIcon,
-  UserGroupIcon,
-  BookmarkIcon,
-  MapPinIcon,
-} from "@heroicons/react/20/solid";
-import useTotalReservationsData from "../Reservations/components/widgets/hooks/useTotalReservationsData";
 import SimpleWidget from "../../components/widgets/SimpleWidget";
-import useClientGrowthData from "../Clients/components/widgets/hooks/useClientGrowthData";
-import useTotalSpaces from "./hooks/useTotalSpaces";
-import useCurrentYearRevenue from "./hooks/useCurrentYearRevenue";
+import StatsWidgets from "./components/StatsWidgets";
 
 export default function Stats() {
   const { data } = useQuery({
@@ -24,38 +15,15 @@ export default function Stats() {
 
   const years = data?.years || [];
 
-  const { data: totalReservations } = useTotalReservationsData();
-  const { data: clientGrowthData } = useClientGrowthData();
-  const { data: totalNumberOfSpaces } = useTotalSpaces();
-  const { data: currentYearRevenue } = useCurrentYearRevenue();
-
   return (
     <div className="h-fit grow bg-blue-50/90">
       <div className="relative w-11/12 h-full mx-auto py-8 flex flex-col gap-4">
-        <h2 className="font-bold text-xl pb-6">Statistici</h2>
-        <div className="grid grid-cols-4 gap-4 flex-1">
-          <SimpleWidget
-            title={"Rezervari totale"}
-            data={totalReservations}
-            icon={BookmarkIcon}
-          />
-          <SimpleWidget
-            title={"Număr clienți"}
-            data={clientGrowthData}
-            icon={UserGroupIcon}
-          />
-          <SimpleWidget
-            title={"Total locuri"}
-            data={totalNumberOfSpaces}
-            icon={MapPinIcon}
-          />
-          <SimpleWidget
-            title={"Încasări an curent"}
-            data={currentYearRevenue}
-            icon={BanknotesIcon}
-            unit={"lei"}
-          />
-
+        <h2 className="font-bold text-2xl pb-4 lg:pb-6 lg:text-2xl">
+          Statistici
+        </h2>
+        <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 flex-1">
+          <StatsWidgets />
+          <div className="w-fit text-2xl pt-6 pb-2 font-bold">Grafice</div>
           <IncomingRevenueChart years={years} />
           <PredominantNationalitiesChart years={years} />
           <ReservationsTrendChart years={years} />

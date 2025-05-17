@@ -18,7 +18,9 @@ export default function ActionSection() {
         subtitle={"Adaugă o rezervare"}
         icon={BsCalendarPlus}
         color={"blue"}
-        grid={"self-stretch col-start-1 col-end-2 row-start-1 row-end-2"}
+        grid={
+          "self-stretch lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-2"
+        }
       />
       <ActionCard
         title={"Adaugă client"}
@@ -33,6 +35,7 @@ export default function ActionSection() {
         icon={MapIcon}
         color={"violet"}
         grid={"self-stretch col-start-1 col-end-2 row-start-1 row-end-2"}
+        display={"hidden lg:flex"}
       />
       <ActionCard
         title={"Vizualizeaza statistici"}
@@ -41,6 +44,7 @@ export default function ActionSection() {
         color={"emerald"}
         grid={"self-stretch col-start-2 col-end-3 row-start-1 row-end-2"}
         handleClick={handleClick}
+        display={"hidden lg:flex"}
       />
     </>
   );
