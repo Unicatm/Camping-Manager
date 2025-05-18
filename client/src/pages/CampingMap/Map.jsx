@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import PopupLocOcupat from "./components/PopupLocOcupat";
+import PopupLocLiber from "./components/PopupLocLiber";
 import { getLocuriZi } from "../../api/locuriApi";
 import spots from "./spots";
 
 export default function Map() {
   const [selectedSpot, setSelectedSpot] = useState(null);
+  const spotRef = useRef(null);
 
   const { data: locuri = [] } = useQuery({
     queryKey: ["locuriZi"],
@@ -14,9 +16,14 @@ export default function Map() {
 
   const locuriMap = Object.fromEntries(locuri.map((loc) => [loc.id, loc]));
 
-  const handleSpotClick = (spot) => {
-    if (spot.status === "Ocupat") {
+  const handleSpotClick = (spot, event) => {
+    event.stopPropagation();
+
+    if (selectedSpot && selectedSpot.id === spot.id) {
+      closePopup();
+    } else {
       setSelectedSpot(spot);
+      spotRef.current = event.currentTarget;
     }
   };
 
@@ -50,7 +57,7 @@ export default function Map() {
                 top: `${fullSpot.top}%`,
                 left: `${fullSpot.left}%`,
               }}
-              onClick={() => handleSpotClick(fullSpot)}
+              onClick={(e) => handleSpotClick(fullSpot, e)}
             >
               {fullSpot.id}
             </div>
@@ -58,7 +65,21 @@ export default function Map() {
         })}
 
         {selectedSpot && (
-          <PopupLocOcupat selectedSpot={selectedSpot} onClose={closePopup} />
+          <>
+            {selectedSpot.status === "Ocupat" ? (
+              <PopupLocOcupat
+                selectedSpot={selectedSpot}
+                onClose={closePopup}
+                ignoreRef={spotRef}
+              />
+            ) : (
+              <PopupLocLiber
+                selectedSpot={selectedSpot}
+                onClose={closePopup}
+                ignoreRef={spotRef}
+              />
+            )}
+          </>
         )}
       </div>
     </div>

@@ -1,26 +1,18 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { validationSchemaRezervare } from "./validationSchema";
-import {
-  createRezervare,
-  editRezervare,
-  getRezervareById,
-} from "../../../../api/reservationsApi";
 import Calendar from "../../../../components/ui/calendar/Calendar";
 import Input from "../../../../components/ui/inputs/Input";
 import Autocomplete from "../../../../components/ui/inputs/Autocomplete";
 import QuantitySelect from "../../../../components/ui/inputs/QuantitySelect";
-import { getTipuriAuto } from "../../../../api/facilitatiApi";
-import { getClientsNameAndCnp } from "../../../../api/clientApi";
-import { getAllLocuriCampare } from "../../../../api/locuriApi";
 import Select from "../../../../components/ui/inputs/Select";
 import { formatDateForServer } from "../../../../utils/dateFormat";
+import useReservationsData from "../../hooks/useReservationsData";
+import useCreateReservation from "../../hooks/useCreateReservation";
+import useUpdateReservation from "../../hooks/useUpdateReservation";
 
 function ReservationsForm({ onClose, isEditing, rezervareId }) {
-  const navigate = useNavigate();
   const [selectedDataIn, setSelectedDataIn] = useState(new Date());
   const [selectedDataOut, setSelectedDataOut] = useState(null);
   const [tipuriAuto, setTipuriAuto] = useState({});
@@ -44,26 +36,18 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
     },
   });
 
-  const { data: rezervare } = useQuery({
-    queryKey: ["rezervare", rezervareId],
-    queryFn: () => getRezervareById(rezervareId),
-    enabled: !!rezervareId,
-  });
-
-  const { data: facilitati } = useQuery({
-    queryKey: ["facilitati"],
-    queryFn: getTipuriAuto,
-  });
-
-  const { data: locuri } = useQuery({
-    queryKey: ["locuri"],
-    queryFn: getAllLocuriCampare,
-  });
-
-  const { data: clientiAutocomplete } = useQuery({
-    queryKey: ["clientiAutocomplete"],
-    queryFn: getClientsNameAndCnp,
-  });
+  const {
+    rezervare,
+    facilitati,
+    locuriDisponibile,
+    clientiAutocomplete,
+    refetchLocuriDisponibile,
+  } = useReservationsData(
+    rezervareId,
+    selectedDataIn,
+    selectedDataOut,
+    watch("hasElectricity")
+  );
 
   useEffect(() => {
     if (rezervare) {
@@ -80,39 +64,21 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
     );
   }, [isEditing, clientiAutocomplete, rezervare]);
 
-  const queryClient = useQueryClient();
+  useEffect(() => {
+    if (selectedDataIn && selectedDataOut) {
+      refetchLocuriDisponibile();
+    }
+  }, [selectedDataIn, selectedDataOut, watch("hasElectricity")]);
 
-  const createRezervareMutation = useMutation({
-    mutationFn: createRezervare,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["rezervari", "list"] });
-      queryClient.invalidateQueries({ queryKey: ["totalReservations"] });
-      queryClient.invalidateQueries({ queryKey: ["averageDaysSpent"] });
-      queryClient.invalidateQueries({ queryKey: ["totalActiveReservations"] });
-      queryClient.invalidateQueries({ queryKey: ["currentYearRevenue"] });
-      queryClient.invalidateQueries({ queryKey: ["checkoutCard"] });
-      queryClient.invalidateQueries({ queryKey: ["locuriZi"] });
-      onClose();
-    },
-  });
-
-  const updateRezervareMutation = useMutation({
-    mutationFn: (data) => editRezervare(rezervareId, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["rezervari", "list"] });
-      queryClient.invalidateQueries({ queryKey: ["totalReservations"] });
-      queryClient.invalidateQueries({ queryKey: ["averageDaysSpent"] });
-      queryClient.invalidateQueries({ queryKey: ["totalActiveReservations"] });
-      queryClient.invalidateQueries({ queryKey: ["currentYearRevenue"] });
-      queryClient.invalidateQueries({ queryKey: ["checkoutCard"] });
-      onClose();
-      navigate("/rezervari");
-    },
-  });
+  const createRezervareMutation = useCreateReservation(onClose);
+  const updateRezervareMutation = useUpdateReservation(rezervareId, onClose);
 
   const onSubmit = (data) => {
     data.dataCheckIn = formatDateForServer(selectedDataIn);
     data.dataCheckOut = formatDateForServer(selectedDataOut);
+
+    console.log("checkIn:", data.dataCheckIn);
+    console.log("checkOut:", data.dataCheckOut);
 
     data.facilitati = {
       Adult: parseInt(data.adulti, 10) || 0,
@@ -274,7 +240,7 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
             error={errors.tipAuto}
           />
           <Select
-            data={locuri}
+            data={locuriDisponibile}
             width="w-full"
             id="idLoc"
             name="idLoc"

@@ -2,14 +2,14 @@ import { useRef } from "react";
 import useClickOutside from "../../../components/hooks/useClickOutside";
 import { dateFormatter } from "../../../utils/dateFormat";
 
-export default function PopupLocOcupat({ selectedSpot, onClose }) {
+export default function PopupLocOcupat({ selectedSpot, onClose, ignoreRef }) {
   const popupRef = useRef(null);
-  useClickOutside(popupRef, onClose);
+  useClickOutside(popupRef, onClose, ignoreRef);
 
   return (
     <div
       ref={popupRef}
-      className="absolute bg-white p-4 rounded-lg shadow-lg w-fit z-50"
+      className="absolute bg-white p-4 rounded-lg shadow-lg w-fit z-50 before:absolute before:-bottom-[7px] before:left-1/2 before:transform before:-translate-x-1/2 before:border-l-8 before:border-l-transparent before:border-r-8 before:border-r-transparent before:border-t-8 before:border-t-white before:drop-shadow-[0_2px_1px_rgba(0,0,0,0.1)]"
       style={{
         top: `${selectedSpot.top}%`,
         left: `${selectedSpot.left}%`,

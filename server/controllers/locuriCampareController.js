@@ -106,10 +106,44 @@ exports.getLocuriZi = async (req, res) => {
       },
     });
   } catch (err) {
-    console.error("Eroare la locuri/zi:", err);
     res.status(404).json({
       status: "failed",
       message: err,
+    });
+  }
+};
+
+exports.getLocuriDisponibile = async (req, res) => {
+  try {
+    const { start, end, energie } = req.query;
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+
+    const rezervari = await Rezervare.find({
+      $or: [
+        { dataCheckIn: { $lte: endDate }, dataCheckOut: { $gte: startDate } },
+      ],
+    });
+
+    const locuriRezervate = rezervari.map((r) => r.idLoc.toString());
+
+    const filtre = {
+      _id: { $nin: locuriRezervate },
+    };
+    if (energie !== undefined) {
+      filtre.hasElectricity = energie === "true";
+    }
+
+    const locuriDisponibile = await LocuriCampare.find(filtre);
+
+    res.status(200).json({
+      status: "success",
+      data: { locuri: locuriDisponibile },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "error",
+      message: err.message,
     });
   }
 };

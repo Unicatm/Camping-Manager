@@ -32,3 +32,16 @@ export const getLocuriZi = async () => {
   const resData = await res.json();
   return resData.data.rezultat;
 };
+
+export const getLocuriDisponibile = async ({ start, end, energie }) => {
+  const res = await fetch(
+    `${BASE_URL}/disponibile?start=${start}&end=${end}&energie=${energie}`
+  );
+
+  if (!res.ok) {
+    throw new Error(`HTTP error! Status: ${res.status}`);
+  }
+
+  const resData = await res.json();
+  return resData.data.locuri;
+};

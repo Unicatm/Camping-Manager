@@ -1,74 +1,32 @@
-import { useState, useEffect } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
 import ReservationsForm from "./components/form/ReservationsForm";
 import Table from "../../components/tables/Table";
 import ReservationsTableData from "./components/table/ReservationsTableData";
 import rezervariTableHeads from "./components/table/rezervariTabelHeads";
-import { deleteRezervare, getAllRezervari } from "../../api/reservationsApi";
 import ReservationsHeaderSection from "./components/ReservationsHeaderSection";
 import ReservationsFilterSection from "./components/ReservationsFilterSection";
 import ReservationsWidgets from "./components/widgets/ReservationsWidgets";
+import useDeleteReservation from "./hooks/useDeleteReservation";
+import useModal from "../../components/hooks/useModal";
+import useHandleEditReservation from "./hooks/useHandleEditReservation";
+import useFetchReservations from "./hooks/useFetchReservations";
 
 function Reservations() {
-  const { id } = useParams();
-  const [isEditing, setIsEditing] = useState(false);
-  const [selectedRezervareId, setSelectedRezervareId] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchParams] = useSearchParams();
   const highlightId = searchParams.get("highlight");
 
-  const {
-    data: rezervari,
-    isFetching,
-    isError,
-    refetch,
-  } = useQuery({
-    queryKey: ["rezervari", "list"],
-    queryFn: getAllRezervari,
-  });
-
-  const queryClient = useQueryClient();
-
-  const deleteMutationRezervare = useMutation({
-    mutationFn: deleteRezervare,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["rezervari", "list"] });
-      queryClient.invalidateQueries({ queryKey: ["totalReservations"] });
-      queryClient.invalidateQueries({ queryKey: ["averageDaysSpent"] });
-      queryClient.invalidateQueries({ queryKey: ["totalActiveReservations"] });
-      queryClient.invalidateQueries({ queryKey: ["currentYearRevenue"] });
-      queryClient.invalidateQueries({ queryKey: ["checkoutCard"] });
-      queryClient.invalidateQueries({ queryKey: ["locuriZi"] });
-      refetch();
-    },
-  });
-
-  const handleDeleteRezervare = (id) => {
-    deleteMutationRezervare.mutate(id);
-  };
-
-  const handleEdit = (rezervareId) => {
-    setIsEditing(true);
-    setSelectedRezervareId(rezervareId);
-    setIsModalOpen(true);
-  };
-
-  useEffect(() => {
-    if (isEditing) {
-      setIsModalOpen(true);
-      setSelectedRezervareId(id);
-    }
-  }, [id]);
+  const { isModalOpen, openModal, closeModal } = useModal();
+  const { data: rezervari, isError, isFetching } = useFetchReservations();
+  const handleDeleteRezervare = useDeleteReservation();
+  const { isEditing, selectedRezervareId, handleEdit, resetEdit } =
+    useHandleEditReservation(openModal);
 
   return (
     <div className="h-fit lg:h-screen grow bg-blue-50/90">
       <div className="relative w-11/12 h-full mx-auto py-8 flex flex-col">
         <ReservationsHeaderSection
           openModal={() => {
-            setIsEditing(false);
-            setSelectedRezervareId(null);
-            setIsModalOpen(true);
+            openModal();
           }}
         />
 
@@ -78,31 +36,28 @@ function Reservations() {
         {isModalOpen && (
           <ReservationsForm
             onClose={() => {
-              setIsModalOpen(false);
-              setIsEditing(false);
-              setSelectedRezervareId(null);
+              closeModal();
+              resetEdit();
             }}
             rezervareId={selectedRezervareId}
             isEditing={isEditing}
           />
         )}
-        <div className="flex-1 overflow-hidden">
-          <Table
-            data={rezervari}
-            columns={rezervariTableHeads}
+        <Table
+          data={rezervari}
+          columns={rezervariTableHeads}
+          forPreview={false}
+          isFetching={isFetching}
+          isError={isError}
+        >
+          <ReservationsTableData
+            rezervari={rezervari}
             forPreview={false}
-            isFetching={isFetching}
-            isError={isError}
-          >
-            <ReservationsTableData
-              rezervari={rezervari}
-              forPreview={false}
-              onEdit={handleEdit}
-              onDelete={handleDeleteRezervare}
-              highlightId={highlightId}
-            />
-          </Table>
-        </div>
+            onEdit={handleEdit}
+            onDelete={handleDeleteRezervare}
+            highlightId={highlightId}
+          />
+        </Table>
       </div>
     </div>
   );

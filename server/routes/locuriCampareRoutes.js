@@ -13,6 +13,7 @@ router
   .get(locuriCampareController.getTotalLocuriCampare);
 
 router.route("/locuri/zi").get(locuriCampareController.getLocuriZi);
+router.route("/disponibile").get(locuriCampareController.getLocuriDisponibile);
 
 router
   .route("/:id")
