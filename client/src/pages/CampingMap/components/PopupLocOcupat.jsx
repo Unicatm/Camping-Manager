@@ -1,10 +1,21 @@
 import { useRef } from "react";
 import useClickOutside from "../../../components/hooks/useClickOutside";
 import { dateFormatter } from "../../../utils/dateFormat";
+import { useNavigate } from "react-router-dom";
 
-export default function PopupLocOcupat({ selectedSpot, onClose, ignoreRef }) {
+export default function PopupLocOcupat({
+  selectedSpot,
+  onClose,
+  ignoreRef,
+  idClient,
+}) {
+  const navigate = useNavigate();
   const popupRef = useRef(null);
   useClickOutside(popupRef, onClose, ignoreRef);
+
+  const handleClick = () => {
+    navigate(`/rezervari?highlight=${idClient}`);
+  };
 
   return (
     <div
@@ -28,7 +39,10 @@ export default function PopupLocOcupat({ selectedSpot, onClose, ignoreRef }) {
         <span className="font-semibold">Check-out:</span>{" "}
         {dateFormatter(selectedSpot.checkoutDate) || "Nespecificat"}
       </p>
-      <button className="text-xs text-gray-600 font-medium border border-gray-300 rounded-md px-4 py-1 bg-white hover:bg-gray-50 transition cursor-pointer">
+      <button
+        onClick={handleClick}
+        className="text-xs text-gray-600 font-medium border border-gray-300 rounded-md px-4 py-1 bg-white hover:bg-gray-50 transition cursor-pointer"
+      >
         Detalii
       </button>
     </div>

@@ -1,8 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 
-// const morgan = require("morgan");
-
 const clientRouter = require("./routes/clientRoutes");
 const rezervariRouter = require("./routes/rezervareRoutes");
 const locuriCampareRouter = require("./routes/locuriCampareRoutes");

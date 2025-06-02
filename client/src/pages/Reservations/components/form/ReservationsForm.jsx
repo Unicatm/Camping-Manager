@@ -77,9 +77,6 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
     data.dataCheckIn = formatDateForServer(selectedDataIn);
     data.dataCheckOut = formatDateForServer(selectedDataOut);
 
-    console.log("checkIn:", data.dataCheckIn);
-    console.log("checkOut:", data.dataCheckOut);
-
     data.facilitati = {
       Adult: parseInt(data.adulti, 10) || 0,
       "Copii 3-12 ani": parseInt(data.copii, 10) || 0,

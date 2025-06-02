@@ -70,7 +70,7 @@ const TableBody = ({ data, columns, children, forPreview, isFetching }) => {
             Datele se încarcă...
           </td>
         </tr>
-      ) : data.length === 0 ? (
+      ) : data?.length === 0 ? (
         <tr className="h-max">
           <td
             colSpan={columns.length + (forPreview ? 0 : 1)}

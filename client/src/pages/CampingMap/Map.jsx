@@ -71,6 +71,7 @@ export default function Map() {
                 selectedSpot={selectedSpot}
                 onClose={closePopup}
                 ignoreRef={spotRef}
+                idClient={selectedSpot.idClient}
               />
             ) : (
               <PopupLocLiber

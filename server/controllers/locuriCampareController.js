@@ -94,6 +94,7 @@ exports.getLocuriZi = async (req, res) => {
             ? "Liber"
             : "Ocupat"
           : "Liber",
+        idClient: rezervare?.idClient?._id || null,
         clientName: rezervare?.idClient?.nume || null,
         checkoutDate: rezervare?.dataCheckOut || null,
         hasElectricity: loc.hasElectricity,

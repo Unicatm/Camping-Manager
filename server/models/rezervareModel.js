@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { numbersRegex } = require("../../client/src/utils/regex");
 
 const rezervareSchema = new mongoose.Schema({
   idClient: {

@@ -19,8 +19,6 @@ export const validationSchemaRezervare = yup
         (value) => value && Object.keys(value).length > 0
       ),
     idLoc: yup.string().required("Trebuie să selectezi un loc!"),
-
-    // .transform((value) => (value === "" ? null : value)),
     hasElectricity: yup.bool().notRequired(),
   })
   .required();

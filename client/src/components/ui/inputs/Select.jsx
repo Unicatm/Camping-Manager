@@ -26,9 +26,9 @@ export default function Select({
           {label}
         </label>
       )}
-      <div className="bg-white pr-2 border border-slate-200 rounded-md focus:border-slate-400 hover:border-slate-300">
+      <div className="bg-white pr-2 border border-slate-200 rounded-lg focus:border-slate-400 hover:border-slate-300">
         <select
-          className={`${width} bg-white rounded-md placeholder:text-slate-400 text-slate-700 text-sm px-3 py-2 transition duration-300 ease focus:outline-none`}
+          className={`${width} bg-white rounded-lg placeholder:text-slate-400 text-slate-700 text-sm px-3 py-2 cursor-pointer transition duration-300 ease focus:outline-none`}
           onChange={handleChange}
           value={value}
           id={id}

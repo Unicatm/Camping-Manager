@@ -1,7 +1,17 @@
 const BASE_URL = "http://127.0.0.1:3000/api/v1/rezervari";
 
-export const getAllRezervari = async () => {
-  const res = await fetch(BASE_URL);
+export const getAllRezervari = async (filters = {}) => {
+  const queryParams = new URLSearchParams();
+
+  if (filters.searchText) {
+    queryParams.append("numeClient", filters.searchText);
+  }
+
+  if (filters.status && filters.status !== "Toate") {
+    queryParams.append("status", filters.status);
+  }
+
+  const res = await fetch(`${BASE_URL}?${queryParams.toString()}`);
 
   if (!res.ok) {
     throw new Error(`HTTP error! Status: ${res.status}`);

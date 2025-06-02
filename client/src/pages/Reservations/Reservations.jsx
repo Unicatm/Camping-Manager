@@ -10,13 +10,19 @@ import useDeleteReservation from "./hooks/useDeleteReservation";
 import useModal from "../../components/hooks/useModal";
 import useHandleEditReservation from "./hooks/useHandleEditReservation";
 import useFetchReservations from "./hooks/useFetchReservations";
+import { useState } from "react";
 
 function Reservations() {
+  const [filters, setFilters] = useState({ searchText: "", status: "Toate" });
   const [searchParams] = useSearchParams();
   const highlightId = searchParams.get("highlight");
 
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { data: rezervari, isError, isFetching } = useFetchReservations();
+  const {
+    data: rezervari,
+    isError,
+    isFetching,
+  } = useFetchReservations(filters);
   const handleDeleteRezervare = useDeleteReservation();
   const { isEditing, selectedRezervareId, handleEdit, resetEdit } =
     useHandleEditReservation(openModal);
@@ -31,7 +37,7 @@ function Reservations() {
         />
 
         <ReservationsWidgets />
-        <ReservationsFilterSection />
+        <ReservationsFilterSection onSearch={setFilters} />
 
         {isModalOpen && (
           <ReservationsForm
