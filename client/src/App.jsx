@@ -5,26 +5,34 @@ import Home from "./pages/Home/Home";
 import Clients from "./pages/Clients/Clients";
 import Reservations from "./pages/Reservations/Reservations";
 import Stats from "./pages/Stats/Stats";
-import SideNav from "./components/sideNav/SideNav";
 import ClientProfile from "./pages/ClientProfile/ClientProfile";
 import CampingMap from "./pages/CampingMap/CampingMap";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import ProtectedRoutes from "./utils/ProtectedRoutes";
+import NoSidebarLayout from "./layouts/NoSidebarLayout";
+import SidebarLayout from "./layouts/SideBarLayout";
+import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
   return (
-    <div className="flex h-screen overflow-hidden">
-      <SideNav />
-      <div className="flex-1 overflow-y-auto">
-        <Routes>
-          <Route path="/" element={<Home />} />
+    <Routes>
+      <Route element={<NoSidebarLayout />}>
+        <Route path="/" element={<LoginPage />} />
+      </Route>
+
+      <Route element={<ProtectedRoutes />}>
+        <Route element={<SidebarLayout />}>
           <Route path="/acasa" element={<Home />} />
           <Route path="/clienti" element={<Clients />} />
           <Route path="/clienti/:id" element={<ClientProfile />} />
           <Route path="/rezervari" element={<Reservations />} />
           <Route path="/map" element={<CampingMap />} />
           <Route path="/stats" element={<Stats />} />
-        </Routes>
-      </div>
-    </div>
+        </Route>
+      </Route>
+
+      <Route path="*" element={<NotFound />} />
+    </Routes>
   );
 }
 
