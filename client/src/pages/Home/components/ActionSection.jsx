@@ -5,12 +5,17 @@ import { ChartBarIcon, MapIcon } from "@heroicons/react/20/solid";
 import { BsCalendarPlus } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
-export default function ActionSection() {
+export default function ActionSection({ onAddRezervare, onAddClient }) {
   const navigateStats = useNavigate();
 
-  const handleClick = () => {
+  const handleStatsClick = () => {
     navigateStats(`/stats`);
   };
+
+  const handleMapClick = () => {
+    navigateStats(`/map`);
+  };
+
   return (
     <>
       <ActionCard
@@ -21,6 +26,7 @@ export default function ActionSection() {
         grid={
           "self-stretch lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-2"
         }
+        handleClick={onAddRezervare}
       />
       <ActionCard
         title={"Adaugă client"}
@@ -28,6 +34,7 @@ export default function ActionSection() {
         icon={BsFillPersonPlusFill}
         color={"yellow"}
         grid={"self-stretch col-start-2 col-end-3 row-start-1 row-end-2"}
+        handleClick={onAddClient}
       />
       <ActionCard
         title={"Vizualizează harta"}
@@ -35,6 +42,7 @@ export default function ActionSection() {
         icon={MapIcon}
         color={"violet"}
         grid={"self-stretch col-start-1 col-end-2 row-start-1 row-end-2"}
+        handleClick={handleMapClick}
         display={"hidden lg:flex"}
       />
       <ActionCard
@@ -43,7 +51,7 @@ export default function ActionSection() {
         icon={ChartBarIcon}
         color={"emerald"}
         grid={"self-stretch col-start-2 col-end-3 row-start-1 row-end-2"}
-        handleClick={handleClick}
+        handleClick={handleStatsClick}
         display={"hidden lg:flex"}
       />
     </>
