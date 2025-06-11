@@ -2,14 +2,21 @@ const PDFDocument = require("pdfkit-table");
 const Rezervare = require("../models/rezervareModel");
 
 exports.RevenueRaport = async (req, res) => {
-  const year = 2025;
+  const { startDate, endDate } = req.query;
+
+  if (!startDate || !endDate) {
+    return res.status(400).send("Datele de început și sfârșit sunt necesare.");
+  }
+
+  const start = new Date(startDate);
+  const end = new Date(endDate);
 
   const data = await Rezervare.aggregate([
     {
       $match: {
         dataCheckIn: {
-          $gte: new Date(year, 0, 2),
-          $lt: new Date(parseInt(year) + 1, 0, 2),
+          $gte: start,
+          $lte: end,
         },
       },
     },
@@ -45,7 +52,7 @@ exports.RevenueRaport = async (req, res) => {
   ]);
 
   const reportTitle = `Raport Venituri`;
-  const periodTitle = `Raport venituri 01.01.${year} - 31.01.${year}`;
+  const periodTitle = `Raport venituri ${start.toLocaleDateString()} - ${end.toLocaleDateString()}`;
   const totalRevenue = data.reduce((sum, rez) => sum + (rez.suma || 0), 0);
 
   const doc = new PDFDocument({ margin: 30, size: "A4", bufferPages: true });
@@ -54,8 +61,8 @@ exports.RevenueRaport = async (req, res) => {
   res.setHeader(
     "Content-Disposition",
     `inline; filename="Raport_Venituri_${
-      year || moment().format("YYYY-MM-DD")
-    }.pdf"`
+      start || moment().format("YYYY-MM-DD")
+    }-${end || moment().format("YYYY-MM-DD")}.pdf"`
   );
   doc.pipe(res);
 

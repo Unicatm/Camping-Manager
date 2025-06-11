@@ -26,7 +26,7 @@ function ReservationsTableData({
     }
   }, [highlightId]);
 
-  return rezervari?.toReversed().map((rezervare, index) => {
+  return rezervari?.map((rezervare, index) => {
     const isHighlighted = rezervare._id === highlightedId;
     return (
       <TableRow isHighlighted={isHighlighted} key={index}>

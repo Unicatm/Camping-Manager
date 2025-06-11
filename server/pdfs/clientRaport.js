@@ -1,6 +1,6 @@
 const PDFDocument = require("pdfkit-table");
 const { getClientReservations } = require("../../client/src/api/clientApi");
-const { default: dateFormatter } = require("../../client/src/utils/dateFormat");
+const { dateFormatter } = require("../../client/src/utils/dateFormat");
 
 exports.ClientRaport = async (req, res) => {
   try {
@@ -63,15 +63,21 @@ exports.ClientRaport = async (req, res) => {
         `${r.sumaPerDay} lei`,
       ]),
     };
+    if (client.rezervari.length !== 0) {
+      await doc.table(table, {
+        prepareHeader: () => doc.font("Helvetica-Bold").fontSize(10),
+        prepareRow: () => doc.font("Helvetica").fontSize(10),
+        columnSpacing: 10,
+        padding: 5,
+      });
+      doc.moveDown(2);
+    } else {
+      doc
+        .fontSize(12)
+        .text("Nu exista rezervari pe numele acestui client!")
+        .moveDown(2);
+    }
 
-    await doc.table(table, {
-      prepareHeader: () => doc.font("Helvetica-Bold").fontSize(10),
-      prepareRow: () => doc.font("Helvetica").fontSize(10),
-      columnSpacing: 10,
-      padding: 5,
-    });
-
-    doc.moveDown(2);
     doc
       .fontSize(10)
       .text(`Generat la: ${new Date().toLocaleDateString("ro-RO")}`, {

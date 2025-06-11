@@ -1,6 +1,4 @@
-import React from "react";
 import Map from "./Map";
-import Map2 from "./Map2";
 import HeaderSection from "../../components/headerSection/HeaderSection";
 
 export default function CampingMap() {
@@ -12,7 +10,6 @@ export default function CampingMap() {
           subtitle="Vizualizează locurile din camping în timp real"
         />
         <Map />
-        {/* <Map2 /> */}
       </div>
     </div>
   );

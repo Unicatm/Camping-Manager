@@ -10,6 +10,7 @@ export default function CustomHeader({
   handleDateChange,
   changeYear,
   birthDate,
+  isMonthPickerMode,
 }) {
   const [showYearDropdown, setShowYearDropdown] = useState(false);
   const dropdownRef = useRef(null);
@@ -39,9 +40,13 @@ export default function CustomHeader({
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
-          decreaseMonth();
+          if (isMonthPickerMode) {
+            changeYear(date.getFullYear() - 1);
+          } else {
+            decreaseMonth();
+          }
         }}
-        className="p-2 rounded-sm text-gray-900 hover:bg-gray-100"
+        className="p-2 rounded-sm text-gray-900 hover:bg-gray-100 cursor-pointer"
       >
         <ArrowLeftIcon className="w-5 h-5" />
       </button>
@@ -50,13 +55,10 @@ export default function CustomHeader({
           className="text-sm font-semibold text-gray-900 p-2 rounded-sm cursor-pointer hover:bg-gray-100"
           onClick={() => setShowYearDropdown((prev) => !prev)}
         >
-          {new Date(date.setYear(startDate.getFullYear())).toLocaleString(
-            "default",
-            {
-              month: "long",
-              year: "numeric",
-            }
-          )}
+          {new Date(date).toLocaleString("default", {
+            month: "long",
+            year: "numeric",
+          })}
         </span>
         {showYearDropdown && (
           <div
@@ -93,9 +95,13 @@ export default function CustomHeader({
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
-          increaseMonth();
+          if (isMonthPickerMode) {
+            changeYear(date.getFullYear() + 1);
+          } else {
+            increaseMonth();
+          }
         }}
-        className="p-2 rounded-sm text-gray-900 hover:bg-gray-100"
+        className="p-2 rounded-sm text-gray-900 hover:bg-gray-100 cursor-pointer"
       >
         <ArrowRightIcon className="w-5 h-5" />
       </button>

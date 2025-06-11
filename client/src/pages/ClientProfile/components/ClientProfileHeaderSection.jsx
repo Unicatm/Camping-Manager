@@ -26,7 +26,7 @@ export default function ClientProfileHeaderSection({ id }) {
       title="Profil client"
       subtitle="Vizualizează și gestionează informațiile clienților"
     >
-      <ExportButton handleOpenPdf={handleOpenPdf} />
+      <ExportButton onClickHandler={handleOpenPdf} />
     </HeaderSection>
   );
 }

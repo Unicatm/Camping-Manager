@@ -1,20 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { ArrowDownTrayIcon } from "@heroicons/react/24/outline";
 import HeaderSection from "../../../components/headerSection/HeaderSection";
 import { getRevenueRaport } from "../../../api/pdfsApi/index";
+import ExportButton from "../../../components/ui/buttons/ExportButton";
+import Calendar from "../../../components/ui/calendar/Calendar";
+import useToggleDropdown from "../../../components/hooks/useToggleDropdown";
+import { formatDateForServer } from "../../../utils/dateFormat";
 
 export default function ReservationsHeaderSection({ openModal }) {
-  const handleOpenPdf = async () => {
-    try {
-      const response = await getRevenueRaport();
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(null);
+  const { isOpen, toggle, close, dropdownRef, toggleRef } = useToggleDropdown();
 
+  useEffect(() => {
+    console.log(startDate, endDate);
+  }, [startDate, endDate]);
+
+  const handleOpenPdf = async () => {
+    if (!startDate || !endDate) {
+      alert("Selectează un interval complet de date.");
+      return;
+    }
+
+    try {
+      const response = await getRevenueRaport(startDate, endDate);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
 
       const link = document.createElement("a");
       link.href = url;
-      link.download = "raport.pdf";
+      link.download = `raport_${formatDateForServer(
+        startDate
+      )}_${formatDateForServer(endDate)}.pdf`;
       link.click();
     } catch (error) {
       console.error("Eroare la descărcarea PDF-ului:", error);
@@ -27,14 +44,51 @@ export default function ReservationsHeaderSection({ openModal }) {
       subtitle="Gestionează rezervările simplu și ușor"
     >
       <div className="flex gap-4">
-        <div>
-          <button
-            className="cursor-pointer flex justify-center items-center gap-2 w-max border-[1px] border-slate-200 bg-white text-slate-600 text-sm px-4 py-2 rounded-md transition-all duration-300 ease-in-out hover:bg-slate-100 hover:text-slate-800 hover:transition-all hover:duration-300 hover:ease-in-out"
-            onClick={handleOpenPdf}
-          >
-            <ArrowDownTrayIcon className="h-4 w-4 font-light stroke-2" />
-            <p className="whitespace-nowrap">Export</p>
-          </button>
+        <div className="relative">
+          <ExportButton onClickHandler={toggle} toggleRef={toggleRef} />
+          {isOpen && (
+            <div
+              ref={dropdownRef}
+              className="absolute translate-y-2 -translate-x-[35%] w-72 flex flex-col gap-4 p-4 z-99999 bg-white pr-2 border border-slate-200 rounded-lg focus:border-slate-400 hover:border-slate-300"
+            >
+              <p className="text-sm text-center font-semibold pb-1 pt-1">
+                Selectează perioada pentru export
+              </p>
+              <Calendar
+                id="dataCheckIn"
+                name="dataCheckIn"
+                label="Data de început"
+                selected={startDate}
+                onDateChange={(date) => {
+                  setStartDate(date);
+                }}
+                selectsStart
+                startDate={startDate}
+                endDate={endDate}
+              />
+              <Calendar
+                id="dataCheckOut"
+                name="dataCheckOut"
+                label="Dată final"
+                selected={endDate}
+                onDateChange={(date) => {
+                  setEndDate(date);
+                }}
+                selectsEnd
+                startDate={startDate}
+                endDate={endDate}
+              />
+              <button
+                className="bg-blue-600 rounded-lg px-1 py-2 text-white hover:bg-blue-700 cursor-pointer"
+                onClick={() => {
+                  handleOpenPdf();
+                  close();
+                }}
+              >
+                Generează
+              </button>
+            </div>
+          )}
         </div>
         <button
           onClick={openModal}

@@ -20,6 +20,7 @@ const Calendar = ({
   error,
   birthDate,
   register,
+  selectsRange,
 }) => {
   const currentYear = new Date().getFullYear();
   const dateLastMajorYear = new Date(new Date().setFullYear(currentYear - 18));
@@ -91,11 +92,13 @@ const Calendar = ({
             startDate={localDate}
             handleDateChange={handleDateChange}
             birthDate={birthDate}
+            isMonthPickerMode={false}
           />
         )}
         open={isOpen}
         onClickOutside={() => setIsOpen(false)}
         onSelect={() => setIsOpen(false)}
+        selectsRange={selectsRange}
       />
       {error && (
         <span className="absolute -bottom-6 left-0 text-xs text-red-700">
