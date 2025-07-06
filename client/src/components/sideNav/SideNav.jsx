@@ -1,8 +1,5 @@
 import { useState } from "react";
 import MiddleNav from "./MiddleNav";
-import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/16/solid";
-
-import logo from "../../assets/logo.png";
 import BottomNav from "./BottomNav";
 import TopLogoNav from "./TopLogoNav";
 

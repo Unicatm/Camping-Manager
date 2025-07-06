@@ -4,16 +4,17 @@ const User = require("../models/userModel");
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
 
-  const match = await bcrypt.compare(password, user.password);
+  try {
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials!" });
+    }
 
-  if (!user || !match) {
-    return res.status(401).json({ message: "Invalid credentials!" });
-  }
-
-  if (match) {
-    const role = user.role;
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(401).json({ message: "Invalid credentials!" });
+    }
 
     const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "15m",
@@ -25,43 +26,91 @@ exports.login = async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    user.refreshToken = refreshToken;
-    const result = await user.save();
-    console.log(result);
-    console.log(role);
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      { refreshToken },
+      { new: true }
+    );
+
+    console.log("User updated with refreshToken:", updatedUser.refreshToken);
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: true,
-      sameSite: "Strict",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    res.json({ role, accessToken });
-  } else {
-    res.sendStatus(401);
+
+    res.json({
+      accessToken,
+      role: user.role,
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
 exports.refresh = async (req, res) => {
   const token = req.cookies.refreshToken;
-  if (!token) return res.sendStatus(401);
+  console.log("Received refreshToken from cookie:", token);
+  if (!token) {
+    return res.status(401).json({ message: "No refresh token provided" });
+  }
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
+    const user = await User.findById(decoded.id);
+
+    console.log("User from DB:", user); 
+    console.log("RefreshToken from DB:", user?.refreshToken); 
+
+    if (!user) {
+      return res.status(403).json({ message: "User not found" });
+    }
+
+    if (user.refreshToken !== token) {
+      console.error(
+        "Token mismatch! DB token:",
+        user.refreshToken,
+        "Cookie token:",
+        token
+      );
+      return res.status(403).json({ message: "Token mismatch" });
+    }
+
     const accessToken = jwt.sign({ id: decoded.id }, process.env.JWT_SECRET, {
       expiresIn: "15m",
     });
-    res.json({ accessToken });
+
+    res.json({ accessToken, role: user.role });
   } catch (err) {
-    res.sendStatus(403);
+    console.error("Refresh error:", err);
+    res.status(403).json({ message: "Invalid refresh token" });
   }
 };
 
-exports.logout = (req, res) => {
-  res.clearCookie("refreshToken", {
-    httpOnly: true,
-    sameSite: "Strict",
-    secure: true,
-  });
-  res.status(200).json({ message: "Logged out successfully" });
+exports.logout = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    return res.sendStatus(204);
+  }
+
+  try {
+    await User.findOneAndUpdate(
+      { refreshToken },
+      { $set: { refreshToken: null } }
+    );
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      sameSite: "Strict",
+      secure: true,
+    });
+    res.status(200).json({ message: "Logged out successfully" });
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
 };

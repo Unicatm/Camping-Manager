@@ -15,14 +15,26 @@ export const loginUser = async ({ email, password }) => {
 };
 
 export const refreshToken = async () => {
-  const res = await fetch(`${BASE_URL}/refresh`, {
-    method: "GET",
-    credentials: "include",
-  });
+  try {
+    const res = await fetch(`${BASE_URL}/refresh`, {
+      method: "GET",
+      credentials: "include",
+    });
 
-  if (!res.ok) throw new Error("Refresh token expired");
-  const data = await res.json();
-  return data.accessToken;
+    if (!res.ok) {
+      if (res.status === 403) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || "Session expired - please login again");
+      }
+      throw new Error(`Refresh failed with status ${res.status}`);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Refresh token error:", error);
+    throw error;
+  }
 };
 
 export const logoutUser = async () => {
@@ -30,6 +42,8 @@ export const logoutUser = async () => {
     method: "POST",
     credentials: "include",
   });
+
+  console.log(res);
 
   if (!res.ok) throw new Error("Logout failed");
   return true;

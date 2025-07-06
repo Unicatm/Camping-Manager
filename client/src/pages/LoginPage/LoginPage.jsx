@@ -25,7 +25,7 @@ export default function LoginPage() {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="lg:h-screen grow bg-blue-50/90 flex justify-center">
+    <div className="h-screen grow bg-blue-50/90 flex justify-center">
       <form
         onSubmit={handleSubmit}
         className="flex flex-col gap-8 bg-white p-6 rounded-lg w-1/4 min-w-80 m-auto border border-slate-200"

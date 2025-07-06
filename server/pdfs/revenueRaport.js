@@ -5,7 +5,7 @@ exports.RevenueRaport = async (req, res) => {
   const { startDate, endDate } = req.query;
 
   if (!startDate || !endDate) {
-    return res.status(400).send("Datele de început și sfârșit sunt necesare.");
+    return res.status(400).send("Datele de inceput si sfarsit sunt necesare");
   }
 
   const start = new Date(startDate);
@@ -56,15 +56,6 @@ exports.RevenueRaport = async (req, res) => {
   const totalRevenue = data.reduce((sum, rez) => sum + (rez.suma || 0), 0);
 
   const doc = new PDFDocument({ margin: 30, size: "A4", bufferPages: true });
-
-  res.setHeader("Content-Type", "application/pdf");
-  res.setHeader(
-    "Content-Disposition",
-    `inline; filename="Raport_Venituri_${
-      start || moment().format("YYYY-MM-DD")
-    }-${end || moment().format("YYYY-MM-DD")}.pdf"`
-  );
-  doc.pipe(res);
 
   doc
     .fillColor("#000000")
@@ -157,4 +148,13 @@ exports.RevenueRaport = async (req, res) => {
   doc.table(table, tableOptions);
 
   doc.end();
+
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader(
+    "Content-Disposition",
+    `inline; filename="Raport_Venituri_${
+      start || moment().format("YYYY-MM-DD")
+    }-${end || moment().format("YYYY-MM-DD")}.pdf"`
+  );
+  doc.pipe(res);
 };

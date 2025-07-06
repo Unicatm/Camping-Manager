@@ -10,15 +10,16 @@ import { formatDateForServer } from "../../../utils/dateFormat";
 export default function ReservationsHeaderSection({ openModal }) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(null);
+  const [error, setIsError] = useState(false);
   const { isOpen, toggle, close, dropdownRef, toggleRef } = useToggleDropdown();
 
   useEffect(() => {
-    console.log(startDate, endDate);
-  }, [startDate, endDate]);
+    if (!isOpen) setIsError(false);
+  }, [isOpen]);
 
   const handleOpenPdf = async () => {
     if (!startDate || !endDate) {
-      alert("Selectează un interval complet de date.");
+      setIsError(true);
       return;
     }
 
@@ -33,8 +34,9 @@ export default function ReservationsHeaderSection({ openModal }) {
         startDate
       )}_${formatDateForServer(endDate)}.pdf`;
       link.click();
+      close();
     } catch (error) {
-      console.error("Eroare la descărcarea PDF-ului:", error);
+      console.error("Eroare la descarcarea PDF-ului:", error);
     }
   };
 
@@ -82,11 +84,15 @@ export default function ReservationsHeaderSection({ openModal }) {
                 className="bg-blue-600 rounded-lg px-1 py-2 text-white hover:bg-blue-700 cursor-pointer"
                 onClick={() => {
                   handleOpenPdf();
-                  close();
                 }}
               >
                 Generează
               </button>
+              {error && (
+                <div className="py-2 px-1 text-xs bg-red-300/40 text-red-800 rounded-lg pl-4">
+                  <p>Alege o perioadă validă!</p>
+                </div>
+              )}
             </div>
           )}
         </div>
