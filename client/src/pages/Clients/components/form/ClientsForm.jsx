@@ -21,7 +21,7 @@ function ClientsForm({ onClose, isEditing, clientId }) {
       onSubmit={handleSubmit(onSubmit)}
       className="fixed inset-0 overflow-x-auto md:flex md:items-center md:justify-center bg-black/50 z-50"
     >
-      <div className="inset-0 flex flex-col gap-6 p-4 py-8 h-max items-center m-auto justify-center bg-white shadow-md md:p-8 md:w-[80%] md:rounded-xl lg:py-6 lg:fixed lg:w-[40%] lg:min-w-lg lg:p-8 lg:h-max lg:rounded-lg">
+      <div className="inset-0 flex flex-col gap-6 p-4 py-8 h-screen items-center m-auto justify-center bg-white shadow-md md:p-8 md:w-[80%] md:rounded-xl lg:py-6 lg:fixed lg:w-[40%] lg:min-w-lg lg:p-8 lg:h-max lg:rounded-lg">
         <h2 className="font-bold text-2xl">
           {isEditing ? <p>Editează clientul</p> : <p>Adaugă un client</p>}
         </h2>

@@ -12,7 +12,7 @@ import useReservationsData from "../../hooks/useReservationsData";
 import useCreateReservation from "../../hooks/useCreateReservation";
 import useUpdateReservation from "../../hooks/useUpdateReservation";
 
-function ReservationsForm({ onClose, isEditing, rezervareId }) {
+function ReservationsForm({ onClose, isEditing, rezervareId, initialSpot }) {
   const [selectedDataIn, setSelectedDataIn] = useState(new Date());
   const [selectedDataOut, setSelectedDataOut] = useState(null);
   const [tipuriAuto, setTipuriAuto] = useState({});
@@ -31,8 +31,8 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
       adulti: "",
       copii: "",
       tipAuto: {},
-      idLoc: "",
-      hasElectricity: false,
+      idLoc: initialSpot?.id || "",
+      hasElectricity: initialSpot?.hasElectricity || false,
     },
   });
 
@@ -101,6 +101,14 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
   }, [tipuriAuto, setValue]);
 
   useEffect(() => {
+    if (initialSpot?.id) {
+      setValue("idLoc", initialSpot?.id);
+    } else if (rezervare && isEditing) {
+      setValue("idLoc", rezervare.idLoc || "");
+    }
+  }, [initialSpot, setValue, rezervare, isEditing]);
+
+  useEffect(() => {
     if (rezervare && isEditing) {
       setTipuriAuto(rezervare.tipAuto);
 
@@ -114,7 +122,6 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
       );
       setValue("adulti", rezervare.facilitati["Adult"] || "0");
       setValue("copii", rezervare.facilitati["Copii 3-12 ani"] || "0");
-      setValue("idLoc", rezervare.idLoc || "");
       setTipuriAuto(rezervare.tipAuto || {});
       setValue("tipAuto", rezervare.tipAuto || {});
       setValue("hasElectricity", rezervare.hasElectricity || "");
@@ -148,7 +155,6 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
           name="idClient"
           defaultValue={selectedClient}
           onSelect={(client) => {
-            console.log(client);
             if (client && client._id) {
               setValue("idClient", client._id);
             } else {

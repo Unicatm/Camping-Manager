@@ -5,7 +5,7 @@ import PopupLocLiber from "./components/PopupLocLiber";
 import { getLocuriZi } from "../../api/locuriApi";
 import spots from "./spots";
 
-export default function Map() {
+export default function Map({ onAddRezervare }) {
   const [selectedSpot, setSelectedSpot] = useState(null);
   const spotRef = useRef(null);
 
@@ -44,15 +44,18 @@ export default function Map() {
             ...pos,
             ...spotData,
           };
-
           return (
             <div
               key={fullSpot.id}
-              className={`absolute flex justify-center items-center w-12 h-18 border-2 ${
-                fullSpot.status === "Ocupat"
-                  ? "bg-red-400 border-red-600"
-                  : "bg-amber-200 border-amber-400"
-              } rounded-lg px-2 py-1 font-bold text-sm cursor-pointer`}
+              className={`absolute flex justify-center items-center w-12 h-18 border-2
+      ${
+        fullSpot.status === "Ocupat"
+          ? "bg-red-400 border-red-600"
+          : fullSpot.hasElectricity
+          ? "bg-lime-200 border-lime-600"
+          : "bg-amber-200 border-amber-400"
+      }
+      rounded-lg px-2 py-1 font-bold text-sm cursor-pointer`}
               style={{
                 top: `${fullSpot.top}%`,
                 left: `${fullSpot.left}%`,
@@ -78,6 +81,7 @@ export default function Map() {
                 selectedSpot={selectedSpot}
                 onClose={closePopup}
                 ignoreRef={spotRef}
+                onAddRezervare={() => onAddRezervare(selectedSpot)}
               />
             )}
           </>

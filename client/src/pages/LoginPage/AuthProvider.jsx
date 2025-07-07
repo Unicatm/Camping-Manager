@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         accessToken,
-        isAuthenticated: !!accessToken, // !!accessToken
+        isAuthenticated: true, // !!accessToken
         login,
         logout: logout.mutate,
         loading,

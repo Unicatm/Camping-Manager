@@ -1,9 +1,23 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import useClickOutside from "../../../components/hooks/useClickOutside";
 
-export default function PopupLocLiber({ selectedSpot, onClose, ignoreRef }) {
+export default function PopupLocLiber({
+  selectedSpot,
+  onClose,
+  ignoreRef,
+  onAddRezervare,
+}) {
   const popupRef = useRef(null);
   useClickOutside(popupRef, onClose, ignoreRef);
+
+  const handleAddRezervareClick = () => {
+    onClose();
+    onAddRezervare();
+  };
+
+  useEffect(() => {
+    console.log(selectedSpot);
+  }, [selectedSpot]);
 
   return (
     <div
@@ -15,13 +29,13 @@ export default function PopupLocLiber({ selectedSpot, onClose, ignoreRef }) {
         transform: "translate(-35%, -110%)",
       }}
     >
-      <h3 className="text-md font-bold mb-4">Adaugă rezervare</h3>
+      <h3 className="text-md font-bold mb-4">Adaugă o rezervare nouă</h3>
 
       <div className="flex flex-col gap-2">
-        <button className="text-sm text-gray-600 font-medium border border-gray-300 rounded-md px-4 py-1 bg-white hover:bg-gray-50 transition cursor-pointer">
-          Rezervare existentă
-        </button>
-        <button className="text-sm text-gray-600 font-medium border border-gray-300 rounded-md px-4 py-1 bg-white hover:bg-gray-50 transition cursor-pointer">
+        <button
+          onClick={handleAddRezervareClick}
+          className="text-sm text-gray-600 font-medium border border-gray-300 rounded-md px-4 py-1 bg-white hover:bg-gray-50 transition cursor-pointer"
+        >
           Adaugă rezervare
         </button>
       </div>
