@@ -18,7 +18,7 @@ const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 const CustomTooltip = ({ active, payload, data }) => {
   if (active && payload && payload.length) {
     const total = data?.reduce((sum, item) => sum + item.count, 0);
-    const procent = (payload[0].payload.count / total) * 100;
+    const procent = Math.trunc((payload[0].payload.count / total) * 100);
 
     return (
       <div className="bg-white p-2 border border-gray-300 rounded shadow-md">
