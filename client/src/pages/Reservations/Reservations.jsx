@@ -28,7 +28,7 @@ function Reservations() {
     useHandleEditReservation(openModal);
 
   return (
-    <div className="h-fit lg:h-screen grow bg-blue-50/90">
+    <div className="h-max grow bg-blue-50/90">
       <div className="relative w-11/12 h-full mx-auto py-8 flex flex-col">
         <ReservationsHeaderSection
           openModal={() => {

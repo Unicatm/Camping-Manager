@@ -12,7 +12,7 @@ export default function Home() {
   const [isClientModalOpen, setClientModalOpen] = useState(false);
 
   return (
-    <div className="lg:h-max grow bg-blue-50/90">
+    <div className="h-fill grow bg-blue-50/90">
       <div className="flex flex-col gap-2 lg:grid lg:grid-cols-4 lg:grid-rows-6 lg:gap-4 relative w-11/12 h-fit lg:h-screen mx-auto py-8">
         <ActionSection
           onAddRezervare={() => setRezervareModalOpen(true)}

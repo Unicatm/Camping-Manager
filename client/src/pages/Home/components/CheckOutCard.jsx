@@ -10,7 +10,7 @@ export default function CheckOutCard() {
   });
 
   return (
-    <div className="col-start-3 col-end-5 row-start-3 row-end-7 bg-white rounded-xl border border-gray-200 p-6 flex flex-col">
+    <div className="lg:col-start-3 lg:col-end-5 lg:row-start-3 lg:row-end-7 bg-white rounded-xl border border-gray-200 p-6 flex flex-col">
       <h2 className="text-2xl font-bold mb-1">Check-out-uri pentru astăzi</h2>
       <p className="text-gray-500 text-sm mb-6">
         Clienți care urmează să plece

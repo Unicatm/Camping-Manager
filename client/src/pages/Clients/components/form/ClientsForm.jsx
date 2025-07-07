@@ -19,9 +19,9 @@ function ClientsForm({ onClose, isEditing, clientId }) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
+      className="fixed inset-0 overflow-x-auto md:flex md:items-center md:justify-center bg-black/50 z-50"
     >
-      <div className="fixed inset-0 flex flex-col gap-6 items-center m-auto w-[40%] min-w-xl p-8 h-max bg-white shadow-md sm:rounded-lg">
+      <div className="inset-0 flex flex-col gap-6 p-4 py-8 h-max items-center m-auto justify-center bg-white shadow-md md:p-8 md:w-[80%] md:rounded-xl lg:py-6 lg:fixed lg:w-[40%] lg:min-w-lg lg:p-8 lg:h-max lg:rounded-lg">
         <h2 className="font-bold text-2xl">
           {isEditing ? <p>Editează clientul</p> : <p>Adaugă un client</p>}
         </h2>
@@ -43,7 +43,7 @@ function ClientsForm({ onClose, isEditing, clientId }) {
           register={register}
           error={errors.nume}
         />
-        <div className="flex gap-8 w-full pb-4">
+        <div className="w-full flex flex-col gap-6 md:flex-row lg:gap-8 lg:pb-4">
           <Select
             data={countryData}
             width="w-full"
@@ -70,7 +70,7 @@ function ClientsForm({ onClose, isEditing, clientId }) {
             />
           </div>
         </div>
-        <div className="relative flex gap-8 w-full pt-4 before:absolute before:w-5/6 before:h-[0.5px] before:bg-blue-950/20 before:top-0 before:left-1/2 before:-translate-x-1/2">
+        <div className="relative flex flex-col gap-6 md:flex-row lg:gap-8 w-full lg:pt-4 lg:before:absolute lg:before:w-5/6 lg:before:h-[0.5px] lg:before:bg-blue-950/20 lg:before:top-0 lg:before:left-1/2 lg:before:-translate-x-1/2">
           <Input
             width="w-full"
             id="email"

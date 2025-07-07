@@ -1,4 +1,3 @@
-import React from "react";
 import useTotalReservationsData from "../../Reservations/components/widgets/hooks/useTotalReservationsData";
 import useClientGrowthData from "../../Clients/components/widgets/hooks/useClientGrowthData";
 import useTotalSpaces from "../hooks/useTotalSpaces";
@@ -17,7 +16,7 @@ export default function StatsWidgets() {
   const { data: totalNumberOfSpaces } = useTotalSpaces();
   const { data: currentYearRevenue } = useCurrentYearRevenue();
   return (
-    <>
+    <div className="grid w-full gap-4 pb-10 lg:pb-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
       <SimpleWidget
         title={"Rezervari totale"}
         data={totalReservations}
@@ -39,6 +38,6 @@ export default function StatsWidgets() {
         icon={BanknotesIcon}
         unit={"lei"}
       />
-    </>
+    </div>
   );
 }

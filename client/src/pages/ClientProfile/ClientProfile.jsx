@@ -17,15 +17,15 @@ function ClientsReservations() {
   });
 
   return (
-    <div className="w-full h-screen flex flex-col bg-blue-50/90">
+    <div className="w-full h-max flex flex-col bg-blue-50/90">
       <div className="w-11/12 mx-auto py-8 flex flex-col flex-grow">
         <ClientProfileHeaderSection id={id} />
 
-        <div className="grid grid-cols-4 grid-rows-5 gap-6 flex-grow h-full">
+        <div className="flex flex-col lg:grid xl:grid-cols-4 xl:grid-rows-5 gap-6 flex-grow h-full">
           <ClientCard client={data} />
 
-          <div className="col-start-2 col-end-5 row-start-1 row-end-6 flex flex-col gap-6">
-            <ClientWidgetsSection idClient={id} />
+          <ClientWidgetsSection idClient={id} />
+          <div className="lg:col-start-1 lg:col-end-3 lg:row-start-6 lg:row-end-7 xl:col-start-2 xl:col-end-5 xl:row-start-2 xl:row-end-6 flex flex-col gap-6">
             <div>
               <h2 className="text-lg font-bold">Istoricul rezervărilor</h2>
               <p className="text-sm text-slate-500">

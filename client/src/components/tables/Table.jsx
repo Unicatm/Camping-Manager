@@ -1,9 +1,5 @@
-import React, { useEffect, useMemo, useState } from "react";
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  ArrowsRightLeftIcon,
-} from "@heroicons/react/16/solid";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowDownIcon, ArrowUpIcon } from "@heroicons/react/16/solid";
 import { LuArrowUpDown } from "react-icons/lu";
 
 const TableElement = ({ children }) => (

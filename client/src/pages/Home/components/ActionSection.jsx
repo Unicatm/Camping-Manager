@@ -1,4 +1,3 @@
-import React from "react";
 import ActionCard from "./ActionCard";
 import { BsFillPersonPlusFill } from "react-icons/bs";
 import { ChartBarIcon, MapIcon } from "@heroicons/react/20/solid";
@@ -27,14 +26,18 @@ export default function ActionSection({ onAddRezervare, onAddClient }) {
           "self-stretch lg:col-start-1 lg:col-end-2 lg:row-start-1 lg:row-end-2"
         }
         handleClick={onAddRezervare}
+        display={"flex"}
       />
       <ActionCard
         title={"Adaugă client"}
         subtitle={"Înregistrează client nou"}
         icon={BsFillPersonPlusFill}
         color={"yellow"}
-        grid={"self-stretch col-start-2 col-end-3 row-start-1 row-end-2"}
+        grid={
+          "self-stretch lg:col-start-2 lg:col-end-3 lg:row-start-1 lg:row-end-2"
+        }
         handleClick={onAddClient}
+        display={"flex"}
       />
       <ActionCard
         title={"Vizualizează harta"}

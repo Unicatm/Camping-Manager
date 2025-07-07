@@ -17,24 +17,28 @@ export default function ReservationsWidgets() {
   const { data: averageDays } = useAverageDays();
   const { data: totalActiveReservations } = useActiveReservationsData();
   return (
-    <div className="flex flex-col lg:flex-row items-center justify-between gap-4 pb-10 lg:pb-6">
+    <div className="grid w-full gap-4 pb-10 lg:pb-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
       <SimpleWidget
+        width="w-full"
         title={"Rezervari totale"}
         data={totalReservations}
         icon={BookmarkIcon}
       />
       <SimpleLabelWidget
+        width="w-full"
         title={"Rezervari in curs"}
         data={totalActiveReservations}
         label={"În curs"}
         icon={Battery50Icon}
       />
       <SimpleWidget
+        width="w-full"
         title={"Media zilelor petrecute"}
         data={averageDays}
         icon={SunIcon}
       />
       <SimpleWidget
+        width="w-full"
         title={"Locuri libere"}
         data={averageDays}
         icon={MapPinIcon}

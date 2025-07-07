@@ -51,7 +51,7 @@ export default function ReservationsHeaderSection({ openModal }) {
           {isOpen && (
             <div
               ref={dropdownRef}
-              className="absolute translate-y-2 -translate-x-[35%] w-72 flex flex-col gap-4 p-4 z-99999 bg-white pr-2 border border-slate-200 rounded-lg focus:border-slate-400 hover:border-slate-300"
+              className="absolute left-0 top-14 w-72 lg:translate-y-2 lg:-translate-x-[35%] flex flex-col gap-4 p-4 z-99999 bg-white pr-2 border border-slate-200 rounded-lg focus:border-slate-400 hover:border-slate-300"
             >
               <p className="text-sm text-center font-semibold pb-1 pt-1">
                 Selectează perioada pentru export

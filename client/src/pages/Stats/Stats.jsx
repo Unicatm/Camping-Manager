@@ -16,13 +16,13 @@ export default function Stats() {
   const years = data?.years || [];
 
   return (
-    <div className="h-fit grow bg-blue-50/90">
+    <div className="h-max grow bg-blue-50/90">
       <div className="relative w-11/12 h-full mx-auto py-8 flex flex-col gap-4">
         <h2 className="font-bold text-2xl pb-4 lg:pb-6 lg:text-2xl">
           Statistici
         </h2>
+        <StatsWidgets />
         <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 flex-1">
-          <StatsWidgets />
           <div className="w-fit text-2xl pt-6 pb-2 font-bold">Grafice</div>
           <IncomingRevenueChart years={years} />
           <PredominantNationalitiesChart years={years} />

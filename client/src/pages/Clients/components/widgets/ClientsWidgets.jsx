@@ -8,7 +8,7 @@ export default function ClientsWidgets() {
   const { data: clientGrowthData } = useClientGrowthData();
   const { data: weeklyNewClientsData } = useWeeklyNewClientsStats();
   return (
-    <div className="flex flex-row items-center justify-between gap-4 w-1/2 pb-6">
+    <div className="flex flex-col md:flex-row items-center justify-between gap-4 pb-10 lg:pb-6">
       <AnalyticWidget
         data={clientGrowthData}
         title={"Total clienți"}

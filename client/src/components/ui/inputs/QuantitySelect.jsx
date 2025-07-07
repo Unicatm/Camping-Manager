@@ -55,7 +55,7 @@ export default function QuantitySelect({
     };
   }, [isOpen]);
 
-  const maxVisibleItems = 2;
+  const maxVisibleItems = 1;
 
   return (
     <div ref={dropdownRef} className={`relative ${width} ${flex}`}>
@@ -85,15 +85,20 @@ export default function QuantitySelect({
             ))}
           {Object.entries(data).filter(([, value]) => value > 0).length >
             maxVisibleItems && (
-            <span className="bg-blue-200 text-blue-900 px-2 py-1 text-xs rounded-md">
-              +{Object.entries(data).length - maxVisibleItems}
-            </span>
+            <>
+              <span className="hidden lg:block bg-blue-200 text-blue-900 px-2 py-1 text-xs rounded-md">
+                +{Object.entries(data).length - maxVisibleItems}
+              </span>
+              <span className="block lg:hidden bg-blue-200 text-blue-900 px-2 py-1 text-xs rounded-md">
+                +{Object.entries(data).length - maxVisibleItems}
+              </span>
+            </>
           )}
         </div>
         <ChevronDownIcon className="w-4 h-4" />
       </div>
       {isOpen && (
-        <div className="absolute w-full min-h-fit max-h-40 h-40 top-full left-0 z-10 mt-2 bg-white shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20 cursor-default">
+        <div className="absolute lg:w-full w-max h-50 lg:min-h-fit lg:max-h-40 lg:h-40 top-full left-0 z-10 mt-2 bg-white shadow-md shadow-blue-950/10 rounded-md border-[1px] border-blue-950/20 cursor-default">
           <div className="flex flex-col overflow-y-auto h-full rounded-md text-blue-950">
             {labelData?.map((label) => (
               <div

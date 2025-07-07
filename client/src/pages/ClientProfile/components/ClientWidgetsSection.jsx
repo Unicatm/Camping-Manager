@@ -7,7 +7,7 @@ import useTotalExpenses from "../hooks/useTotalExpenses";
 export default function ClientWidgetsSection({ idClient }) {
   const { data: expenses } = useTotalExpenses({ idClient });
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col md:flex-row gap-4 lg:flex-col lg:col-start-2 lg:col-end-3 lg:row-start-1 lg:row-end-6 xl:flex-row xl:col-start-2 xl:col-end-5">
       <SimpleWidget
         title={"Medie zile campate"}
         data={{ total: expenses?.medieZileCampate }}

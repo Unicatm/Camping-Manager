@@ -134,9 +134,9 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="fixed inset-0 flex items-center justify-center bg-black/50 z-50"
+      className="fixed inset-0 overflow-x-auto md:flex md:items-center md:justify-center bg-black/50 z-50"
     >
-      <div className="fixed inset-0 flex flex-col gap-6 items-center m-auto w-[40%] min-w-xl p-8 h-max bg-white shadow-md sm:rounded-lg">
+      <div className="inset-0 flex flex-col gap-6 p-4 py-8 h-max items-center m-auto justify-center bg-white shadow-md md:p-8 md:w-[80%] md:rounded-xl lg:py-6 lg:fixed lg:w-[40%] lg:min-w-lg lg:p-8 lg:h-max lg:rounded-lg">
         <h2 className="font-bold text-2xl">
           {isEditing ? <p>Editează rezervarea</p> : <p>Adaugă o rezervare</p>}
         </h2>
@@ -157,7 +157,7 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
           }}
           error={errors.idClient}
         />
-        <div className="flex gap-6 w-full pb-4">
+        <div className="flex flex-col md:flex-row gap-6 w-full md:pb-4">
           <Input
             width="w-full"
             id="adulti"
@@ -185,7 +185,7 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
             }
           />
         </div>
-        <div className="relative pt-6 flex gap-6 w-full before:absolute before:w-5/6 before:h-[0.5px] before:bg-blue-950/20 before:top-0 before:left-1/2 before:-translate-x-1/2">
+        <div className="relative flex flex-col md:flex-row gap-6 w-full md:pt-6 md:before:absolute md:before:w-5/6 md:before:h-[0.5px] md:before:bg-blue-950/20 md:before:top-0 md:before:left-1/2 md:before:-translate-x-1/2">
           <Calendar
             id="dataCheckIn"
             name="dataCheckIn"
@@ -221,7 +221,7 @@ function ReservationsForm({ onClose, isEditing, rezervareId }) {
             register={register}
           />
         </div>
-        <div className="flex gap-6 w-full">
+        <div className="flex flex-col md:flex-row gap-6 w-full">
           <QuantitySelect
             width="w-full"
             id="tipAuto"

@@ -8,7 +8,7 @@ export default function CustomInput({ value, id, name, setIsOpen }) {
         id={id}
         name={name}
         type="text"
-        className="w-full bg-white text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow pr-10"
+        className="w-full bg-white text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 focus:shadow pr-5"
         value={value}
         onClick={(e) => {
           e.stopPropagation();

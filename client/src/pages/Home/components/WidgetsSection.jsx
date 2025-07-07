@@ -17,7 +17,7 @@ export default function WidgetsSection() {
         data={totalActiveReservations}
         label={"În curs"}
         icon={RiLoopLeftFill}
-        grid={"col-start-1 col-end-2 row-start-2 row-end-3"}
+        grid={"lg:col-start-1 lg:col-end-2 lg:row-start-2 lg:row-end-3"}
       />
       <SimpleWidget
         title={"Încasări an curent"}
@@ -30,7 +30,9 @@ export default function WidgetsSection() {
         title={"Locuri libere"}
         data={totalActiveReservations}
         icon={RiLoopLeftFill}
-        grid={"col-start-3 col-end-5 row-start-2 row-end-3"}
+        grid={
+          "lg:col-start-3 lg:col-end-5 lg:row-start-2 lg:row-end-3"
+        }
       />
     </>
   );

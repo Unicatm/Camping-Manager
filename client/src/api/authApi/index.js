@@ -24,7 +24,9 @@ export const refreshToken = async () => {
     if (!res.ok) {
       if (res.status === 403) {
         const errorData = await res.json().catch(() => ({}));
-        throw new Error(errorData.message || "Session expired - please login again");
+        throw new Error(
+          errorData.message || "Session expired - please login again"
+        );
       }
       throw new Error(`Refresh failed with status ${res.status}`);
     }

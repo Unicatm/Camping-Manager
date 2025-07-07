@@ -65,7 +65,7 @@ export const getClientGrowthData = async () => {
   return data;
 };
 
-export const getWeeklyNewClientsStats  = async () => {
+export const getWeeklyNewClientsStats = async () => {
   const res = await fetch(`${BASE_URL}/stats/weekly-new-data`);
 
   const resData = await res.json();
