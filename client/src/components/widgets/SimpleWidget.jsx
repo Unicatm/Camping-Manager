@@ -1,4 +1,3 @@
-import React from "react";
 import { StatsWidget } from "./StatsWidget";
 
 export default function SimpleWidget({

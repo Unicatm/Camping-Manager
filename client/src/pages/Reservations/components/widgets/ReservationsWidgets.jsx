@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import SimpleWidget from "../../../../components/widgets/SimpleWidget";
 import {
   SunIcon,
@@ -11,11 +11,18 @@ import SimpleLabelWidget from "../../../../components/widgets/SimpleLabelWidget"
 import useAverageDays from "./hooks/useAverageDays";
 import useTotalReservationsData from "./hooks/useTotalReservationsData";
 import useActiveReservationsData from "./hooks/useActiveReservationsData";
+import useLocuriLibere from "./hooks/useLocuriLibere";
 
 export default function ReservationsWidgets() {
   const { data: totalReservations } = useTotalReservationsData();
   const { data: averageDays } = useAverageDays();
   const { data: totalActiveReservations } = useActiveReservationsData();
+  const { data: locuriLibere } = useLocuriLibere();
+
+  useEffect(() => {
+    console.log(locuriLibere);
+  });
+
   return (
     <div className="grid w-full gap-4 pb-10 lg:pb-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
       <SimpleWidget
@@ -40,7 +47,7 @@ export default function ReservationsWidgets() {
       <SimpleWidget
         width="w-full"
         title={"Locuri libere"}
-        data={averageDays}
+        data={locuriLibere}
         icon={MapPinIcon}
       />
     </div>

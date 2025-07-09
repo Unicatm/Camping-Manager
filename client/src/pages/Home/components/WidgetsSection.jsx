@@ -4,11 +4,14 @@ import { BanknotesIcon } from "@heroicons/react/20/solid";
 import useActiveReservationsData from "../../Reservations/components/widgets/hooks/useActiveReservationsData";
 import SimpleLabelWidget from "../../../components/widgets/SimpleLabelWidget";
 import SimpleWidget from "../../../components/widgets/SimpleWidget";
+import DoubleDataWidget from "../../../components/widgets/DoubleDataWidget";
 import useCurrentYearRevenue from "../../Stats/hooks/useCurrentYearRevenue";
+import useLocuriLibere from "../../Reservations/components/widgets/hooks/useLocuriLibere";
 
 export default function WidgetsSection() {
   const { data: totalActiveReservations } = useActiveReservationsData();
   const { data: currentYearRevenue } = useCurrentYearRevenue();
+  const { data: locuriLibere } = useLocuriLibere();
 
   return (
     <>
@@ -26,13 +29,15 @@ export default function WidgetsSection() {
         unit={"lei"}
         display={"hidden lg:flex"}
       />
-      <SimpleWidget
-        title={"Locuri libere"}
-        data={totalActiveReservations}
+      <DoubleDataWidget
+        title={"Locuri libere astăzi"}
+        data={locuriLibere}
+        firstDataKey={"cuEnergie"}
+        secondDataKey={"faraEnergie"}
+        firstUnit={"cu energie"}
+        secontUnit={"făra energie"}
         icon={RiLoopLeftFill}
-        grid={
-          "lg:col-start-3 lg:col-end-5 lg:row-start-2 lg:row-end-3"
-        }
+        grid={"lg:col-start-3 lg:col-end-5 lg:row-start-2 lg:row-end-3"}
       />
     </>
   );

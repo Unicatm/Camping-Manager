@@ -61,6 +61,36 @@ StatsWidget.DisplayDataLabel = function DisplayDataLabel({ label }) {
   );
 };
 
+StatsWidget.DisplayDoubleDataLabel = function DisplayDoubleDataLabel({
+  firstUnit,
+  secondUnit,
+  firstDataKey,
+  secondDataKey,
+}) {
+  const { data } = useStatsWidgetContext();
+  return (
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-4 w-fit h-max pt-2">
+        <p className="text-2xl font-bold text-slate-900">
+          {" "}
+          {data?.[firstDataKey] != null
+            ? Number(Number(data?.[firstDataKey]).toFixed(2))
+            : 0}
+          {" " + firstUnit}
+        </p>
+        <span>|</span>
+        <p className="text-2xl font-bold text-slate-900">
+          {" "}
+          {data?.[secondDataKey] != null
+            ? Number(Number(data?.[secondDataKey]).toFixed(2))
+            : 0}
+          {" " + secondUnit}
+        </p>
+      </div>
+    </div>
+  );
+};
+
 StatsWidget.ChangeIndicator = function ChangeIndicator({ referenceText }) {
   const [isLower, setIsLower] = useState(false);
   const { data } = useStatsWidgetContext();

@@ -114,6 +114,56 @@ exports.getLocuriZi = async (req, res) => {
   }
 };
 
+exports.getNumarLocuriLibere = async (req, res) => {
+  try {
+    const azi = new Date();
+    azi.setHours(0, 0, 0, 0);
+    const maine = new Date(azi);
+    maine.setDate(maine.getDate() + 1);
+
+    const locuri = await LocuriCampare.find();
+
+    const rezervari = await Rezervare.find({
+      dataCheckIn: { $lte: maine },
+      dataCheckOut: { $gte: azi },
+      status: "În curs",
+    });
+
+    let cuEnergieLibere = 0;
+    let faraEnergieLibere = 0;
+
+    locuri.forEach((loc) => {
+      const esteOcupat = rezervari.some(
+        (rez) => String(rez.idLoc) === String(loc._id)
+      );
+
+      if (!esteOcupat) {
+        if (loc.hasElectricity) {
+          cuEnergieLibere++;
+        } else {
+          faraEnergieLibere++;
+        }
+      }
+    });
+
+    res.status(200).json({
+      status: "succes",
+      data: {
+        locuriLibere: {
+          cuEnergie: cuEnergieLibere,
+          faraEnergie: faraEnergieLibere,
+          total: faraEnergieLibere + cuEnergieLibere,
+        },
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "failed",
+      message: err.message,
+    });
+  }
+};
+
 exports.getLocuriDisponibile = async (req, res) => {
   try {
     const { start, end, energie } = req.query;

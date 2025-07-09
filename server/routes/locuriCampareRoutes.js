@@ -12,6 +12,9 @@ router
   .route("/get-total-number-of-spaces")
   .get(locuriCampareController.getTotalLocuriCampare);
 
+router
+  .route("/locuri-libere")
+  .get(locuriCampareController.getNumarLocuriLibere);
 router.route("/locuri/zi").get(locuriCampareController.getLocuriZi);
 router.route("/disponibile").get(locuriCampareController.getLocuriDisponibile);
 

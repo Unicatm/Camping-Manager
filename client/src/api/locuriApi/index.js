@@ -33,6 +33,17 @@ export const getLocuriZi = async () => {
   return resData.data.rezultat;
 };
 
+export const getNumarLocuriDisponibile = async () => {
+  const res = await fetch(`${BASE_URL}/locuri-libere`);
+
+  if (!res.ok) {
+    throw new Error(`HTTP error! Status: ${res.status}`);
+  }
+
+  const resData = await res.json();
+  return resData.data.locuriLibere;
+};
+
 export const getLocuriDisponibile = async ({ start, end, energie }) => {
   const res = await fetch(
     `${BASE_URL}/disponibile?start=${start}&end=${end}&energie=${energie}`

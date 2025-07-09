@@ -5,6 +5,7 @@ import priceListTabelHeads from "./priceListTableHeads";
 import Table from "../../../../components/tables/Table";
 import PriceListTableData from "./PriceListTableData";
 import ExportButton from "../../../../components/ui/buttons/ExportButton";
+import { getPriceList } from "../../../../api/pdfsApi";
 
 export default function PriceList() {
   const {
@@ -16,6 +17,22 @@ export default function PriceList() {
     queryFn: getFacilitati,
   });
 
+  const handleOpenPdf = async () => {
+    try {
+      const response = await getPriceList();
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "Lista_Preturi.pdf";
+      link.click();
+      close();
+    } catch (error) {
+      console.error("Eroare la descarcarea PDF-ului:", error);
+    }
+  };
+
   return (
     <div className="p-6 bg-white rounded-xl border border-gray-200 flex flex-col lg:col-start-1 lg:col-end-3 lg:row-start-3 lg:row-end-7">
       <div className="flex flex-col lg:flex-row lg:justify-between items-start pb-4 lg:pb-0">
@@ -25,7 +42,7 @@ export default function PriceList() {
             Prețurile curente ale facilităților
           </p>
         </div>
-        <ExportButton handleOpenPdf={""} />
+        <ExportButton onClickHandler={handleOpenPdf} />
       </div>
 
       <Table
@@ -35,7 +52,7 @@ export default function PriceList() {
         isFetching={isFetching}
         isError={isError}
       >
-        <PriceListTableData data={preturi} forPreview={false} />
+        <PriceListTableData data={preturi} forPreview={true} />
       </Table>
     </div>
   );
