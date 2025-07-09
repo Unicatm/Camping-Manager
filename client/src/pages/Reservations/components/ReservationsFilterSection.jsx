@@ -1,22 +1,16 @@
-import React, { useState } from "react";
 import Select from "../../../components/ui/inputs/Select";
 import Input from "../../../components/ui/inputs/Input";
 
-export default function ReservationsFilterSection({ onSearch }) {
+export default function ReservationsFilterSection({ onSearch, filters }) {
   const tipRes = ["Toate", "În curs", "Terminată"];
 
-  const [searchText, setSearchText] = useState("");
-  const [status, setStatus] = useState("Toate");
-
-  const handleStatusChange = (value) => {
-    setStatus(value);
-    onSearch({ searchText, status: value });
+  const handleStatusChange = (newStatus) => {
+    onSearch({ ...filters, status: newStatus });
   };
 
   const handleSearchChange = (e) => {
-    const value = e.target.value;
-    setSearchText(value);
-    onSearch({ searchText: value, status });
+    const newSearchText = e.target.value;
+    onSearch({ ...filters, searchText: newSearchText });
   };
 
   return (
@@ -26,12 +20,13 @@ export default function ReservationsFilterSection({ onSearch }) {
         placeholder="Caută..."
         onChange={handleSearchChange}
         label="Caută după client"
+        value={filters.searchText}
       />
       <Select
         data={tipRes}
         width="w-fit"
         label="Status"
-        value={status}
+        value={filters.status}
         setValue={handleStatusChange}
       />
     </div>

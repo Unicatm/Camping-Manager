@@ -19,10 +19,6 @@ export default function ReservationsWidgets() {
   const { data: totalActiveReservations } = useActiveReservationsData();
   const { data: locuriLibere } = useLocuriLibere();
 
-  useEffect(() => {
-    console.log(locuriLibere);
-  });
-
   return (
     <div className="grid w-full gap-4 pb-10 lg:pb-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-4">
       <SimpleWidget

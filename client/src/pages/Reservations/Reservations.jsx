@@ -10,7 +10,7 @@ import useDeleteReservation from "./hooks/useDeleteReservation";
 import useModal from "../../components/hooks/useModal";
 import useHandleEditReservation from "./hooks/useHandleEditReservation";
 import useFetchReservations from "./hooks/useFetchReservations";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Reservations() {
   const [filters, setFilters] = useState({ searchText: "", status: "Toate" });
@@ -22,10 +22,19 @@ function Reservations() {
     data: rezervari,
     isError,
     isFetching,
-  } = useFetchReservations(filters);
+  } = useFetchReservations({ status: filters.status });
   const handleDeleteRezervare = useDeleteReservation();
   const { isEditing, selectedRezervareId, handleEdit, resetEdit } =
     useHandleEditReservation(openModal);
+
+  const filteredReservations = rezervari?.filter((rezervare) => {
+    const clientName = rezervare.numeClient || "";
+    return clientName.toLowerCase().includes(filters.searchText.toLowerCase());
+  });
+
+  useEffect(() => {
+    console.log(filteredReservations);
+  }, [filteredReservations]);
 
   return (
     <div className="h-max grow bg-blue-50/90">
@@ -37,7 +46,7 @@ function Reservations() {
         />
 
         <ReservationsWidgets />
-        <ReservationsFilterSection onSearch={setFilters} />
+        <ReservationsFilterSection onSearch={setFilters} filters={filters} />
 
         {isModalOpen && (
           <ReservationsForm
@@ -50,14 +59,14 @@ function Reservations() {
           />
         )}
         <Table
-          data={rezervari}
+          data={filteredReservations}
           columns={rezervariTableHeads}
           forPreview={false}
           isFetching={isFetching}
           isError={isError}
         >
           <ReservationsTableData
-            rezervari={rezervari}
+            rezervari={filteredReservations}
             forPreview={false}
             onEdit={handleEdit}
             onDelete={handleDeleteRezervare}
