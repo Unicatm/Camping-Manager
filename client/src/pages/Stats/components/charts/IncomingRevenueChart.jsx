@@ -89,11 +89,6 @@ export default function IncomingRevenueChart({ years = [] }) {
         </div>
 
         <div className="flex gap-2 text-sm">
-          <button className="h-fit flex items-center gap-1 bg-blue-600 text-white px-2 py-1 rounded-md cursor-pointer hover:bg-blue-700">
-            Lună
-            <ChevronDownIcon className="w-4 h-4" />
-          </button>
-
           <ChartMultiSelectButton
             data={years}
             btnTitle={"Anual"}
