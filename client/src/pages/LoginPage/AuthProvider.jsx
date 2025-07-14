@@ -25,29 +25,19 @@ export const AuthProvider = ({ children }) => {
         if (data && data.accessToken) {
           setAccessToken(data.accessToken);
         } else {
+          setAccessToken(null);
           throw new Error("Invalid refresh response");
         }
       } catch (err) {
-        console.log("Auth initialization error:", err.message);
         setAccessToken(null);
 
-        // Optional: Redirect to login if session expired
-        if (
-          err.message.includes("expired") ||
-          err.message.includes("invalid")
-        ) {
-          // window.location.href = '/login'; // Hard redirect to clear state
-        }
+        if (err.message.includes("expired") || err.message.includes("invalid"));
       } finally {
         setLoading(false);
       }
     };
 
-    const timer = setTimeout(() => {
-      initAuth();
-    }, 100);
-
-    return () => clearTimeout(timer);
+    initAuth();
   }, []);
 
   const login = ({ email, password }) => {
@@ -68,7 +58,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         accessToken,
-        isAuthenticated: true, // !!accessToken
+        isAuthenticated: !!accessToken,
         login,
         logout: logout.mutate,
         loading,

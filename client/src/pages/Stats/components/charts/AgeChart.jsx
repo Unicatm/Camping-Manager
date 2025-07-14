@@ -61,7 +61,7 @@ const colors = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#00C456"];
 export default function AgeChart({ years }) {
   const [focusBar, setFocusBar] = useState(null);
   const [mouseLeave, setMouseLeave] = useState(true);
-  const [selectedYear, setSelectedYear] = useState(2022);
+  const [selectedYear, setSelectedYear] = useState(2025);
 
   const { data } = useQuery({
     queryKey: ["age-groups", selectedYear],

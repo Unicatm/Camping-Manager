@@ -69,6 +69,10 @@ exports.getClientWithReservations = async (req, res) => {
 
 exports.getAllClients = async (req, res) => {
   try {
+    if (!req.query.sort) {
+      req.query.sort = "-createdAt";
+    }
+
     const features = new APIFeatures(Client.find(), req.query)
       .filter()
       .sort()

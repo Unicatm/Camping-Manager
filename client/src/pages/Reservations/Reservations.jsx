@@ -10,7 +10,7 @@ import useDeleteReservation from "./hooks/useDeleteReservation";
 import useModal from "../../components/hooks/useModal";
 import useHandleEditReservation from "./hooks/useHandleEditReservation";
 import useFetchReservations from "./hooks/useFetchReservations";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 function Reservations() {
   const [filters, setFilters] = useState({ searchText: "", status: "Toate" });
@@ -32,12 +32,8 @@ function Reservations() {
     return clientName.toLowerCase().includes(filters.searchText.toLowerCase());
   });
 
-  useEffect(() => {
-    console.log(filteredReservations);
-  }, [filteredReservations]);
-
   return (
-    <div className="h-max grow bg-blue-50/90">
+    <div className="h-screen grow bg-blue-50/90">
       <div className="relative w-11/12 h-full mx-auto py-8 flex flex-col">
         <ReservationsHeaderSection
           openModal={() => {

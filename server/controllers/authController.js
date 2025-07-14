@@ -36,8 +36,8 @@ exports.login = async (req, res) => {
 
     res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+      secure: false,
+      sameSite: "Lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -53,7 +53,6 @@ exports.login = async (req, res) => {
 
 exports.refresh = async (req, res) => {
   const token = req.cookies.refreshToken;
-  console.log("Received refreshToken from cookie:", token);
   if (!token) {
     return res.status(401).json({ message: "No refresh token provided" });
   }
@@ -61,9 +60,6 @@ exports.refresh = async (req, res) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
     const user = await User.findById(decoded.id);
-
-    console.log("User from DB:", user); 
-    console.log("RefreshToken from DB:", user?.refreshToken); 
 
     if (!user) {
       return res.status(403).json({ message: "User not found" });
@@ -105,8 +101,8 @@ exports.logout = async (req, res) => {
 
     res.clearCookie("refreshToken", {
       httpOnly: true,
-      sameSite: "Strict",
-      secure: true,
+      secure: false,
+      sameSite: "Lax",
     });
     res.status(200).json({ message: "Logged out successfully" });
   } catch (err) {

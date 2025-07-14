@@ -216,7 +216,7 @@ exports.getAllAvailableYears = async (req, res) => {
         },
       },
       {
-        $sort: { _id: 1 },
+        $sort: { _id: -1 },
       },
     ]);
 
@@ -466,6 +466,10 @@ exports.getAgeGroups = async (req, res) => {
 
 exports.getAllRezervari = async (req, res) => {
   try {
+    if (!req.query.sort) {
+      req.query.sort = "-dataCheckIn";
+    }
+
     const features = new APIFeatures(
       Rezervare.find().populate({
         path: "idClient",
